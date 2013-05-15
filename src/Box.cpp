@@ -158,9 +158,9 @@ const Box Box::rotate(const Vector &axis, const double theta) const
     sz = sizeZ();
   const Vector
     p1 = m_Bounds[0].rotate(axis, theta),
-    u = Vector::AXIS_X.rotate(axis, theta),
-    v = Vector::AXIS_Y.rotate(axis, theta),
-    w = Vector::AXIS_Z.rotate(axis, theta),
+    u = vector::UX.rotate(axis, theta),
+    v = vector::UY.rotate(axis, theta),
+    w = vector::UZ.rotate(axis, theta),
     dx = u * sx,
     dy = v * sy,
     dz = w * sz,
@@ -252,9 +252,9 @@ const Vector Box::corner(const int i) const
     addZ = (i & 4) != 0;
 
   return m_Bounds[0] +
-    addX * sizeX() * Vector::AXIS_X +
-    addY * sizeY() * Vector::AXIS_Y +
-    addZ * sizeZ() * Vector::AXIS_Z;
+    addX * sizeX() * vector::UX +
+    addY * sizeY() * vector::UY +
+    addZ * sizeZ() * vector::UZ;
 }
 
 
