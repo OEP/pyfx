@@ -10,6 +10,8 @@ namespace vr
     private:
     protected:
     public:
+      virtual const float eval(const Vector &p) const;
+      virtual const float getMax() const;
   };
 }
 

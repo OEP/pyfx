@@ -70,6 +70,8 @@ namespace std
 %include "Scene.i"
 %include "Model.i"
 %include "Levelset.i"
+%include "FractalSumParameters.i"
+%include "NoiseParameters.i"
 %include "Noise.i"
 %include "FractalSum.i"
 %include "PRN.i"

@@ -2,23 +2,18 @@
 #define NOISE_H_
 
 #include "Vector.h"
+#include "NoiseParameters.h"
 
 namespace vr
 {
-  class NoiseParameters
-  {
-    public:
-  };
-
   class Noise
   {
     private:
     protected:
     public:
 
-      virtual const float eval(const Vector &p) const;
-      virtual const float getMax() const;
-      virtual const float setParameters(const NoiseParameters &p);
+      virtual const float eval(const Vector &p) const = 0;
+      virtual const float getMax() const = 0;
   };
 }
 
