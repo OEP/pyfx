@@ -50,7 +50,7 @@ const int Ginsu::sign(const int i, const Vector2D &p) const
     &v = (*m_Vectors)[i],
     &w = (*m_Vectors)[i+1],
     dir = w - v,
-    norm = Vector2D(dir.Y(), -dir.X());
+    norm = Vector2D(dir.y(), -dir.x());
 
   const float dot = norm * (p-v);
 

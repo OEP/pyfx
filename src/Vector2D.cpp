@@ -80,22 +80,22 @@ const Vector2D Vector2D::replace(const int i, const double v) const
 const Vector2D Vector2D::componentMin(const Vector2D &other) const
 {
   return Vector2D(
-    std::min(X(), other.X()),
-    std::min(Y(), other.Y()));
+    std::min(X(), other.x()),
+    std::min(Y(), other.y()));
 }
 
 const Vector2D Vector2D::componentMax(const Vector2D &other) const
 {
   return Vector2D(
-    std::max(X(), other.X()),
-    std::max(Y(), other.Y()));
+    std::max(X(), other.x()),
+    std::max(Y(), other.y()));
 }
 
 const Vector2D Vector2D::componentProduct(const Vector2D &other) const
 {
   return Vector2D(
-    X() * other.X(),
-    Y() * other.Y());
+    X() * other.x(),
+    Y() * other.y());
 }
 
 const bool Vector2D::equals(const Vector2D &other) const
@@ -106,15 +106,15 @@ const bool Vector2D::equals(const Vector2D &other) const
 const Vector2D Vector2D::operator+ (const Vector2D &other) const
 {
   return Vector2D(
-    X() + other.X(),
-    Y() + other.Y());
+    X() + other.x(),
+    Y() + other.y());
 }
 
 const Vector2D Vector2D::operator- (const Vector2D &other) const
 {
   return Vector2D(
-    X() - other.X(),
-    Y() - other.Y());
+    X() - other.x(),
+    Y() - other.y());
 }
 
 const Vector2D Vector2D::operator-() const
@@ -131,7 +131,7 @@ const Vector2D Vector2D::operator/ (const double amt) const
 
 const Vector2D Vector2D::operator/ (const Vector2D &v) const
 {
-  return Vector2D(X() / v.X(), Y() / v.Y());
+  return Vector2D(X() / v.x(), Y() / v.y());
 }
 
 const Vector2D Vector2D::operator* (const double amt) const
@@ -141,17 +141,17 @@ const Vector2D Vector2D::operator* (const double amt) const
 
 const double Vector2D::operator* (const Vector2D& other) const
 {
-  return X() * other.X() + Y() * other.Y();
+  return X() * other.x() + Y() * other.y();
 }
 
 const bool Vector2D::operator== (const Vector2D& v) const
 {
-  return X() == v.X() && Y() == v.Y();
+  return X() == v.x() && Y() == v.y();
 }
 
 const bool Vector2D::operator!= (const Vector2D& v) const
 {
-  return X() != v.X() || Y() != v.Y();
+  return X() != v.x() || Y() != v.y();
 }
 
 const bool Vector2D::operator>= (const Vector2D& v) const
@@ -182,14 +182,14 @@ const double Vector2D::operator[](const int i) const
 ostream& vr::operator<< (ostream& out, const vr::Vector2D &v)
 {
   out << "<" <<
-    v.X() << ", " <<
-    v.Y() << ">";
+    v.x() << ", " <<
+    v.y() << ">";
   return out;
 }
 
 const Vector2D vr::operator*(const double t, const Vector2D &v)
 {
-  return Vector2D(t * v.X(), t * v.Y());
+  return Vector2D(t * v.x(), t * v.y());
 }
 
 const std::string Vector2D::__str__() const

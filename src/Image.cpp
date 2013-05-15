@@ -346,10 +346,10 @@ void Image::copyPixels(std::vector<Color> &buf) const
 const float Image::evalChannel(const Vector2D &p, size_t c, float background) const
 {
   const Vector2D idx = p.componentProduct(Vector2D(width(), height()));
-  const size_t i = idx.X(), j = idx.Y();
+  const size_t i = idx.x(), j = idx.y();
   const float
-    wx = (1 - (idx.X() - i)),
-    wy = (1 - (idx.Y() - j));
+    wx = (1 - (idx.x() - i)),
+    wy = (1 - (idx.y() - j));
 
   return
     wx * wy * evalChannel(i, j, c, background) +

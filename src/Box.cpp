@@ -12,6 +12,9 @@ using namespace vr;
 using std::map;
 using std::string;
 
+using openvdb::OPENVDB_VERSION_NAME::math::maxComponent;
+using openvdb::OPENVDB_VERSION_NAME::math::minComponent;
+
 const Box
   Box::NIL = Box(-DBL_MAX),
   Box::INFINITE = Box(DBL_MAX);
@@ -48,17 +51,17 @@ Box::Box(const Box &other)
 
 double Box::sizeX() const
 {
-  return m_Bounds[1].X() - m_Bounds[0].X();
+  return m_Bounds[1].x() - m_Bounds[0].x();
 }
 
 double Box::sizeY() const
 {
-  return m_Bounds[1].Y() - m_Bounds[0].Y();
+  return m_Bounds[1].y() - m_Bounds[0].y();
 }
 
 double Box::sizeZ() const
 {
-  return m_Bounds[1].Z() - m_Bounds[0].Z();
+  return m_Bounds[1].z() - m_Bounds[0].z();
 }
 
 bool Box::intersects(const Ray& r) const
@@ -86,40 +89,37 @@ const Box Box::expand(const Vector &p) const
 {
   if(isNil()) return *this;
   return Box(
-    m_Bounds[0].componentMin(p),
-    m_Bounds[1].componentMax(p));
+    minComponent(m_Bounds[0], p),
+    maxComponent(m_Bounds[1], p));
 }
 
 const Box Box::expand(const Box &other) const
 {
   if(other.isNil()) return *this;
   if(isNil()) return other;
-  return Box(
-    m_Bounds[0].componentMin(other.m_Bounds[0]),
-    m_Bounds[1].componentMax(other.m_Bounds[1]));
+
+  return
+    expand(other.m_Bounds[0])
+    .expand(other.m_Bounds[1]);
 }
 
 const Box Box::expand(const Triangle &other) const
 {
-  return Box(
-    m_Bounds[0]
-      .componentMin(other.point(0))
-      .componentMin(other.point(1))
-      .componentMin(other.point(2)),
-    m_Bounds[1]
-      .componentMax(other.point(0))
-      .componentMax(other.point(1))
-      .componentMax(other.point(2)));
+  return 
+      expand(other.point(0))
+      .expand(other.point(1))
+      .expand(other.point(2));
 }
 
 const Box Box::intersect(const Box &other) const
 {
   if(other.isNil()) return *this;
   if(isNil()) return other;
+
   const Vector
-    p0 = m_Bounds[0].componentMax(other.m_Bounds[0]),
-    p1 = m_Bounds[1].componentMin(other.m_Bounds[1]),
-    pp0 = p0.componentMin(p1);
+    p0 = maxComponent(m_Bounds[0], other.m_Bounds[0]),
+    p1 = minComponent(m_Bounds[1], other.m_Bounds[1]),
+    pp0 = minComponent(p0, p1);
       
   return Box(pp0, p1);
 }
@@ -145,49 +145,22 @@ const Box Box::scale(const double factor) const
 
 const Box Box::scale(const Vector &scale) const
 {
+  using vector::componentProduct;
   return Box(
-    m_Bounds[0].componentProduct(scale),
-    m_Bounds[1].componentProduct(scale));
+    componentProduct(m_Bounds[0], scale),
+    componentProduct(m_Bounds[1], scale)
+  );
 }
 
 const Box Box::rotate(const Vector &axis, const double theta) const
 {
-  const double
-    sx = sizeX(),
-    sy = sizeY(),
-    sz = sizeZ();
+  using vector::rotate;
+
   const Vector
-    p1 = m_Bounds[0].rotate(axis, theta),
-    u = vector::UX.rotate(axis, theta),
-    v = vector::UY.rotate(axis, theta),
-    w = vector::UZ.rotate(axis, theta),
-    dx = u * sx,
-    dy = v * sy,
-    dz = w * sz,
-    p2 = p1 + dx,
-    p3 = p1 + dy,
-    p4 = p1 + dz,
-    p5 = p1 + dx + dy,
-    p6 = p1 + dy + dz,
-    p7 = p1 + dx + dy,
-    p8 = p1 + dx + dy + dz,
-    pmin = 
-      p1.componentMin(p2)
-        .componentMin(p3)
-        .componentMin(p4)
-        .componentMin(p5)
-        .componentMin(p6)
-        .componentMin(p7)
-        .componentMin(p8),
-    pmax = 
-      p1.componentMax(p2)
-        .componentMax(p3)
-        .componentMax(p4)
-        .componentMax(p5)
-        .componentMax(p6)
-        .componentMax(p7)
-        .componentMax(p8);
-  return Box(pmin, pmax);
+    p0 = rotate(m_Bounds[0], axis, theta),
+    p1 = rotate(m_Bounds[1], axis, theta);
+
+  return Box(minComponent(p0, p1), maxComponent(p0, p1));
 }
 
 bool Box::contains(const Vector &p) const
@@ -223,7 +196,7 @@ const Vector Box::gridSpace(const Vector &p) const
 const Vector
 Box::worldSpace(const Vector &pg) const
 {
-  return llc() + pg.componentProduct(length());
+  return llc() + vector::componentProduct(pg, length());
 }
 
 void Box::gridSize(const Vector &res, int *dims) const
@@ -267,11 +240,11 @@ bool Box::intersects(const Ray& r, double& t0, double& t1) const
 {
   double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
-  tmin = (m_Bounds[r.sign(0)].X() - r.origin().X()) * r.inverseDirection().X();
-  tmax = (m_Bounds[1-r.sign(0)].X() - r.origin().X()) * r.inverseDirection().X();
+  tmin = (m_Bounds[r.sign(0)].x() - r.origin().x()) * r.inverseDirection().x();
+  tmax = (m_Bounds[1-r.sign(0)].x() - r.origin().x()) * r.inverseDirection().x();
 
-  tymin = (m_Bounds[r.sign(1)].Y() - r.origin().Y()) * r.inverseDirection().Y();
-  tymax = (m_Bounds[1-r.sign(1)].Y() - r.origin().Y()) * r.inverseDirection().Y();
+  tymin = (m_Bounds[r.sign(1)].y() - r.origin().y()) * r.inverseDirection().y();
+  tymax = (m_Bounds[1-r.sign(1)].y() - r.origin().y()) * r.inverseDirection().y();
   
   if(tmin > tymax || tymin > tmax)
   {
@@ -281,8 +254,8 @@ bool Box::intersects(const Ray& r, double& t0, double& t1) const
   tmin = std::max(tmin, tymin);
   tmax = std::min(tmax, tymax);
 
-  tzmin = (m_Bounds[r.sign(2)].Z() - r.origin().Z()) * r.inverseDirection().Z();
-  tzmax = (m_Bounds[1-r.sign(2)].Z() - r.origin().Z()) * r.inverseDirection().Z();
+  tzmin = (m_Bounds[r.sign(2)].z() - r.origin().z()) * r.inverseDirection().z();
+  tzmax = (m_Bounds[1-r.sign(2)].z() - r.origin().z()) * r.inverseDirection().z();
 
   if(tmin > tzmax || tzmin > tmax)
   {
@@ -311,6 +284,6 @@ const std::string Box::getShape() const
 
 void Box::getProperties(map<string,string> &prop) const
 {
-  prop["llc"] = m_Bounds[0].toString();
-  prop["urc"] = m_Bounds[1].toString();
+  prop["llc"] = vector::toString(m_Bounds[0]);
+  prop["urc"] = vector::toString(m_Bounds[1]);
 }

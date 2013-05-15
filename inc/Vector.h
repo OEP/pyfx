@@ -16,6 +16,15 @@ namespace vr
       UX, UY, UZ;
 
     const Vector replace(const Vector &in, const int i, const double v);
+    const Vector rotate(const Vector &in, const Vector &axis, const double v);
+    const Vector componentProduct(const Vector &a, const Vector &b);
+    const Vector componentProduct(const Vector &a, const Vector &b);
+    const std::string toString(const Vector &v);
+
+//    using openvdb::OPENVDB_VERSION_NAME::math::maxComponent<double>;
+
+//    const Vector componentMin(const Vector &a, const Vector &b);
+//    const Vector componentMax(const Vector &a, const Vector &b);
   }
 }
 

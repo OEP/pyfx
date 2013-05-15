@@ -4,29 +4,16 @@
 #include <cmath>
 #include <cfloat>
 */
+#include <sstream>
 
 #include "Vector.h"
 #include "Matrix.h"
 #include "macros.h"
 
 using namespace vr;
+using namespace vr::vector;
 
-Vector::Vector(const Vec3Double &v)
-{
-  init(v.x(), v.y(), v.z());
-}
-
-Vector::Vector(const double c)
-{
-  init(c,c,c);
-}
-
-Vector::Vector(const double x, const double y, const double z)
-{
-  init(x,y,z);
-}
-
-const Vector vector::replace(const Vector &in, const int i, const double v) const
+const Vector replace(const Vector &in, const int i, const double v) 
 {
   switch(i)
   {
@@ -34,9 +21,42 @@ const Vector vector::replace(const Vector &in, const int i, const double v) cons
     case 1: return Vector(in.x(), v, in.z());
     case 2: return Vector(in.x(), in.y(), v);
   }
-  return *this;
+  return in;
 }
 
+const Vector vector::componentProduct(const Vector &a, const Vector &b)
+{
+  return Vector(
+    a.x() * b.x(),
+    a.y() * b.y(),
+    a.z() * b.z()
+  );
+}
+
+const std::string vector::toString(const Vector &v)
+{
+  std::stringstream ss;
+  ss << v.x() << " " << v.y() << " " << v.z();
+  return ss.str();
+}
+
+/*
+const Vector vector::componentMin(const Vector &a, const Vector &b) const
+{
+  return Vector(
+    std::min(a.x(), b.x()),
+    std::min(a.y(), b.y()),
+    std::min(a.z(), b.z()));
+}
+
+const Vector vector::componentMax(const Vector &a, const Vector &b) const
+{
+  return Vector(
+    std::max(a.x(), b.x()),
+    std::max(a.y(), b.y()),
+    std::max(a.z(), b.z()));
+}
+*/
 
 /*
 using namespace std;
@@ -135,25 +155,25 @@ const double Vector::magnitude() const
 const Vector Vector::componentMin(const Vector &other) const
 {
   return Vector(
-    std::min(X(), other.X()),
-    std::min(Y(), other.Y()),
-    std::min(Z(), other.Z()));
+    std::min(X(), other.x()),
+    std::min(Y(), other.y()),
+    std::min(Z(), other.z()));
 }
 
 const Vector Vector::componentMax(const Vector &other) const
 {
   return Vector(
-    std::max(X(), other.X()),
-    std::max(Y(), other.Y()),
-    std::max(Z(), other.Z()));
+    std::max(X(), other.x()),
+    std::max(Y(), other.y()),
+    std::max(Z(), other.z()));
 }
 
 const Vector Vector::componentProduct(const Vector &other) const
 {
   return Vector(
-    X() * other.X(),
-    Y() * other.Y(),
-    Z() * other.Z());
+    X() * other.x(),
+    Y() * other.y(),
+    Z() * other.z());
 }
 
 const bool Vector::equals(const Vector &other) const
@@ -173,17 +193,17 @@ const Matrix Vector::outerProduct(const Vector &other) const
 const Vector Vector::operator+ (const Vector &other) const
 {
   return Vector(
-    X() + other.X(),
-    Y() + other.Y(),
-    Z() + other.Z());
+    X() + other.x(),
+    Y() + other.y(),
+    Z() + other.z());
 }
 
 const Vector Vector::operator- (const Vector &other) const
 {
   return Vector(
-    X() - other.X(),
-    Y() - other.Y(),
-    Z() - other.Z());
+    X() - other.x(),
+    Y() - other.y(),
+    Z() - other.z());
 }
 
 const Vector Vector::operator-() const
@@ -201,7 +221,7 @@ const Vector Vector::operator/ (const double amt) const
 
 const Vector Vector::operator/ (const Vector &v) const
 {
-  return Vector(X() / v.X(), Y() / v.Y(), Z() / v.Z());
+  return Vector(X() / v.x(), Y() / v.y(), Z() / v.z());
 }
 
 const Vector Vector::operator* (const double amt) const
@@ -211,25 +231,25 @@ const Vector Vector::operator* (const double amt) const
 
 const double Vector::operator* (const Vector& other) const
 {
-  return X() * other.X() + Y() * other.Y() + Z() * other.Z();
+  return X() * other.x() + Y() * other.y() + Z() * other.z();
 }
 
 const Vector Vector::operator^ (const Vector& other) const
 {
   return Vector(
-    Y() * other.Z() - Z() * other.Y(),
-    -( X() * other.Z() - Z() * other.X()),
-    X() * other.Y() - Y() * other.X());
+    Y() * other.z() - Z() * other.y(),
+    -( X() * other.z() - Z() * other.x()),
+    X() * other.y() - Y() * other.x());
 }
 
 const bool Vector::operator== (const Vector& v) const
 {
-  return X() == v.X() && Y() == v.Y() && Z() == v.Z();
+  return X() == v.x() && Y() == v.y() && Z() == v.z();
 }
 
 const bool Vector::operator!= (const Vector& v) const
 {
-  return X() != v.X() || Y() != v.Y() || Z() != v.Z();
+  return X() != v.x() || Y() != v.y() || Z() != v.z();
 }
 
 const bool Vector::operator>= (const Vector& v) const
@@ -260,15 +280,15 @@ const double Vector::operator[](const int i) const
 ostream& vr::operator<< (ostream& out, const vr::Vector &v)
 {
   out << "<" <<
-    v.X() << ", " <<
-    v.Y() << ", " <<
-    v.Z() << ">";
+    v.x() << ", " <<
+    v.y() << ", " <<
+    v.z() << ">";
   return out;
 }
 
 const Vector vr::operator*(const double t, const Vector &v)
 {
-  return Vector(t * v.X(), t * v.Y(), t * v.Z());
+  return Vector(t * v.x(), t * v.y(), t * v.z());
 }
 
 const std::string Vector::__str__() const

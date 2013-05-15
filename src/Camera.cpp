@@ -14,7 +14,7 @@ Camera::Camera()
   m_Eye = Vector(0,0,0);
   m_Up = Vector(0, 1, 0);
   m_Right = Vector(1, 0, 0);
-  m_View = m_Up ^ m_Right;
+  m_View = m_Up.cross(m_Right);
   m_FOV = 60.0 * M_PI / 180.0;
   m_AspectRatio = 1.77778;
   m_FarPlane = 100.0;
@@ -27,7 +27,7 @@ Camera::Camera(const Vector &up, const Vector &right)
   m_Eye = Vector(0,0,0);
   m_Up = up.unit();
   m_Right = right.unit();
-  m_View = m_Up ^ m_Right;
+  m_View = m_Up.cross(m_Right);
   m_FOV = 60.0 * M_PI / 180.0;
   m_AspectRatio = 1.77778;
   m_FarPlane = 100.0;
@@ -67,7 +67,7 @@ const Camera Camera::boundingFrustum(const Vector &x, const Box &b)
   for(int i = 0; i < 8; i++)
   {
     const Vector p = b.corner(i) - x;
-    const double mag = p.magnitude();
+    const double mag = p.length();
     const double
       xcp = p * c.right(),
       ycp = p * c.up(),
@@ -289,9 +289,9 @@ Camera::rotate(const Vector &axis, double theta)
 {
   const Vector
     naxis = axis.unit(),
-    rView = view().rotate(naxis, theta),
-    rUp = up().rotate(naxis, theta),
-    rEye = eye().rotate(naxis, theta);
+    rView = vector::rotate(view(), naxis, theta),
+    rUp = vector::rotate(up(), naxis, theta),
+    rEye = vector::rotate(eye(), naxis, theta);
 
   Camera newCamera(*this);
   newCamera.setEyeViewUp(rEye, rView, rUp);
