@@ -27,8 +27,8 @@ namespace vr
         const Vector k = m_P2 - m_P1,
           t = p - m_P1;
         const double
-          pt = (k * t) / k.magnitude(),
-          amt = std::max(0.0, std::min(1.0, pt / k.magnitude()));
+          pt = (k * t) / k.length(),
+          amt = std::max(0.0, std::min(1.0, pt / k.length()));
         return amt;
       }
 

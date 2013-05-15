@@ -7,7 +7,7 @@ using namespace vr;
 const float Cylinder::eval(const Vector &p) const
 {
   const Vector xperp = p - (p*m_N)*m_N;
-  const float f = m_R - xperp.magnitude();
+  const float f = m_R - xperp.length();
   const float dist = fabs(p * m_N);
 
   if(m_L < 0) return f;

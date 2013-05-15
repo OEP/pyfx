@@ -50,9 +50,9 @@ const double Triangle::intersects(const Ray &r) const
 const double Triangle::minimumVertexDistance(const Vector &p) const
 {
   return
-    std::min(  (p - m_Points[0]).magnitude(),
-      std::min((p - m_Points[1]).magnitude(),
-               (p - m_Points[2]).magnitude()));
+    std::min(  (p - m_Points[0]).length(),
+      std::min((p - m_Points[1]).length(),
+               (p - m_Points[2]).length()));
 }
 
 const double Triangle::minimumDistance(const Vector &p) const

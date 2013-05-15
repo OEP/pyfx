@@ -5,7 +5,7 @@ using namespace vr;
 const Vector Normalize::eval(const Vector &p) const
 {
   const Vector f = m_Field->eval(p);
-  const float mag = f.magnitude();
+  const float mag = f.length();
 
   if(mag == 0.0f)
   {

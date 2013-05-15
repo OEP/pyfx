@@ -69,9 +69,9 @@ const Camera Camera::boundingFrustum(const Vector &x, const Box &b)
     const Vector p = b.corner(i) - x;
     const double mag = p.length();
     const double
-      xcp = p * c.right(),
-      ycp = p * c.up(),
-      zcp = p * c.view();
+      xcp = p.dot(c.right()),
+      ycp = p.dot(c.up()),
+      zcp = p.dot(c.view());
 
     far = std::max(far, mag);
     near = std::min(near, mag);
@@ -257,7 +257,7 @@ const Vector Camera::gridSpace(const Vector &p) const
   return Vector(
     ((xcp/m_HTanFOV) + 1) / 2,
     ((ycp/m_VTanFOV) + 1) / 2,
-    ((pp.magnitude() - nearPlane()) / viewLength()));
+    ((pp.length() - nearPlane()) / viewLength()));
 }
 
 const Vector

@@ -120,10 +120,10 @@ const Vector Vector::lerpRotate(const Vector &b, const double q) const
 {
   const Vector bxa = b ^ (*this);
   const Vector au = unit();
-  const double m1 = magnitude();
-  const double m2 = b.magnitude();
+  const double m1 = length();
+  const double m2 = b.length();
 
-  if (bxa.magnitude() == 0)
+  if (bxa.length() == 0)
   {
     return au * LERP(m1, m2, q);
   }
@@ -135,19 +135,19 @@ const Vector Vector::lerpRotate(const Vector &b, const double q) const
 
 const Vector Vector::unit() const
 {
-  const double mag = magnitude();
+  const double mag = length();
   return Vector(X() / mag, Y() / mag, Z() / mag);
 }
 
 void Vector::normalize()
 {
-  const double mag = magnitude();
+  const double mag = length();
   m_XYZ[0] /= mag;
   m_XYZ[1] /= mag;
   m_XYZ[2] /= mag;
 }
 
-const double Vector::magnitude() const
+const double Vector::length() const
 {
   return std::sqrt(X() * X() + Y() * Y() + Z() * Z());
 }
@@ -254,22 +254,22 @@ const bool Vector::operator!= (const Vector& v) const
 
 const bool Vector::operator>= (const Vector& v) const
 {
-  return magnitude() >= v.magnitude();
+  return length() >= v.length();
 }
 
 const bool Vector::operator<= (const Vector& v) const
 {
-  return magnitude() <= v.magnitude();
+  return length() <= v.length();
 }
 
 const bool Vector::operator< (const Vector& v) const
 {
-  return magnitude() < v.magnitude();
+  return length() < v.length();
 }
 
 const bool Vector::operator> (const Vector& v) const
 {
-  return magnitude() > v.magnitude();
+  return length() > v.length();
 }
 
 const double Vector::operator[](const int i) const

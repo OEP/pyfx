@@ -5,7 +5,7 @@ using namespace vr;
 const float PyroclasticSphere::eval(const Vector &p) const
 {
   const float
-    pmag = p.magnitude(),
+    pmag = p.length(),
     fspn = m_Noise->eval(p / pmag);
   return m_Radius - pmag + pow(fabs(fspn), m_Gamma) * m_Amp;
 }

@@ -9,12 +9,12 @@ const Box Sphere::getBBox() const
 
 const float Sphere::eval(const Vector &p) const
 {
-  return m_R - p.magnitude();
+  return m_R - p.length();
 }
 
 const Vector Sphere::grad(const Vector &p) const
 {
-  const float mag = p.magnitude();
+  const float mag = p.length();
   return mag > 0
     ? p / -mag
     : Vector(1., 1., 1.);

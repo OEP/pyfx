@@ -26,7 +26,7 @@ const Vector SplineWisp::nextSegmentPoint(size_t segment, float &opacity)
     pp = low.P0 + // TODO: Is this right?
       p[0] * params.Scale[0] * params.PScale * params.E0 +
       p[1] * params.Scale[1] * params.PScale * params.E1 +
-      p[2] * params.E2 * (low.P0 - hi.P0).magnitude() * params.Scale[2],
+      p[2] * params.E2 * (low.P0 - hi.P0).length() * params.Scale[2],
     t = Vector(m_FSPN2.eval(pp), m_FSPN2.eval(pp + params.Delta), m_FSPN2.eval(pp - params.Delta));
   opacity = params.Opacity;
   return pp + t.componentProduct(params.Scale) * params.PScale;

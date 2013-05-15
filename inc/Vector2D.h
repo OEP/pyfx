@@ -26,7 +26,7 @@ namespace vr
       Vector2D(const Vector2D&);
       Vector2D(const double x, const double y);
 
-      const double magnitude() const;
+      const double length() const;
       const Vector2D unit() const;
       void normalize();
 

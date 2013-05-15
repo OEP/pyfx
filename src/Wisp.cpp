@@ -10,7 +10,7 @@ const Box Wisp::calcBBox() const
 const Vector Wisp::nextPoint()
 {
   const Vector start = m_PRN.nextVector(-1, 1);
-  const Vector y = start / start.magnitude();
+  const Vector y = start / start.length();
   const float fspn1 = fabs(m_FSPN1.eval(start));
   const float r = pow(fspn1, m_Parameters.Clump);
   const Vector yp = y * r;

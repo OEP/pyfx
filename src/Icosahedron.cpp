@@ -10,7 +10,7 @@ const float Icosahedron::eval(const Vector &p) const
     x = p[0],
     y = p[1],
     z = p[2],
-    mag = p.magnitude(),
+    mag = p.length(),
     T = 1.61803399;
 
   if(mag > 1.8 * M_PI)
@@ -30,7 +30,7 @@ const Vector Icosahedron::grad(const Vector &p) const
     x = p[0],
     y = p[1],
     z = p[2],
-    mag = p.magnitude(),
+    mag = p.length(),
     T = 1.61803399;
 
   if(mag > 1.8 * M_PI) return Vector(0,0,0);

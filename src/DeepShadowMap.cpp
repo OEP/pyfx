@@ -195,7 +195,7 @@ DeepShadowMap::computeRay(
   }
 
   double s = m_Griddables[grid]->nearPlane();
-  const double stop = fromLight.magnitude();
+  const double stop = fromLight.length();
   double value = 0.0;
 
   while(s < stop)

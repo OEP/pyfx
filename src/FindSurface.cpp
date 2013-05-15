@@ -6,7 +6,7 @@ const Vector FindSurface::inward(const Vector &p) const
 {
   Vector in = m_F->grad(p);
 
-  if(in.magnitude() == 0)
+  if(in.length() == 0)
   {
     in = getBBox().center() - p;
   }

@@ -18,7 +18,7 @@ const float Cone::eval(const Vector &p) const
   }
   else
   {
-    return m_Theta - acos(xn/p.magnitude());
+    return m_Theta - acos(xn/p.length());
   }
 }
 

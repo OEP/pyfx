@@ -51,18 +51,18 @@ const double Vector2D::Y() const
 
 const Vector2D Vector2D::unit() const
 {
-  const double mag = magnitude();
+  const double mag = length();
   return (*this) / mag;
 }
 
 void Vector2D::normalize()
 {
-  const double mag = magnitude();
+  const double mag = length();
   m_XY[0] /= mag;
   m_XY[1] /= mag;
 }
 
-const double Vector2D::magnitude() const
+const double Vector2D::length() const
 {
   return std::sqrt(X() * X() + Y() * Y());
 }
@@ -156,22 +156,22 @@ const bool Vector2D::operator!= (const Vector2D& v) const
 
 const bool Vector2D::operator>= (const Vector2D& v) const
 {
-  return magnitude() >= v.magnitude();
+  return length() >= v.length();
 }
 
 const bool Vector2D::operator<= (const Vector2D& v) const
 {
-  return magnitude() <= v.magnitude();
+  return length() <= v.length();
 }
 
 const bool Vector2D::operator< (const Vector2D& v) const
 {
-  return magnitude() < v.magnitude();
+  return length() < v.length();
 }
 
 const bool Vector2D::operator> (const Vector2D& v) const
 {
-  return magnitude() > v.magnitude();
+  return length() > v.length();
 }
 
 const double Vector2D::operator[](const int i) const
@@ -222,20 +222,20 @@ const float vr::line_distance(
 
   if(l2 == 0.0)
   {
-    return (p - v).magnitude();
+    return (p - v).length();
   }
 
   const float t = ((p - v) * (w - v)) / l2;
 
   if(((bounded_flags & 0x1) != 0) && t < 0.0)
   {
-    return (p-v).magnitude();
+    return (p-v).length();
   }
   else if(((bounded_flags & 0x2) != 0) && t > 1.0)
   {
-    return (p-w).magnitude();
+    return (p-w).length();
   }
 
   const Vector2D projection = v + t * (w - v);
-  return (p - projection).magnitude();
+  return (p - projection).length();
 }
