@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function printUsage {
+  echo "Usage: $0 <class-name>"
+}
+
+test -z "$1" && printUsage && exit 1
+
+export CLASSNAME="$1"
+
+set -x
+
+git rm -f inc/$CLASSNAME.h src/$CLASSNAME.cpp swig/$CLASSNAME.i

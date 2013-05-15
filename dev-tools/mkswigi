@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+# Make a swig *.i file from a given header file.
+
+import sys
+import os
+
+TEMPLATE = '''%module {module}
+%{{
+#include "{header}"
+%}}
+
+%include "{header}"'''
+
+def main():
+  global TEMPLATE
+
+  if len(sys.argv) < 3:
+    print("Usage: mkswigi <module> <header>")
+    sys.exit(1)
+
+  moduleName = sys.argv[1]
+  headerName = os.path.basename(sys.argv[2])
+
+  print(TEMPLATE.format(module=moduleName,header=headerName))
+
+if __name__ == "__main__":
+  main()

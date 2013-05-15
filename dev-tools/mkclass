@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+
+# Make a class given the header file name.
+
+import sys
+import os
+
+TEMPLATE = '''#ifndef {lockName}
+#define {lockName}
+
+namespace {namespace}
+{{
+  class {className}
+  {{
+    private:
+    protected:
+    public:
+  }};
+}}
+
+#endif'''
+
+def main():
+  global TEMPLATE
+
+  if len(sys.argv) < 3:
+    print("Usage: mkclass <namespace> <header>")
+    sys.exit(1)
+
+  namespaceName = sys.argv[1]
+  headerName = os.path.basename(sys.argv[2])
+
+  (className, ext) = os.path.splitext(headerName)
+
+  lockName = "{}_H_".format(className.upper()) 
+
+  print(TEMPLATE.format(
+    lockName = lockName,
+    namespace = namespaceName,
+    className = className))
+
+if __name__ == "__main__":
+  main()

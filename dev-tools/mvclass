@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function printUsage {
+  echo "Usage: $0 <class-name> <target-name>"
+}
+
+test -z "$1" -o -z "$2" && printUsage && exit 1
+
+export CLASSNAME="$1"
+export TARGET="$2"
+
+set -x
+
+sed -i -e "s/ $CLASSNAME / $TARGET /g" inc/* src/* swig/*
+
+git mv -f inc/$CLASSNAME.h inc/$TARGET.h
+git mv -f swig/$CLASSNAME.i swig/$TARGET.i
+git mv -f src/$CLASSNAME.cpp src/$TARGET.cpp

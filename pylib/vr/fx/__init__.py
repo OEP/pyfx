@@ -1,0 +1,3 @@
+"""
+Reusable visual effects.
+"""

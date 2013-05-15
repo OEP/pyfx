@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+
+# Make a class given the header file name.
+
+import sys
+import os
+
+TYPE_MAP = {
+  "template": ["N/A", "N/A", "N/A"],
+  "scalar": ["float", "Vector", "ScalarField"],
+  "vector": ["Vector", "Matrix", "VectorField"],
+  "matrix": ["Matrix", "int", "MatrixField"],
+  "color": ["Color", "int", "ColorField"]
+}
+
+SP_TEMPLATE_H ='''#ifndef {lockName}
+#define {lockName}
+
+#include "Volume.h"
+#include "Vector.h"
+#include "Matrix.h"
+
+namespace vr
+{{
+  template <typename U, typename V>
+  class {className} : public Volume<U,V>
+  {{
+    private:
+    protected:
+    public:
+      {className}() {{}}
+
+      const U eval(const Vector &p) const
+      {{
+        throw std::runtime_error("{className}::eval() not implemented");
+      }}
+
+      const V grad(const Vector &p) const
+      {{
+        throw std::runtime_error("{className}::grad() not implemented");
+      }}
+
+      const Box getBBox() const
+      {{
+        throw std::runtime_error("{className}::getBBox() not implemented");
+      }}
+  }};
+}}
+
+#endif'''
+
+TEMPLATE_H = '''#ifndef {lockName}
+#define {lockName}
+
+#include "Volume.h"
+#include "Vector.h"
+#include "Matrix.h"
+
+namespace vr
+{{
+  class {className} : public {superclass}
+  {{
+    private:
+    protected:
+    public:
+      {className}()
+        : {{}}
+
+      const {volumeDataType} eval(const Vector&) const;
+      const {volumeGradType} grad(const Vector&) const;
+      const Box getBBox() const;
+  }};
+}}
+
+#endif'''
+
+TEMPLATE_CPP = '''#include "{className}.h"
+
+using namespace vr;
+
+const {volumeDataType} {className}::eval(const Vector &p) const
+{{
+  throw std::runtime_error("{className}::eval(): Not implemented.");
+}}
+
+const {volumeGradType} {className}::grad(const Vector &p) const
+{{
+  throw std::runtime_error("{className}::grad(): Not implemented.");
+}}
+
+const Box {className}::getBBox() const
+{{
+  throw std::runtime_error("{className}::getBBox(): Not implemented.");
+}}
+'''
+
+def main():
+  global TEMPLATE_H
+  global TEMPLATE_CPP
+  global TYPE_MAP
+
+  if len(sys.argv) < 3:
+    print("Usage: mkvolume <type> <classname>")
+    sys.exit(1)
+
+  typeName = sys.argv[1]
+
+  classes = sys.argv[2:]
+
+  for klass in classes:
+    mkVolume(typeName, klass)
+
+def mkVolume(typeName, className):
+  typeName = typeName.lower()
+
+  headerName = os.path.basename(className + ".h")
+  lockName = "{}_H_".format(className.upper())
+  (volumeDataType, volumeGradType, superclass) = TYPE_MAP[typeName]
+
+  hTemplate = TEMPLATE_H
+  cppTemplate = TEMPLATE_CPP
+
+  if typeName == "template":
+    hTemplate = SP_TEMPLATE_H
+
+  headerContents = hTemplate.format(
+    volumeDataType = volumeDataType,
+    volumeGradType = volumeGradType,
+    lockName = lockName,
+    superclass = superclass,
+    className = className)
+
+  cppContents = cppTemplate.format(
+    volumeDataType = volumeDataType,
+    volumeGradType = volumeGradType,
+    lockName = lockName,
+    className = className)
+
+  headerPath = "inc/" + headerName
+  cppPath = "src/" + className + ".cpp"
+
+  with open(headerPath, "w") as fp:
+    print("generating: ", headerPath)
+    fp.write(headerContents)
+
+  if typeName != "template":
+    with open(cppPath, "w") as fp:
+      print("generating: ", cppPath)
+      fp.write(cppContents)
+
+if __name__ == "__main__":
+  main()
