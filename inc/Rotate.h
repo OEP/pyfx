@@ -26,18 +26,18 @@ namespace vr
     public:
       Rotate(const Vector &axis, const double theta, const Volume<U,V> *field)
         : m_Axis(axis), m_Theta(theta), m_Field(field),
-          m_Rotation(Matrix::rotation(axis, theta)),
+          m_Rotation(matrix::rotation(axis, theta)),
           m_InvRotation(m_Rotation.inverse()),
           m_TRotation(m_Rotation.transpose()) {}
 
       const U eval(const Vector &p) const
       {
-        return wrapEval( m_Field->eval(p.rotate(m_Axis, -m_Theta)) );
+        return wrapEval( m_Field->eval(vector::rotate(p, m_Axis, -m_Theta)) );
       }
 
       const V grad(const Vector &p) const
       {
-        return wrapGrad( m_Field->grad(p.rotate(m_Axis, -m_Theta)) );
+        return wrapGrad( m_Field->grad(vector::rotate(p, m_Axis, -m_Theta)) );
       }
 
       const Box getBBox() const

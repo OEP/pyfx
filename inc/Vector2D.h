@@ -35,8 +35,8 @@ namespace vr
       const Vector2D componentProduct(const Vector2D&) const;
       const Vector2D replace(const int i, const double x) const;
 
-      const double X() const;
-      const double Y() const;
+      const double x() const;
+      const double y() const;
 
       const bool equals(const Vector2D&) const;
 

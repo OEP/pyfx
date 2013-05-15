@@ -6,9 +6,9 @@ const Vector Coil::eval(const Vector &p) const
 {
   const Vector
     pp = (p - m_X0),
-    xp = ((pp * m_Normal) * m_Normal) + m_X0;
+    xp = (pp.dot(m_Normal) * m_Normal) + m_X0;
 
-  return (p - xp) ^ m_Normal;
+  return (p - xp).cross(m_Normal);
 }
 
 const Matrix Coil::grad(const Vector &p) const

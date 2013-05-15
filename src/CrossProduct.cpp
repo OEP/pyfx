@@ -4,7 +4,7 @@ using namespace vr;
 
 const Vector CrossProduct::eval(const Vector &p) const
 {
-  return m_V1->eval(p) ^ m_V2->eval(p);
+  return m_V1->eval(p).cross(m_V2->eval(p));
 }
 
 /*

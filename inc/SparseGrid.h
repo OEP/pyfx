@@ -30,15 +30,13 @@ namespace vr
       }
 
     public:
+      using VolumeGrid<U,V>::size;
+      using VolumeGrid<U,V>::defaultValue;
       using VolumeGrid<U,V>::oob;
       using VolumeGrid<U,V>::index;
-      using VolumeGrid<U,V>::defaultValue;
-      using VolumeGrid<U,V>::size;
-      using VolumeGrid<U,V>::getBBox;
       using VolumeGrid<U,V>::NX;
       using VolumeGrid<U,V>::NY;
       using VolumeGrid<U,V>::NZ;
-      using VolumeGrid<U,V>::resolution;
       using VolumeGrid<U,V>::evalP;
 
       SparseGrid(Griddable *b, const Vector resolution,

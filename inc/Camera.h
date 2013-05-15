@@ -1,6 +1,9 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+#include<map>
+#include<string>
+
 #include "Vector.h"
 #include "Vector.h"
 #include "Ray.h"

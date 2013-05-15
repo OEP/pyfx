@@ -4,11 +4,13 @@ using namespace vr;
 
 const Matrix OuterProduct::eval(const Vector &p) const
 {
+  using openvdb::OPENVDB_VERSION_NAME::math::outerProduct;
+
   const Vector
     v1 = m_V1->eval(p),
     v2 = m_V2->eval(p);
 
-  return v1.outerProduct(v2);
+  return outerProduct(v1, v2);
 }
 
 /*

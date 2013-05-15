@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Ray.h"
 #include "Vector.h"
 
@@ -48,6 +50,7 @@ int Ray::sign(const int i) const
   return m_Sign[i];
 }
 
+using std::ostream;
 ostream& vr::operator<<(ostream& out, const Ray &r)
 {
   out << "[" << r.origin() << ", " << r.direction() << "]";

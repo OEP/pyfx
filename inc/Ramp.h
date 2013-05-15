@@ -24,10 +24,11 @@ namespace vr
 
       const double computePhase(const Vector &p) const
       {
-        const Vector k = m_P2 - m_P1,
+        const Vector
+          k = m_P2 - m_P1,
           t = p - m_P1;
         const double
-          pt = (k * t) / k.length(),
+          pt = k.dot(t) / k.length(),
           amt = std::max(0.0, std::min(1.0, pt / k.length()));
         return amt;
       }

@@ -6,8 +6,8 @@ const float Torus::eval(const Vector &p) const
 {
   const Vector xperp = p - (p * m_Norm) * m_Norm;
   const float
-    left = 4 * m_Major * m_Major * (xperp * xperp),
-    right = ((p * p) + m_Major * m_Major - m_Minor * m_Minor);
+    left = 4 * m_Major * m_Major * xperp.dot(xperp),
+    right = p.dot(p) + m_Major * m_Major - m_Minor * m_Minor;
   return left - right * right; 
 }
 

@@ -21,14 +21,14 @@ Triangle::Triangle(const Triangle &t)
 
 void Triangle::update()
 {
-  m_Normal = ((m_Points[1] - m_Points[0]) ^ (m_Points[2] - m_Points[0])).unit();
-  m_D = m_Normal * m_Points[0];
+  m_Normal = ((m_Points[1] - m_Points[0]).cross(m_Points[2] - m_Points[0])).unit();
+  m_D = m_Normal.dot(m_Points[0]);
   m_Edge[0] = m_Points[2] - m_Points[0];
   m_Edge[1] = m_Points[1] - m_Points[0];
 
-  m_Dot00 = m_Edge[0] * m_Edge[0];
-  m_Dot01 = m_Edge[0] * m_Edge[1];
-  m_Dot11 = m_Edge[1] * m_Edge[1];
+  m_Dot00 = m_Edge[0].dot(m_Edge[0]);
+  m_Dot01 = m_Edge[0].dot(m_Edge[1]);
+  m_Dot11 = m_Edge[1].dot(m_Edge[1]);
   m_InvDenom = 1 / (m_Dot00 * m_Dot11 - m_Dot01 * m_Dot01);
 }
 
@@ -324,11 +324,11 @@ const double Triangle::minimumDistance(const Vector &p) const
 
 const bool Triangle::intersects(const Ray &r, double &t) const
 {
-  if(normal() * r.direction() == 0.0)
+  if(normal().dot(r.direction()) == 0.0)
   {
     return false;
   }
-  t = (m_D - normal() * r.origin()) / (normal() * r.direction());
+  t = (m_D - normal().dot(r.origin())) / (normal().dot(r.direction()));
 
   if(t < 0)
   {
@@ -348,8 +348,8 @@ const bool Triangle::contains(const Vector &p) const
 {
   const Vector e2 = p - m_Points[0];
   const double
-    dot02 = m_Edge[0] * e2,
-    dot12 = m_Edge[1] * e2,
+    dot02 = m_Edge[0].dot(e2),
+    dot12 = m_Edge[1].dot(e2),
     u = (m_Dot11 * dot02 - m_Dot01 * dot12) * m_InvDenom,
     v = (m_Dot00 * dot12 - m_Dot01 * dot02) * m_InvDenom;
 

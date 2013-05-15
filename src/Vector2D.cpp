@@ -38,12 +38,12 @@ Vector2D::Vector2D(const double x, const double y)
   m_XY[1] = y;
 }
 
-const double Vector2D::X() const
+const double Vector2D::x() const
 {
   return m_XY[0];
 }
 
-const double Vector2D::Y() const
+const double Vector2D::y() const
 {
   return m_XY[1];
 }
@@ -64,15 +64,15 @@ void Vector2D::normalize()
 
 const double Vector2D::length() const
 {
-  return std::sqrt(X() * X() + Y() * Y());
+  return std::sqrt(x() * x() + y() * y());
 }
 
 const Vector2D Vector2D::replace(const int i, const double v) const
 {
   switch(i)
   {
-    case 0: return Vector2D(v, Y());
-    case 1: return Vector2D(X(), v);
+    case 0: return Vector2D(v, y());
+    case 1: return Vector2D(x(), v);
   }
   return *this;
 }
@@ -80,22 +80,22 @@ const Vector2D Vector2D::replace(const int i, const double v) const
 const Vector2D Vector2D::componentMin(const Vector2D &other) const
 {
   return Vector2D(
-    std::min(X(), other.x()),
-    std::min(Y(), other.y()));
+    std::min(x(), other.x()),
+    std::min(y(), other.y()));
 }
 
 const Vector2D Vector2D::componentMax(const Vector2D &other) const
 {
   return Vector2D(
-    std::max(X(), other.x()),
-    std::max(Y(), other.y()));
+    std::max(x(), other.x()),
+    std::max(y(), other.y()));
 }
 
 const Vector2D Vector2D::componentProduct(const Vector2D &other) const
 {
   return Vector2D(
-    X() * other.x(),
-    Y() * other.y());
+    x() * other.x(),
+    y() * other.y());
 }
 
 const bool Vector2D::equals(const Vector2D &other) const
@@ -106,15 +106,15 @@ const bool Vector2D::equals(const Vector2D &other) const
 const Vector2D Vector2D::operator+ (const Vector2D &other) const
 {
   return Vector2D(
-    X() + other.x(),
-    Y() + other.y());
+    x() + other.x(),
+    y() + other.y());
 }
 
 const Vector2D Vector2D::operator- (const Vector2D &other) const
 {
   return Vector2D(
-    X() - other.x(),
-    Y() - other.y());
+    x() - other.x(),
+    y() - other.y());
 }
 
 const Vector2D Vector2D::operator-() const
@@ -126,32 +126,32 @@ const Vector2D Vector2D::operator-() const
 
 const Vector2D Vector2D::operator/ (const double amt) const
 {
-  return Vector2D(X() / amt, Y() / amt);
+  return Vector2D(x() / amt, y() / amt);
 }
 
 const Vector2D Vector2D::operator/ (const Vector2D &v) const
 {
-  return Vector2D(X() / v.x(), Y() / v.y());
+  return Vector2D(x() / v.x(), y() / v.y());
 }
 
 const Vector2D Vector2D::operator* (const double amt) const
 {
-  return Vector2D(X() * amt, Y() * amt);
+  return Vector2D(x() * amt, y() * amt);
 }
 
 const double Vector2D::operator* (const Vector2D& other) const
 {
-  return X() * other.x() + Y() * other.y();
+  return x() * other.x() + y() * other.y();
 }
 
 const bool Vector2D::operator== (const Vector2D& v) const
 {
-  return X() == v.x() && Y() == v.y();
+  return x() == v.x() && y() == v.y();
 }
 
 const bool Vector2D::operator!= (const Vector2D& v) const
 {
-  return X() != v.x() || Y() != v.y();
+  return x() != v.x() || y() != v.y();
 }
 
 const bool Vector2D::operator>= (const Vector2D& v) const
@@ -200,14 +200,14 @@ const std::string Vector2D::__str__() const
 const std::string Vector2D::__repr__() const
 {
   std::stringstream ss;
-  ss << "(" << X() << ", " << Y() << ")";
+  ss << "(" << x() << ", " << y() << ")";
   return ss.str();
 }
 
 const std::string Vector2D::toString() const
 {
   std::stringstream ss;
-  ss << X() << " " << Y();
+  ss << x() << " " << y();
   return ss.str();
 }
  

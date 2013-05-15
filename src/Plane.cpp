@@ -4,7 +4,7 @@ using namespace vr;
 
 const float Plane::eval(const Vector &p) const
 {
-  return (p - m_X0) * m_N;
+  return (p - m_X0).dot(m_N);
 }
 
 const Vector Plane::grad(const Vector &p) const

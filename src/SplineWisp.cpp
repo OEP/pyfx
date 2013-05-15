@@ -23,13 +23,13 @@ const Vector SplineWisp::nextSegmentPoint(size_t segment, float &opacity)
     fspn = pow(fabs(m_FSPN1.eval(start)), params.Clump);
   const Vector
     p = Vector(start[0] * fspn / denom, start[1] * fspn / denom, start[2]),
-    pp = low.P0 + // TODO: Is this right?
+    pp = low.P0 +
       p[0] * params.Scale[0] * params.PScale * params.E0 +
       p[1] * params.Scale[1] * params.PScale * params.E1 +
       p[2] * params.E2 * (low.P0 - hi.P0).length() * params.Scale[2],
     t = Vector(m_FSPN2.eval(pp), m_FSPN2.eval(pp + params.Delta), m_FSPN2.eval(pp - params.Delta));
   opacity = params.Opacity;
-  return pp + t.componentProduct(params.Scale) * params.PScale;
+  return pp + vector::componentProduct(t, params.Scale) * params.PScale;
 }
 
 void SplineWisp::addSegmentPoints(const size_t segment)

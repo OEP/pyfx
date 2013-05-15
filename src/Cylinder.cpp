@@ -6,9 +6,9 @@ using namespace vr;
 
 const float Cylinder::eval(const Vector &p) const
 {
-  const Vector xperp = p - (p*m_N)*m_N;
+  const Vector xperp = p - (p.dot(m_N) * m_N);
   const float f = m_R - xperp.length();
-  const float dist = fabs(p * m_N);
+  const float dist = fabs(p.dot(m_N));
 
   if(m_L < 0) return f;
   else if(dist > m_L/2)
@@ -26,6 +26,9 @@ const Vector Cylinder::grad(const Vector &p) const
 
 const Box Cylinder::getBBox() const
 {
+  using openvdb::OPENVDB_VERSION_NAME::math::minComponent;
+  using openvdb::OPENVDB_VERSION_NAME::math::maxComponent;
+
   if(m_L < 0) return Box::INFINITE;
 
   const Vector
@@ -43,29 +46,31 @@ const Box Cylinder::getBBox() const
     p10 = end2 - vector::UX * m_R,
     p11 = end2 - vector::UY * m_R,
     p12 = end2 - vector::UZ * m_R,
-    pmin = end1.componentMin(p1)
-      .componentMin(p2)
-      .componentMin(p3)
-      .componentMin(p4)
-      .componentMin(p5)
-      .componentMin(p6)
-      .componentMin(p7)
-      .componentMin(p8)
-      .componentMin(p9)
-      .componentMin(p10)
-      .componentMin(p11)
-      .componentMin(p12),
-    pmax = end1.componentMax(p1)
-      .componentMax(p2)
-      .componentMax(p3)
-      .componentMax(p4)
-      .componentMax(p5)
-      .componentMax(p6)
-      .componentMax(p7)
-      .componentMax(p8)
-      .componentMax(p9)
-      .componentMax(p10)
-      .componentMax(p11)
-      .componentMax(p12);
+    pmin =
+      minComponent(end1,
+      minComponent(p1,
+      minComponent(p2,
+      minComponent(p3,
+      minComponent(p4,
+      minComponent(p5,
+      minComponent(p6,
+      minComponent(p7,
+      minComponent(p8,
+      minComponent(p9,
+      minComponent(p10,
+      minComponent(p11, p12)))))))))))),
+    pmax =
+      maxComponent(end1,
+      maxComponent(p1,
+      maxComponent(p2,
+      maxComponent(p3,
+      maxComponent(p4,
+      maxComponent(p5,
+      maxComponent(p6,
+      maxComponent(p7,
+      maxComponent(p8,
+      maxComponent(p9,
+      maxComponent(p10,
+      maxComponent(p11, p12))))))))))));
   return Box(pmin, pmax);
 }

@@ -40,6 +40,24 @@ const std::string vector::toString(const Vector &v)
   return ss.str();
 }
 
+const Vector vector::lerpRotate(const Vector &a, const Vector &b, const double q)
+{
+  const Vector bxa = b.cross(a);
+  const Vector au = a.unit();
+  const double m1 = a.length();
+  const double m2 = b.length();
+
+  if (bxa.length() == 0)
+  {
+    return au * LERP(m1, m2, q);
+  }
+
+  const Vector axis = bxa.unit();
+  const double theta = acos(a.dot(b) / (m1 * m2));
+  return rotate(au, axis, q * theta) * LERP(m1, m2, q);
+}
+
+
 /*
 const Vector vector::componentMin(const Vector &a, const Vector &b) const
 {
@@ -114,23 +132,6 @@ const Vector Vector::rotate(const Vector &axis, const double theta) const
     *this * cos(theta) +
     axis * (*this * axis) * (1 - cos(theta)) +
     (*this ^ axis) * sin(theta);
-}
-
-const Vector Vector::lerpRotate(const Vector &b, const double q) const
-{
-  const Vector bxa = b ^ (*this);
-  const Vector au = unit();
-  const double m1 = length();
-  const double m2 = b.length();
-
-  if (bxa.length() == 0)
-  {
-    return au * LERP(m1, m2, q);
-  }
-
-  const Vector axis = bxa.unit();
-  const double theta = acos(((*this) * b) / (m1 * m2));
-  return au.rotate(axis, q * theta) * LERP(m1, m2, q);
 }
 
 const Vector Vector::unit() const

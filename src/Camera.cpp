@@ -9,6 +9,9 @@
 #include "macros.h"
 using namespace vr;
 
+using std::map;
+using std::string;
+
 Camera::Camera()
 {
   m_Eye = Vector(0,0,0);
@@ -150,8 +153,8 @@ void Camera::setEyeViewUp(const Vector &eye, const Vector &view, const Vector &u
 {
   m_Eye = eye;
   m_View = view.unit();
-  m_Up = (up - (up*m_View) * m_View).unit();
-  m_Right = (m_View ^ m_Up).unit();
+  m_Up = (up - up.dot(m_View) * m_View).unit();
+  m_Right = m_View.cross(m_Up).unit();
 }
 
 void Camera::setFOV(const double fov)
@@ -228,8 +231,11 @@ const Vector& Camera::right() const
 
 const Box Camera::getBBox() const
 {
+  using openvdb::OPENVDB_VERSION_NAME::math::minComponent;
+  using openvdb::OPENVDB_VERSION_NAME::math::maxComponent;
+
   const Vector p0 = corner(0), p1 = corner(1);
-  Box b = Box(p0.componentMin(p1), p0.componentMax(p1));
+  Box b = Box(minComponent(p0, p1), maxComponent(p0, p1));
   for(int i = 2; i < 8; i++)
   {
     b = b.expand(corner(i));
@@ -252,8 +258,8 @@ const Vector Camera::gridSpace(const Vector &p) const
     pp = (p - eye()),
     x = (pp / (view() * pp)) - view();
   const double
-    xcp = x * right(),
-    ycp = x * up();
+    xcp = x.dot(right()),
+    ycp = x.dot(up());
   return Vector(
     ((xcp/m_HTanFOV) + 1) / 2,
     ((ycp/m_VTanFOV) + 1) / 2,
@@ -306,10 +312,10 @@ void Camera::update()
 
 void Camera::getProperties(map<string, string> &prop) const
 {
-  prop["eye"] = m_Eye.toString();
-  prop["up"] = m_Up.toString();
-  prop["right"] = m_Right.toString();
-  prop["view"] = m_View.toString();
+  prop["eye"] = vector::toString(eye());
+  prop["up"] = vector::toString(up());
+  prop["right"] = vector::toString(right());
+  prop["view"] = vector::toString(view());
   prop["hfov"] = horizontalFOV();
   prop["ar"] = boost::lexical_cast<string>( aspectRatio() );
   prop["nearplane"] = boost::lexical_cast<string>( nearPlane() );

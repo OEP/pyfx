@@ -6,7 +6,7 @@ using namespace vr;
 
 const float Cone::eval(const Vector &p) const
 {
-  const double xn =  p * m_N;
+  const double xn = p.dot(m_N);
 
   if(xn < 0)
   {
@@ -29,6 +29,9 @@ const Vector Cone::grad(const Vector &p) const
 
 const Box Cone::getBBox() const
 {
+  using openvdb::OPENVDB_VERSION_NAME::math::minComponent;
+  using openvdb::OPENVDB_VERSION_NAME::math::maxComponent;
+
   const double
     r = m_H * tan(m_Theta);
   const Vector
@@ -43,25 +46,25 @@ const Box Cone::getBBox() const
     corner8 = -r * vector::UY,
     corner9 = -r * vector::UZ,
     minp =
-      base.componentMin(corner1)
-          .componentMin(corner2)
-          .componentMin(corner3)
-          .componentMin(corner4)
-          .componentMin(corner5)
-          .componentMin(corner6)
-          .componentMin(corner7)
-          .componentMin(corner8)
-          .componentMin(corner9),
+      minComponent(base,
+        minComponent(corner1,
+        minComponent(corner2,
+        minComponent(corner3,
+        minComponent(corner4,
+        minComponent(corner5,
+        minComponent(corner6,
+        minComponent(corner7,
+        minComponent(corner8, corner9))))))))),
     maxp =
-      base.componentMax(corner1)
-          .componentMax(corner2)
-          .componentMax(corner3)
-          .componentMax(corner4)
-          .componentMax(corner5)
-          .componentMax(corner6)
-          .componentMax(corner7)
-          .componentMax(corner8)
-          .componentMax(corner9);
+      maxComponent(base,
+        maxComponent(corner1,
+        maxComponent(corner2,
+        maxComponent(corner3,
+        maxComponent(corner4,
+        maxComponent(corner5,
+        maxComponent(corner6,
+        maxComponent(corner7,
+        maxComponent(corner8, corner9)))))))));
 
   return Box(minp, maxp);
 }

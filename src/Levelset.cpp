@@ -5,6 +5,8 @@
 
 using namespace vr;
 
+using std::min;
+
 Levelset::Levelset(Model *m, const Vector &resolution, const Vector &padding, const double thresh)
   : m_Model(m), m_Passes(0), m_Threshold(thresh)
 {

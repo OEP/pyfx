@@ -28,13 +28,10 @@ namespace vr
       }
 
     public:
+      using VolumeGrid<U,V>::size;
+      using VolumeGrid<U,V>::defaultValue;
       using VolumeGrid<U,V>::oob;
       using VolumeGrid<U,V>::index;
-      using VolumeGrid<U,V>::defaultValue;
-      using VolumeGrid<U,V>::size;
-      using VolumeGrid<U,V>::NX;
-      using VolumeGrid<U,V>::NY;
-      using VolumeGrid<U,V>::NZ;
 
       DenseGrid(Griddable *b, const Vector resolution, const U &dv)
         : VolumeGrid<U,V>(b,resolution,dv)
