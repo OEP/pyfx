@@ -18,13 +18,13 @@ namespace vr
       BaseProject2DPlane(
           const Vector &view,
           const Vector &up,
-          const Vector &x0 = Vector::ZEROS)
+          const Vector &x0 = Vector(0))
         : 
           m_View(view.unit()),
           m_X0(x0)
         {
-          m_Right = (up ^ view).unit();
-          m_Up = (m_View ^ m_Right).unit();
+          m_Right = up.cross(view).unit();
+          m_Up = m_View.cross(m_Right).unit();
         }
 
       const float eval(const Vector&) const;

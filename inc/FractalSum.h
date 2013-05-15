@@ -14,9 +14,9 @@ namespace vr
         double _fjump = 2.0,
         double _roughness = 0.5,
         double _frequency = 0.6666,
-        Vector _translate = Vector::ZEROS,
+        Vector _translate = Vector(0),
         double _offset = 0.0,
-        Vector _axis = Vector::AXIS_Z,
+        Vector _axis = vector::UZ,
         double _angle = 0.0
       ):
         octaves(_octaves),

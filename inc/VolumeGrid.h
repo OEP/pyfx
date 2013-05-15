@@ -72,9 +72,9 @@ namespace vr
       {
         const Vector v = m_Griddable->gridSpace(p);
         return Vector(
-          v.X() * NX(),
-          v.Y() * NY(),
-          v.Z() * NZ());
+          v.x() * NX(),
+          v.y() * NY(),
+          v.z() * NZ());
       }
 
       const Box getBBox() const

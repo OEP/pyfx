@@ -12,8 +12,8 @@ const float BaseProject2DPlane::eval(const Vector &p) const
   // Put x in image coordinates.
   const Vector2D
     plane_coord =
-      Vector2D(m_Right * (x - m_X0) + 0.5,
-               m_Up    * (x - m_X0) + 0.5);
+      Vector2D(m_Right.dot(x - m_X0) + 0.5,
+                  m_Up.dot(x - m_X0) + 0.5);
   
   // The rest is up to the child class.
   return evalPlane(plane_coord);

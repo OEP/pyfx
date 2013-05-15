@@ -25,8 +25,11 @@ namespace vr
       
       virtual const Ray getAARay(const int i, const Vector &gs) const
       {
-        const Vector origin = worldSpace(gs.replace(i, 0));
-        return Ray(origin, (worldSpace(gs.replace(i, 1)) - origin));
+        const Vector
+          origin = worldSpace(vector::replace(gs, i, 0)),
+          direction = worldSpace(vector::replace(gs, i, 1));
+
+        return Ray(origin, direction);
       }
   };
 }

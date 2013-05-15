@@ -1,12 +1,44 @@
+/*
 #include <ostream>
 #include <sstream>
 #include <cmath>
 #include <cfloat>
+*/
 
 #include "Vector.h"
 #include "Matrix.h"
 #include "macros.h"
 
+using namespace vr;
+
+Vector::Vector(const Vec3Double &v)
+{
+  init(v.x(), v.y(), v.z());
+}
+
+Vector::Vector(const double c)
+{
+  init(c,c,c);
+}
+
+Vector::Vector(const double x, const double y, const double z)
+{
+  init(x,y,z);
+}
+
+const Vector vector::replace(const Vector &in, const int i, const double v) const
+{
+  switch(i)
+  {
+    case 0: return Vector(v, in.y(), in.z());
+    case 1: return Vector(in.x(), v, in.z());
+    case 2: return Vector(in.x(), in.y(), v);
+  }
+  return *this;
+}
+
+
+/*
 using namespace std;
 using namespace vr;
 
@@ -100,17 +132,6 @@ void Vector::normalize()
 const double Vector::magnitude() const
 {
   return std::sqrt(X() * X() + Y() * Y() + Z() * Z());
-}
-
-const Vector Vector::replace(const int i, const double v) const
-{
-  switch(i)
-  {
-    case 0: return Vector(v, Y(), Z());
-    case 1: return Vector(X(), v, Z());
-    case 2: return Vector(X(), Y(), v);
-  }
-  return *this;
 }
 
 const Vector Vector::componentMin(const Vector &other) const
@@ -270,3 +291,4 @@ const std::string Vector::toString() const
   ss << X() << " " << Y() << " " << Z();
   return ss.str();
 }
+*/

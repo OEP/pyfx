@@ -4,7 +4,6 @@
 #include <ostream>
 
 #include "Vector.h"
-#include "Vector.h"
 
 namespace vr
 {
