@@ -50,8 +50,6 @@ const int
 const Vector
   Vector::MAX = Vector(DBL_MAX, DBL_MAX, DBL_MAX),
   Vector::MIN = Vector(-DBL_MAX, -DBL_MAX, -DBL_MAX),
-  Vector::ZEROS = Vector(0,0,0),
-  Vector::ONES  = Vector(1,1,1),
   vector::UX = Vector(1,0,0),
   vector::UY = Vector(0,1,0),
   vector::UZ = Vector(0,0,1);

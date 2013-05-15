@@ -20,7 +20,7 @@ namespace vr
       Ginsu(const std::vector<Vector2D> *vectors,
             const Vector &view,
             const Vector &up,
-            const Vector &x0 = Vector::ZEROS)
+            const Vector &x0 = Vector(0))
         : BaseProject2DPlane(view, up, x0), m_Vectors(vectors)
         {}
 

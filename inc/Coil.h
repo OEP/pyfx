@@ -16,7 +16,7 @@ namespace vr
     public:
       Coil(
         const Vector &n,
-        const Vector &x0=Vector::ZEROS)
+        const Vector &x0=Vector(0))
         :
         m_Normal(n.unit()),
         m_X0(x0)

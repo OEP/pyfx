@@ -19,7 +19,7 @@ namespace vr
       ProjectImage(const Image *image,
             const Vector &view,
             const Vector &up,
-            const Vector &x0 = Vector::ZEROS,
+            const Vector &x0 = Vector(0),
             const int channel = 0)
         : BaseProject2DPlane(view, up, x0),
           m_Image(image),
