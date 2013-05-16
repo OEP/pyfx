@@ -95,7 +95,7 @@ class FractalSumFactory(BaseFactory):
     ('frequency', 0.666666, interpolate.linear),
     ('translate', vrend.Vector(0), interpolate.linear),
     ('offset', 0.0, interpolate.linear),
-    ('axis', vrend.Vector.AXIS_Z, interpolate.rotate),
+    ('axis', vrend.Vector.UZ, interpolate.rotate),
     ('angle', 0.0, interpolate.linear),
   )
 
@@ -104,9 +104,9 @@ class WispFactory(BaseFactory):
   FIELDS = (
     ('fspn1', FractalSumFactory, interpolate.factory),
     ('fspn2', FractalSumFactory, interpolate.factory),
-    ('e0', vrend.Vector.AXIS_X, interpolate.rotate),
-    ('e1', vrend.Vector.AXIS_Y, interpolate.rotate),
-    ('e2', vrend.Vector.AXIS_Z, interpolate.rotate),
+    ('e0', vrend.Vector.UX, interpolate.rotate),
+    ('e1', vrend.Vector.UY, interpolate.rotate),
+    ('e2', vrend.Vector.UZ, interpolate.rotate),
     ('p0', vrend.Vector(0), interpolate.linear),
     ('scale', vrend.Vector.ONES, interpolate.linear),
     ('delta', vrend.Vector(0), interpolate.linear),

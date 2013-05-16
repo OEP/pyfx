@@ -8,7 +8,7 @@ class Transform(object):
   def __init__(self,
       density = None,
       translate = vrend.Vector.ZEROS,
-      rotate_axis = vrend.Vector.AXIS_Z,
+      rotate_axis = vrend.Vector.UZ,
       rotate_theta = 0.0,
       scale = 1.0):
     self.translate = translate

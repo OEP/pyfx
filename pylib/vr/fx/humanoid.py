@@ -130,8 +130,8 @@ def create_tie():
 
   majmin = unionAll(major, minor)
 
-  plane1 = (Plane, Vector.AXIS_X, Vector(-TIE_THICK/2, 0, 0))
-  plane2 = (Plane, Vector.AXIS_X * -1, Vector(TIE_THICK/2, 0, 0))
+  plane1 = (Plane, Vector.UX, Vector(-TIE_THICK/2, 0, 0))
+  plane2 = (Plane, Vector.UX * -1, Vector(TIE_THICK/2, 0, 0))
   tie = intersectAll(majmin, plane1, plane2)
   tie = (Mask, tie)
 
@@ -158,30 +158,30 @@ def left_legsocket_position():
   return Vector(0, TORSO_HEIGHT/2, 0)
 
 def right_hindleg_direction():
-  return (Vector.AXIS_Z * 1).rotate(Vector.AXIS_X, RHLEG_THETA)
+  return (Vector.UZ * 1).rotate(Vector.UX, RHLEG_THETA)
 
 def right_foreleg_direction():
-  return (Vector.AXIS_Z * 1).rotate(Vector.AXIS_X, RFLEG_THETA)
+  return (Vector.UZ * 1).rotate(Vector.UX, RFLEG_THETA)
 
 def left_foreleg_direction():
-  return (Vector.AXIS_Z * -1).rotate(Vector.AXIS_X, LFLEG_THETA)
+  return (Vector.UZ * -1).rotate(Vector.UX, LFLEG_THETA)
 
 def right_knee_position():
   return right_legsocket_position() + right_hindleg_direction() * \
     HINDLEG_LENGTH * 2 * 0.8
 
 def left_hindleg_direction():
-  return (Vector.AXIS_Z * -1).rotate(Vector.AXIS_X, LHLEG_THETA)
+  return (Vector.UZ * -1).rotate(Vector.UX, LHLEG_THETA)
 
 def left_knee_position():
   return left_legsocket_position() + left_hindleg_direction() * \
     HINDLEG_LENGTH * 2 * 0.8
 
 def right_hindarm_direction():
-  return (Vector.AXIS_Z * 1).rotate(Vector.AXIS_X, RHARM_THETA)
+  return (Vector.UZ * 1).rotate(Vector.UX, RHARM_THETA)
 
 def left_hindarm_direction():
-  return (Vector.AXIS_Z *-1).rotate(Vector.AXIS_X, LHARM_THETA)
+  return (Vector.UZ *-1).rotate(Vector.UX, LHARM_THETA)
 
 def left_hindarm_position():
   return left_shoulder_position() + left_hindarm_direction() * \
@@ -192,10 +192,10 @@ def right_hindarm_position():
     HINDARM_LENGTH * 2 * 0.8
 
 def right_forearm_direction():
-  return (Vector.AXIS_Z *  1).rotate(Vector.AXIS_X, RFARM_THETA)
+  return (Vector.UZ *  1).rotate(Vector.UX, RFARM_THETA)
 
 def left_forearm_direction():
-  return (Vector.AXIS_Z * -1).rotate(Vector.AXIS_X, LFARM_THETA)
+  return (Vector.UZ * -1).rotate(Vector.UX, LFARM_THETA)
 
 def right_forearm_position():
   return right_hindarm_position() + right_forearm_direction() * \
@@ -239,14 +239,14 @@ def create_body(subset='all'):
   rfoot = create_foot()
   pelvis = (Scale, PELVIS_SCALE, pelvis)
 
-  rfarm = (Rotate, Vector.AXIS_X, RFARM_THETA, rfarm)
-  lfarm = (Rotate, Vector.AXIS_X, LFARM_THETA, lfarm)
-  lharm = (Rotate, Vector.AXIS_X, LHARM_THETA, lharm)
-  rharm = (Rotate, Vector.AXIS_X, RHARM_THETA, rharm)
-  lhleg = (Rotate, Vector.AXIS_X, LHLEG_THETA, lhleg)
-  rhleg = (Rotate, Vector.AXIS_X, RHLEG_THETA, rhleg)
-  lfleg = (Rotate, Vector.AXIS_X, LFLEG_THETA, lfleg)
-  rfleg = (Rotate, Vector.AXIS_X, RFLEG_THETA, rfleg)
+  rfarm = (Rotate, Vector.UX, RFARM_THETA, rfarm)
+  lfarm = (Rotate, Vector.UX, LFARM_THETA, lfarm)
+  lharm = (Rotate, Vector.UX, LHARM_THETA, lharm)
+  rharm = (Rotate, Vector.UX, RHARM_THETA, rharm)
+  lhleg = (Rotate, Vector.UX, LHLEG_THETA, lhleg)
+  rhleg = (Rotate, Vector.UX, RHLEG_THETA, rhleg)
+  lfleg = (Rotate, Vector.UX, LFLEG_THETA, lfleg)
+  rfleg = (Rotate, Vector.UX, RFLEG_THETA, rfleg)
 
   lhleg = translateAll(left_legsocket_position(), lhleg)
   rhleg = translateAll(right_legsocket_position(), rhleg)
@@ -334,7 +334,7 @@ def create_hat_bowl():
 def create_flower():
   direction = Vector(1,1,0).unit()
   pos = direction * (HEAD_SIZE+ACCENT_THICKNESS) \
-    - Vector.AXIS_Z * FLOWER_SCALE - Vector.AXIS_Z * BRIM_THICKNESS
+    - Vector.UZ * FLOWER_SCALE - Vector.UZ * BRIM_THICKNESS
   return (Mask,
     translateAll(pos,
       (Scale, FLOWER_SCALE, SteinerPatch)))
@@ -347,10 +347,10 @@ def create_hat():
   flower = create_flower()
 
   main, accent, flower = \
-    rotateAll(Vector.AXIS_X, -math.pi/8, main, accent, flower)
+    rotateAll(Vector.UX, -math.pi/8, main, accent, flower)
 
   pos = left_hand_position()
-  tdir = Vector.AXIS_Y.rotate(Vector.AXIS_X, -math.pi/8)
+  tdir = Vector.UY.rotate(Vector.UX, -math.pi/8)
   pos = pos - tdir * 0.9*BRIM_RADIUS
 
   main, accent, flower = \
@@ -425,7 +425,7 @@ def main():
   (opt, args) = parser.parse_args()
 
   theta = (opt.frame-1) * 2*math.pi / 199
-  cc = c.rotate(Vector.AXIS_Y, theta)
+  cc = c.rotate(Vector.UY, theta)
 
   cmd.perform_render_density(parser, cc, density, color)
 

@@ -8,7 +8,7 @@ from vr import vrend
 class Particle(Transform):
   def __init__(self,
       time=0.0, 
-      angular_axis = vrend.Vector.AXIS_Z,
+      angular_axis = vrend.Vector.UZ,
       angular_velocity = 0.0,
       **kwargs):
     self.angular_axis = angular_axis
