@@ -53,14 +53,14 @@ class TestVector(vrendtest.VrendTestCase):
     tricky = Vector(self.tricky)
     ones = Vector(self.ones)
 
-    trickyMag = tricky.magnitude()
-    onesMag = ones.magnitude()
+    trickyMag = tricky.length()
+    onesMag = ones.length()
 
     tricky.normalize()
     ones.normalize()
 
-    self.assertClose(tricky.magnitude(), 1.0)
-    self.assertClose(ones.magnitude(), 1.0)
-    self.assertTrue((tricky * trickyMag).equals(self.tricky))
+    self.assertClose(tricky.length(), 1.0)
+    self.assertClose(ones.length(), 1.0)
+    self.assertEqual(tricky * trickyMag, self.tricky)
     self.assertTrue((ones * onesMag).equals(self.ones))
 

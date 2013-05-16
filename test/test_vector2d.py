@@ -14,7 +14,7 @@ class TestVector2D(vrendtest.VrendTestCase):
     step = Vector2D(0, 0.01)
     p = (self.u + self.v) / 2.0
 
-    while p.Y() < 1:
+    while p.y() < 1:
       dist = line_distance(p, self.u, self.v)
-      self.assertClose(dist, p.Y())
+      self.assertClose(dist, p.y())
       p = p + step

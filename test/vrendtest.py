@@ -17,14 +17,14 @@ class VrendTestCase(unittest.TestCase):
   def assertVectorBetween(self, test, upper, lower):
     mid = (upper + lower) / 2
     length = upper - lower
-    dx = length.X() / 2
-    dy = length.Y() / 2
-    dz = length.Z() / 2
+    dx = length.x() / 2
+    dy = length.y() / 2
+    dz = length.z() / 2
 
     try:
-      self.assertWithin(test.X(), mid.X(), dx)
-      self.assertWithin(test.Y(), mid.Y(), dy)
-      self.assertWithin(test.Z(), mid.Z(), dz)
+      self.assertWithin(test.x(), mid.x(), dx)
+      self.assertWithin(test.y(), mid.y(), dy)
+      self.assertWithin(test.z(), mid.z(), dz)
     except AssertionError:
       args = (test, lower, upper)
       args = tuple(strvector(x) for x in args)
@@ -40,9 +40,9 @@ class VrendTestCase(unittest.TestCase):
 
   def assertVectorWithin(self, test, expected, delta):
     try:
-      self.assertWithin(test.X(), expected.X(), delta)
-      self.assertWithin(test.Y(), expected.Y(), delta)
-      self.assertWithin(test.Z(), expected.Z(), delta)
+      self.assertWithin(test.x(), expected.x(), delta)
+      self.assertWithin(test.y(), expected.y(), delta)
+      self.assertWithin(test.z(), expected.z(), delta)
     except AssertionError:
       raise AssertionError("%s not in %s +/- %f" %
         (strvector(test), strvector(expected), delta))

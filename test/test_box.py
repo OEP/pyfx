@@ -22,17 +22,17 @@ class TestBox(vrendtest.VrendTestCase):
     self.assertBoxClose(box2, self.unit)
 
   def test_rotate(self):
-    b1 = self.unit.rotate(Vector.AXIS_X, math.pi)
-    b2 = self.unit.rotate(Vector.AXIS_Y, math.pi)
-    b3 = self.unit.rotate(Vector.AXIS_Z, math.pi)
-    b4 = self.unit.rotate(Vector.AXIS_X, math.pi/4)
-    b5 = self.unit.rotate(Vector.AXIS_Y, math.pi/4)
-    b6 = self.unit.rotate(Vector.AXIS_Z, math.pi/4)
+    b1 = self.unit.rotate(Vector.UX, math.pi)
+    b2 = self.unit.rotate(Vector.UY, math.pi)
+    b3 = self.unit.rotate(Vector.UZ, math.pi)
+    b4 = self.unit.rotate(Vector.UX, math.pi/4)
+    b5 = self.unit.rotate(Vector.UY, math.pi/4)
+    b6 = self.unit.rotate(Vector.UZ, math.pi/4)
 
     for b in (b1, b2, b3):
-      self.assertEqual(b.sizeX(), 2)
-      self.assertEqual(b.sizeY(), 2)
-      self.assertEqual(b.sizeZ(), 2)
+      self.assertClose(b.sizeX(), 2)
+      self.assertClose(b.sizeY(), 2)
+      self.assertClose(b.sizeZ(), 2)
 
     self.assertClose(b4.sizeY(), 2 * math.sqrt(2))
     self.assertClose(b5.sizeZ(), 2 * math.sqrt(2))
@@ -47,7 +47,7 @@ class TestBox(vrendtest.VrendTestCase):
     for k in range(20):
       for j in range(20):
         for i in range(20):
-          dv = Vector(i * res.X(), j*res.Y(), k*res.Z())
+          dv = Vector(i * res.x(), j*res.y(), k*res.z())
           p = llc + dv
           result = self.unit.gridSpace(p)
           self.assertVectorBetween(result, upper, lower)

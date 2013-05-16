@@ -15,7 +15,7 @@ class TestGinsu(vrendtest.VrendTestCase):
     self.seq.push_back(Vector2D(0.25, 0.5))
     self.seq.push_back(Vector2D(0.50, 0.5))
     self.seq.push_back(Vector2D(0.75, 0.5))
-    self.ginsu = (Ginsu, self.seq, Vector.AXIS_Z, Vector.AXIS_Y)
+    self.ginsu = (Ginsu, self.seq, Vector.UZ, Vector.UY)
     self.ginsu = asvolumegraph(self.ginsu)
 
 
