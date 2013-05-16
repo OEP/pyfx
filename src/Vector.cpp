@@ -11,9 +11,17 @@
 #include "macros.h"
 
 using namespace vr;
-using namespace vr::vector;
 
-const Vector replace(const Vector &in, const int i, const double v) 
+const Vector
+vector::rotate(const Vector &a, const Vector &axis, const double theta)
+{
+  return
+    a * cos(theta) +
+    axis * a.dot(axis) * (1 - cos(theta)) +
+    a.cross(axis) * sin(theta);
+}
+
+const Vector vector::replace(const Vector &in, const int i, const double v) 
 {
   switch(i)
   {
@@ -124,14 +132,6 @@ const double Vector::Y() const
 const double Vector::Z() const
 {
   return m_XYZ[2];
-}
-
-const Vector Vector::rotate(const Vector &axis, const double theta) const
-{
-  return
-    *this * cos(theta) +
-    axis * (*this * axis) * (1 - cos(theta)) +
-    (*this ^ axis) * sin(theta);
 }
 
 const Vector Vector::unit() const
