@@ -108,7 +108,7 @@ class WispFactory(BaseFactory):
     ('e1', vrend.Vector.UY, interpolate.rotate),
     ('e2', vrend.Vector.UZ, interpolate.rotate),
     ('p0', vrend.Vector(0), interpolate.linear),
-    ('scale', vrend.Vector.ONES, interpolate.linear),
+    ('scale', vrend.Vector(1), interpolate.linear),
     ('delta', vrend.Vector(0), interpolate.linear),
     ('pscale', 1.0, interpolate.linear),
     ('clump', 0.333, interpolate.linear),
