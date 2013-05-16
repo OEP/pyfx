@@ -196,7 +196,7 @@ const Vector Box::gridSpace(const Vector &p) const
 const Vector
 Box::worldSpace(const Vector &pg) const
 {
-  return llc() + vector::componentProduct(pg, length());
+  return llc() + pg.componentProduct(length());
 }
 
 void Box::gridSize(const Vector &res, int *dims) const
