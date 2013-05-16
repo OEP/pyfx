@@ -9,9 +9,9 @@ void WispParameters::interpolate
 {
   result.FSPN1   = FSPN1.interpolate(other.FSPN1, q);
   result.FSPN2   = FSPN2.interpolate(other.FSPN2, q);
-  result.E0      = vector::lerpRotate(E0, other.E0, q);
-  result.E1      = vector::lerpRotate(E1, other.E1, q);
-  result.E2      = vector::lerpRotate(E2, other.E2, q);
+  result.E0      = E0.lerpRotate(other.E0, q);
+  result.E1      = E1.lerpRotate(other.E1, q);
+  result.E2      = E2.lerpRotate(other.E2, q);
   result.P0      = LERP(P0, other.P0, q);
   result.Scale   = LERP(Scale, other.Scale, q);
   result.Delta   = LERP(Delta, other.Delta, q);
