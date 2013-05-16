@@ -8,25 +8,74 @@
 
 namespace vr
 {
-  typedef openvdb::Vec3d Vector;
-
-  namespace vector
+  class Matrix;
+  class Vector
   {
-    static const Vector
-      UX, UY, UZ;
+    private:
+      double m_XYZ[3];
 
-    const Vector replace(const Vector &in, const int i, const double v);
-    const Vector rotate(const Vector &in, const Vector &axis, const double v);
-    const Vector lerpRotate(const Vector &a, const Vector &b, const double q);
-    const Vector componentProduct(const Vector &a, const Vector &b);
-    const Vector componentProduct(const Vector &a, const Vector &b);
-    const std::string toString(const Vector &v);
+    protected:
+    public:
+      static const int
+        COMPONENT_X, COMPONENT_Y, COMPONENT_Z;
 
-//    using openvdb::OPENVDB_VERSION_NAME::math::maxComponent<double>;
+      static const Vector
+        MAX, MIN,
+        ZEROS, ONES,
+        AXIS_X, AXIS_Y, AXIS_Z;
 
-//    const Vector componentMin(const Vector &a, const Vector &b);
-//    const Vector componentMax(const Vector &a, const Vector &b);
-  }
+      Vector();
+      Vector(const Vector&);
+      Vector(const double x, const double y, const double z);
+
+      const double length() const;
+      const Vector unit() const;
+      void normalize();
+
+      const Vector componentMin(const Vector&) const;
+      const Vector componentMax(const Vector&) const;
+      const Vector componentProduct(const Vector&) const;
+      const Vector replace(const int i, const double x) const;
+
+      const double x() const;
+      const double y() const;
+      const double z() const;
+
+      const Vector rotate(const Vector&, const double) const;
+      const Vector lerpRotate(const Vector&, const double) const;
+
+      const bool equals(const Vector&) const;
+
+      const Matrix outerProduct(const Vector&) const;
+
+      const Vector operator- ()                const;
+      const Vector operator- (const Vector& v) const;
+      const Vector operator/ (const double)    const;
+      const Vector operator/ (const Vector& v) const;
+      const Vector operator+ (const Vector& v) const;
+      const double operator* (const Vector& v) const;
+      const Vector operator* (const double)    const;
+      const Vector operator^ (const Vector& v) const;
+
+      const double operator[](const int) const;
+
+      const bool operator== (const Vector& v) const;
+      const bool operator!= (const Vector& v) const;
+      const bool operator>= (const Vector& v) const;
+      const bool operator<= (const Vector& v) const;
+      const bool operator>  (const Vector& v) const;
+      const bool operator<  (const Vector& v) const;
+
+      const std::string toString() const;
+      const std::string __str__() const;
+      const std::string __repr__() const;
+
+      friend ostream& operator<< (ostream& output, const Vector& v);
+      friend const Vector operator* (const double, const Vector& v);
+  };
+  
+  ostream& operator<< (ostream& output, const Vector& v);
+  const Vector operator*(const double, const Vector& v);
 }
 
 

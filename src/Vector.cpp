@@ -1,90 +1,12 @@
-/*
 #include <ostream>
 #include <sstream>
 #include <cmath>
 #include <cfloat>
-*/
-#include <sstream>
 
 #include "Vector.h"
 #include "Matrix.h"
 #include "macros.h"
 
-using namespace vr;
-
-const Vector
-vector::rotate(const Vector &a, const Vector &axis, const double theta)
-{
-  return
-    a * cos(theta) +
-    axis * a.dot(axis) * (1 - cos(theta)) +
-    a.cross(axis) * sin(theta);
-}
-
-const Vector vector::replace(const Vector &in, const int i, const double v) 
-{
-  switch(i)
-  {
-    case 0: return Vector(v, in.y(), in.z());
-    case 1: return Vector(in.x(), v, in.z());
-    case 2: return Vector(in.x(), in.y(), v);
-  }
-  return in;
-}
-
-const Vector vector::componentProduct(const Vector &a, const Vector &b)
-{
-  return Vector(
-    a.x() * b.x(),
-    a.y() * b.y(),
-    a.z() * b.z()
-  );
-}
-
-const std::string vector::toString(const Vector &v)
-{
-  std::stringstream ss;
-  ss << v.x() << " " << v.y() << " " << v.z();
-  return ss.str();
-}
-
-const Vector vector::lerpRotate(const Vector &a, const Vector &b, const double q)
-{
-  const Vector bxa = b.cross(a);
-  const Vector au = a.unit();
-  const double m1 = a.length();
-  const double m2 = b.length();
-
-  if (bxa.length() == 0)
-  {
-    return au * LERP(m1, m2, q);
-  }
-
-  const Vector axis = bxa.unit();
-  const double theta = acos(a.dot(b) / (m1 * m2));
-  return rotate(au, axis, q * theta) * LERP(m1, m2, q);
-}
-
-
-/*
-const Vector vector::componentMin(const Vector &a, const Vector &b) const
-{
-  return Vector(
-    std::min(a.x(), b.x()),
-    std::min(a.y(), b.y()),
-    std::min(a.z(), b.z()));
-}
-
-const Vector vector::componentMax(const Vector &a, const Vector &b) const
-{
-  return Vector(
-    std::max(a.x(), b.x()),
-    std::max(a.y(), b.y()),
-    std::max(a.z(), b.z()));
-}
-*/
-
-/*
 using namespace std;
 using namespace vr;
 
@@ -96,9 +18,11 @@ const int
 const Vector
   Vector::MAX = Vector(DBL_MAX, DBL_MAX, DBL_MAX),
   Vector::MIN = Vector(-DBL_MAX, -DBL_MAX, -DBL_MAX),
-  vector::UX = Vector(1,0,0),
-  vector::UY = Vector(0,1,0),
-  vector::UZ = Vector(0,0,1);
+  Vector::ZEROS = Vector(0,0,0),
+  Vector::ONES  = Vector(1,1,1),
+  Vector::AXIS_X = Vector(1,0,0),
+  Vector::AXIS_Y = Vector(0,1,0),
+  Vector::AXIS_Z = Vector(0,0,1);
 
 Vector::Vector()
 {
@@ -119,25 +43,50 @@ Vector::Vector(const double x, const double y, const double z)
   m_XYZ[2] = z;
 }
 
-const double Vector::X() const
+const double Vector::x() const
 {
   return m_XYZ[0];
 }
 
-const double Vector::Y() const
+const double Vector::y() const
 {
   return m_XYZ[1];
 }
 
-const double Vector::Z() const
+const double Vector::z() const
 {
   return m_XYZ[2];
+}
+
+const Vector Vector::rotate(const Vector &axis, const double theta) const
+{
+  return
+    *this * cos(theta) +
+    axis * (*this * axis) * (1 - cos(theta)) +
+    (*this ^ axis) * sin(theta);
+}
+
+const Vector Vector::lerpRotate(const Vector &b, const double q) const
+{
+  const Vector bxa = b ^ (*this);
+  const Vector au = unit();
+  const double m1 = length();
+  const double m2 = b.length();
+
+  if (bxa.length() == 0)
+  {
+    return au * LERP(m1, m2, q);
+  }
+
+  const Vector axis = bxa.unit();
+  const double theta = acos(((*this) * b) / (m1 * m2));
+  return au.rotate(axis, q * theta) * LERP(m1, m2, q);
 }
 
 const Vector Vector::unit() const
 {
   const double mag = length();
-  return Vector(X() / mag, Y() / mag, Z() / mag);
+  return Vector(x() / mag, y() / mag, z() / mag);
 }
 
 void Vector::normalize()
@@ -150,31 +99,42 @@ void Vector::normalize()
 
 const double Vector::length() const
 {
-  return std::sqrt(X() * X() + Y() * Y() + Z() * Z());
+  return std::sqrt(x() * x() + y() * y() + z() * z());
+}
+
+const Vector Vector::replace(const int i, const double v) const
+{
+  switch(i)
+  {
+    case 0: return Vector(v, y(), z());
+    case 1: return Vector(x(), v, z());
+    case 2: return Vector(x(), y(), v);
+  }
+  return *this;
 }
 
 const Vector Vector::componentMin(const Vector &other) const
 {
   return Vector(
-    std::min(X(), other.x()),
-    std::min(Y(), other.y()),
-    std::min(Z(), other.z()));
+    std::min(x(), other.x()),
+    std::min(y(), other.y()),
+    std::min(z(), other.z()));
 }
 
 const Vector Vector::componentMax(const Vector &other) const
 {
   return Vector(
-    std::max(X(), other.x()),
-    std::max(Y(), other.y()),
-    std::max(Z(), other.z()));
+    std::max(x(), other.x()),
+    std::max(y(), other.y()),
+    std::max(z(), other.z()));
 }
 
 const Vector Vector::componentProduct(const Vector &other) const
 {
   return Vector(
-    X() * other.x(),
-    Y() * other.y(),
-    Z() * other.z());
+    x() * other.x(),
+    y() * other.y(),
+    z() * other.z());
 }
 
 const bool Vector::equals(const Vector &other) const
@@ -194,17 +154,17 @@ const Matrix Vector::outerProduct(const Vector &other) const
 const Vector Vector::operator+ (const Vector &other) const
 {
   return Vector(
-    X() + other.x(),
-    Y() + other.y(),
-    Z() + other.z());
+    x() + other.x(),
+    y() + other.y(),
+    z() + other.z());
 }
 
 const Vector Vector::operator- (const Vector &other) const
 {
   return Vector(
-    X() - other.x(),
-    Y() - other.y(),
-    Z() - other.z());
+    x() - other.x(),
+    y() - other.y(),
+    z() - other.z());
 }
 
 const Vector Vector::operator-() const
@@ -217,40 +177,40 @@ const Vector Vector::operator-() const
 
 const Vector Vector::operator/ (const double amt) const
 {
-  return Vector(X() / amt, Y() / amt, Z() / amt);
+  return Vector(x() / amt, y() / amt, z() / amt);
 }
 
 const Vector Vector::operator/ (const Vector &v) const
 {
-  return Vector(X() / v.x(), Y() / v.y(), Z() / v.z());
+  return Vector(x() / v.x(), y() / v.y(), z() / v.z());
 }
 
 const Vector Vector::operator* (const double amt) const
 {
-  return Vector(X() * amt, Y() * amt, Z() * amt);
+  return Vector(x() * amt, y() * amt, z() * amt);
 }
 
 const double Vector::operator* (const Vector& other) const
 {
-  return X() * other.x() + Y() * other.y() + Z() * other.z();
+  return x() * other.x() + y() * other.y() + z() * other.z();
 }
 
 const Vector Vector::operator^ (const Vector& other) const
 {
   return Vector(
-    Y() * other.z() - Z() * other.y(),
-    -( X() * other.z() - Z() * other.x()),
-    X() * other.y() - Y() * other.x());
+    y() * other.z() - z() * other.y(),
+    -( x() * other.z() - z() * other.x()),
+    x() * other.y() - y() * other.x());
 }
 
 const bool Vector::operator== (const Vector& v) const
 {
-  return X() == v.x() && Y() == v.y() && Z() == v.z();
+  return x() == v.x() && y() == v.y() && z() == v.z();
 }
 
 const bool Vector::operator!= (const Vector& v) const
 {
-  return X() != v.x() || Y() != v.y() || Z() != v.z();
+  return x() != v.x() || y() != v.y() || z() != v.z();
 }
 
 const bool Vector::operator>= (const Vector& v) const
@@ -300,14 +260,13 @@ const std::string Vector::__str__() const
 const std::string Vector::__repr__() const
 {
   std::stringstream ss;
-  ss << "(" << X() << ", " << Y() << ", " << Z() << ")";
+  ss << "(" << x() << ", " << y() << ", " << z() << ")";
   return ss.str();
 }
 
 const std::string Vector::toString() const
 {
   std::stringstream ss;
-  ss << X() << " " << Y() << " " << Z();
+  ss << x() << " " << y() << " " << z();
   return ss.str();
 }
-*/
