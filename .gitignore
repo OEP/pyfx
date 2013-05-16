@@ -1,0 +1,6 @@
+lib
+obj
+tags
+*.pyc
+*.sw*
+*.so
