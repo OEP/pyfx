@@ -2,7 +2,6 @@ import vrendtest
 import math
 
 from vr.vrend import *
-from vr.common import printvector, strvector
 
 class TestFrustumGrid(vrendtest.VrendTestCase):
 
