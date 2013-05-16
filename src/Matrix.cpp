@@ -248,3 +248,23 @@ const Matrix vr::operator*(const float f, const Matrix &m)
 {
   return m.scale(f);
 }
+
+const std::string Matrix::__str__() const
+{
+  return toString();
+}
+
+const std::string Matrix::__repr__() const
+{
+  return toString();
+}
+
+const std::string Matrix::toString() const
+{
+  std::stringstream ss;
+  ss << "(" <<
+    this->row(0) << ",\n" <<
+    this->row(1) << ",\n" <<
+    this->row(2) << ")";
+  return ss.str();
+}

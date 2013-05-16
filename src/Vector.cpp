@@ -259,10 +259,7 @@ const double Vector::operator[](const int i) const
 
 ostream& vr::operator<< (ostream& out, const vr::Vector &v)
 {
-  out << "<" <<
-    v.x() << ", " <<
-    v.y() << ", " <<
-    v.z() << ">";
+  out << v.toString();
   return out;
 }
 
@@ -278,14 +275,12 @@ const std::string Vector::__str__() const
 
 const std::string Vector::__repr__() const
 {
-  std::stringstream ss;
-  ss << "(" << x() << ", " << y() << ", " << z() << ")";
-  return ss.str();
+  return toString();
 }
 
 const std::string Vector::toString() const
 {
   std::stringstream ss;
-  ss << x() << " " << y() << " " << z();
+  ss << "(" << x() << ", " << y() << ", " << z() << ")";
   return ss.str();
 }

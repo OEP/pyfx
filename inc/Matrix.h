@@ -48,6 +48,11 @@ namespace vr
       const Matrix operator-(const Matrix&) const;
       const double operator()(size_t i, size_t j) const;
       const bool operator==(const Matrix&) const;
+      
+      // String representation
+      const std::string toString() const;
+      const std::string __str__() const;
+      const std::string __repr__() const;
 
   };
   
