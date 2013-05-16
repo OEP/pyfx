@@ -244,7 +244,7 @@ const double Matrix::operator()(size_t i, size_t j) const
   return this->mm[i][j];
 }
 
-const Matrix operator*(const float f, const Matrix &m)
+const Matrix vr::operator*(const float f, const Matrix &m)
 {
   return m.scale(f);
 }
