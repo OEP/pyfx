@@ -10,7 +10,7 @@ namespace vr
     private:
     protected:
     public:
-      const float eval() = 0;
+      virtual const float eval() = 0;
       const Vector nextVector(const float low = 0.0f, const float hi = 0.0f);
       const Vector nextVector(const Vector low, const Vector hi);
   };
