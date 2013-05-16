@@ -1,14 +1,14 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
-#include <openvdb/math/Vec3.h>
+#include <openvdb/openvdb.h>
 #include <ostream>
 
 #include "Matrix.h"
 
 namespace vr
 {
-  typedef openvdb::OPENVDB_VERSION_NAME::math::Vec3<double> Vector;
+  typedef openvdb::Vec3d Vector;
 
   namespace vector
   {
