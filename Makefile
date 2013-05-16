@@ -25,9 +25,6 @@ ARFLAGS=rvs
 override CFLAGS+=-g -O2 -Wall -I$(INC) -std=c++0x -c -fPIC -fopenmp
 TOOL_CFLAGS += -g -Wall -I$(INC) -std=c++0x -L$(LIB)
 
-LDFLAGS += 
-TOOL_LDFLAGS += -lvrend -lpng -lOpenImageIO -fopenmp
-
 SWIGCFLAGS += -g -O2 -c -I$(INC) -I/usr/include/python2.7
 SWIGLDFLAGS += -L$(LIB) -lpython2.7 -lvrend -lOpenImageIO -lfftw3 -fopenmp
 SWIGFLAGS+=-c++ -python -shadow -I$(INC) -outdir $(PYLIB)
@@ -89,10 +86,6 @@ $(TAGFILE): $(SOURCES) $(HEADERS)
 ## generates static library
 $(WAVESLIB): $(OBJECTS)
 	$(AR) $(ARFLAGS) $(WAVESLIB) $(OBJECTS)
-
-## generates tool executables
-bin/%: $(TOOLS)/%.cpp $(WAVESLIB)
-	$(CC) $(TOOL_CFLAGS) $< -o $@ $(TOOL_LDFLAGS)
 
 ## generates object files from library
 $(OBJ)/%.o: $(SRC)/%.cpp $(INC)/%.h
