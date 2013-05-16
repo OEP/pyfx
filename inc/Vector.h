@@ -1,7 +1,6 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
-#include <openvdb/openvdb.h>
 #include <ostream>
 
 #include "Matrix.h"

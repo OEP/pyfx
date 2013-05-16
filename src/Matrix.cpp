@@ -1,5 +1,9 @@
 #include "Matrix.h"
 
+#include <stdexcept>
+#include <sstream>
+#include <cmath>
+
 using namespace vr;
 
 const Matrix Matrix::EYE =
