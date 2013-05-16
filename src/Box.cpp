@@ -12,9 +12,6 @@ using namespace vr;
 using std::map;
 using std::string;
 
-using openvdb::OPENVDB_VERSION_NAME::math::maxComponent;
-using openvdb::OPENVDB_VERSION_NAME::math::minComponent;
-
 const Box
   Box::NIL = Box(-DBL_MAX),
   Box::INFINITE = Box(DBL_MAX);
@@ -89,8 +86,8 @@ const Box Box::expand(const Vector &p) const
 {
   if(isNil()) return *this;
   return Box(
-    minComponent(m_Bounds[0], p),
-    maxComponent(m_Bounds[1], p));
+    m_Bounds[0].minComponent(p),
+    m_Bounds[1].maxComponent(p));
 }
 
 const Box Box::expand(const Box &other) const
@@ -117,9 +114,9 @@ const Box Box::intersect(const Box &other) const
   if(isNil()) return other;
 
   const Vector
-    p0 = maxComponent(m_Bounds[0], other.m_Bounds[0]),
-    p1 = minComponent(m_Bounds[1], other.m_Bounds[1]),
-    pp0 = minComponent(p0, p1);
+    p0 = m_Bounds[0].maxComponent(other.m_Bounds[0]),
+    p1 = m_Bounds[1].minComponent(other.m_Bounds[1]),
+    pp0 = p0.minComponent(p1);
       
   return Box(pp0, p1);
 }
@@ -145,22 +142,19 @@ const Box Box::scale(const double factor) const
 
 const Box Box::scale(const Vector &scale) const
 {
-  using vector::componentProduct;
   return Box(
-    componentProduct(m_Bounds[0], scale),
-    componentProduct(m_Bounds[1], scale)
+    m_Bounds[0].scale(scale),
+    m_Bounds[1].scale(scale)
   );
 }
 
 const Box Box::rotate(const Vector &axis, const double theta) const
 {
-  using vector::rotate;
-
   const Vector
-    p0 = rotate(m_Bounds[0], axis, theta),
-    p1 = rotate(m_Bounds[1], axis, theta);
+    p0 = m_Bounds[0].rotate(axis, theta),
+    p1 = m_Bounds[1].rotate(axis, theta);
 
-  return Box(minComponent(p0, p1), maxComponent(p0, p1));
+  return Box(p0.minComponent(p1), p0.maxComponent(p1));
 }
 
 bool Box::contains(const Vector &p) const
@@ -196,7 +190,7 @@ const Vector Box::gridSpace(const Vector &p) const
 const Vector
 Box::worldSpace(const Vector &pg) const
 {
-  return llc() + pg.componentProduct(length());
+  return llc() + pg.scale(length());
 }
 
 void Box::gridSize(const Vector &res, int *dims) const
@@ -225,9 +219,9 @@ const Vector Box::corner(const int i) const
     addZ = (i & 4) != 0;
 
   return m_Bounds[0] +
-    addX * sizeX() * vector::UX +
-    addY * sizeY() * vector::UY +
-    addZ * sizeZ() * vector::UZ;
+    addX * sizeX() * Vector::UX +
+    addY * sizeY() * Vector::UY +
+    addZ * sizeZ() * Vector::UZ;
 }
 
 
@@ -284,6 +278,6 @@ const std::string Box::getShape() const
 
 void Box::getProperties(map<string,string> &prop) const
 {
-  prop["llc"] = vector::toString(m_Bounds[0]);
-  prop["urc"] = vector::toString(m_Bounds[1]);
+  prop["llc"] = m_Bounds[0].toString();
+  prop["urc"] = m_Bounds[1].toString();
 }

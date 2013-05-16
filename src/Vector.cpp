@@ -24,9 +24,9 @@ const Vector
   Vector::AXIS_Y = Vector(0,1,0),
   Vector::AXIS_Z = Vector(0,0,1);
 
-Vector::Vector()
+Vector::Vector(const double x)
 {
-  m_XYZ[0] = m_XYZ[1] = m_XYZ[2] = 0.0;
+  m_XYZ[0] = m_XYZ[1] = m_XYZ[2] = x;
 }
 
 Vector::Vector(const Vector &other)

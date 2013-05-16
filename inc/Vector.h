@@ -22,9 +22,9 @@ namespace vr
       static const Vector
         MAX, MIN,
         ZEROS, ONES,
-        AXIS_X, AXIS_Y, AXIS_Z;
+        UX, UY, UZ;
 
-      Vector();
+      Vector(const double x = 0.0);
       Vector(const Vector&);
       Vector(const double x, const double y, const double z);
 

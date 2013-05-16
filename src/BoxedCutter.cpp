@@ -15,6 +15,6 @@ const Vector BoxedCutter::grad(int i, const Vector &p) const
 const Box BoxedCutter::getBBox(int i) const
 {
   Vector ndx(i % (int)(nUnits[0]), (i % (int)(nUnits[0] * nUnits[1])) / (int)(nUnits[1]), i / (int)(nUnits[0] * nUnits[1]));
-  return Box(ndx.componentProduct(res) + bBox.llc(),
-             ndx.componentProduct(res) + bBox.llc() + res);
+  return Box(ndx.scale(res) + bBox.llc(),
+             ndx.scale(res) + bBox.llc() + res);
 }

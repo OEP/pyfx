@@ -15,7 +15,7 @@ namespace vr
         double _frequency = 0.6666,
         Vector _translate = Vector(0),
         double _offset = 0.0,
-        Vector _axis = vector::UZ,
+        Vector _axis = Vector::UZ,
         double _angle = 0.0
       ):
         octaves(_octaves),

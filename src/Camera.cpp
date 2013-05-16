@@ -295,9 +295,9 @@ Camera::rotate(const Vector &axis, double theta)
 {
   const Vector
     naxis = axis.unit(),
-    rView = vector::rotate(view(), naxis, theta),
-    rUp = vector::rotate(up(), naxis, theta),
-    rEye = vector::rotate(eye(), naxis, theta);
+    rView = view().rotate(naxis, theta),
+    rUp = up().rotate(naxis, theta),
+    rEye = eye().rotate(naxis, theta);
 
   Camera newCamera(*this);
   newCamera.setEyeViewUp(rEye, rView, rUp);

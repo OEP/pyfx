@@ -35,9 +35,9 @@ namespace vr
       WispParameters() :
         FSPN1   (FractalSumParameters()),
         FSPN2   (FractalSumParameters()),
-        E0      (vector::UX),
-        E1      (vector::UY),
-        E2      (vector::UZ),
+        E0      (Vector::UX),
+        E1      (Vector::UY),
+        E2      (Vector::UZ),
         P0      (Vector(0)),
         Scale   (Vector(1)),
         Delta   (Vector(0)),
