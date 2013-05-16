@@ -1,36 +1,37 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
-#include <openvdb/openvdb.h>
 #include "Vector.h"
 
 namespace vr
 {
-  typedef openvdb::Vec3d Vector;
-  typedef openvdb::math::Mat3d Matrix;
-
-  namespace matrix
+  class Vector;
+  class Matrix
   {
-    const Matrix
-      EYE = Matrix(1, 0, 0,
-                   0, 1, 0,
-                   0, 0, 1);
-    const Matrix
-      PAULI[3] =
-      {
-        Matrix( 0, 0, 0,
-                0, 0, 1,
-                0,-1, 0 ),
-        Matrix( 0, 0,-1,
-                0, 0, 0,
-                1, 0, 0 ),
-        Matrix( 0, 1, 0,
-               -1, 0, 0,
-                0, 0, 0 )
-      };
+    private:
+      double mm[3][3];
+    public:
+      static const Matrix
+        EYE,
+        PAULI[3];
+      
+      Matrix(const double v = 0.0);
+      Matrix(
+        const double v00, const double v01, const double v02,
+        const double v10, const double v11, const double v12,
+        const double v20, const double v21, const double v22
+      );
 
-    const Matrix rotation(const Vector &axis, const double theta);
-  }
+      const Matrix rotation(const Vector &axis, const double theta);
+
+      // Scaling operations
+      const Matrix scale(const float) const;
+
+      // Operator overloads
+      const Matrix operator*(const float) const;
+      const Matrix operator/(const float) const;
+      const Matrix operator+(const Matrix&) const;
+  };
 }
 
 #endif

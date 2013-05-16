@@ -113,7 +113,7 @@ const Vector Vector::replace(const int i, const double v) const
   return *this;
 }
 
-const Vector Vector::componentMin(const Vector &other) const
+const Vector Vector::minComponent(const Vector &other) const
 {
   return Vector(
     std::min(x(), other.x()),
@@ -121,25 +121,12 @@ const Vector Vector::componentMin(const Vector &other) const
     std::min(z(), other.z()));
 }
 
-const Vector Vector::componentMax(const Vector &other) const
+const Vector Vector::maxComponent(const Vector &other) const
 {
   return Vector(
     std::max(x(), other.x()),
     std::max(y(), other.y()),
     std::max(z(), other.z()));
-}
-
-const Vector Vector::componentProduct(const Vector &other) const
-{
-  return Vector(
-    x() * other.x(),
-    y() * other.y(),
-    z() * other.z());
-}
-
-const bool Vector::equals(const Vector &other) const
-{
-  return *this == other;
 }
 
 const Matrix Vector::outerProduct(const Vector &other) const
@@ -177,7 +164,7 @@ const Vector Vector::operator-() const
 
 const Vector Vector::operator/ (const double amt) const
 {
-  return Vector(x() / amt, y() / amt, z() / amt);
+  return this->scale(1.0 / amt);
 }
 
 const Vector Vector::operator/ (const Vector &v) const
@@ -185,17 +172,32 @@ const Vector Vector::operator/ (const Vector &v) const
   return Vector(x() / v.x(), y() / v.y(), z() / v.z());
 }
 
-const Vector Vector::operator* (const double amt) const
+const Vector Vector::scale (const float amt) const
 {
   return Vector(x() * amt, y() * amt, z() * amt);
 }
 
-const double Vector::operator* (const Vector& other) const
+const Vector Vector::scale (const Vector &amt) const
+{
+  return Vector(x() * amt.x(), y() * amt.y(), z() * amt.z());
+}
+
+const Vector Vector::operator* (const double amt) const
+{
+  return this->scale(amt);
+}
+
+const double Vector::dot (const Vector& other) const
 {
   return x() * other.x() + y() * other.y() + z() * other.z();
 }
 
-const Vector Vector::operator^ (const Vector& other) const
+const double Vector::operator* (const Vector& other) const
+{
+  return this->dot(other);
+}
+
+const Vector Vector::cross (const Vector& other) const
 {
   return Vector(
     y() * other.z() - z() * other.y(),
@@ -203,14 +205,24 @@ const Vector Vector::operator^ (const Vector& other) const
     x() * other.y() - y() * other.x());
 }
 
-const bool Vector::operator== (const Vector& v) const
+const Vector Vector::operator^ (const Vector& other) const
+{
+  return this->cross(other);
+}
+
+const bool Vector::equals(const Vector &v) const
 {
   return x() == v.x() && y() == v.y() && z() == v.z();
 }
 
+const bool Vector::operator== (const Vector& v) const
+{
+  return this->equals(v);
+}
+
 const bool Vector::operator!= (const Vector& v) const
 {
-  return x() != v.x() || y() != v.y() || z() != v.z();
+  return !this->equals(v);
 }
 
 const bool Vector::operator>= (const Vector& v) const

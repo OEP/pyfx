@@ -32,20 +32,29 @@ namespace vr
       const Vector unit() const;
       void normalize();
 
-      const Vector componentMin(const Vector&) const;
-      const Vector componentMax(const Vector&) const;
-      const Vector componentProduct(const Vector&) const;
+      // Component operators
+      const Vector minComponent(const Vector&) const;
+      const Vector maxComponent(const Vector&) const;
       const Vector replace(const int i, const double x) const;
 
+      // Component accessors
       const double x() const;
       const double y() const;
       const double z() const;
 
+      // Rotation methods
       const Vector rotate(const Vector&, const double) const;
       const Vector lerpRotate(const Vector&, const double) const;
 
       const bool equals(const Vector&) const;
+      
+      // Scaling methods
+      const Vector scale(const Vector&) const;
+      const Vector scale(const float) const;
 
+      // Named linalg methods
+      const double dot(const Vector &v) const;
+      const Vector cross(const Vector &v) const;
       const Matrix outerProduct(const Vector&) const;
 
       const Vector operator- ()                const;
@@ -70,11 +79,11 @@ namespace vr
       const std::string __str__() const;
       const std::string __repr__() const;
 
-      friend ostream& operator<< (ostream& output, const Vector& v);
+      friend std::ostream& operator<< (std::ostream& output, const Vector& v);
       friend const Vector operator* (const double, const Vector& v);
   };
   
-  ostream& operator<< (ostream& output, const Vector& v);
+  std::ostream& operator<< (std::ostream& output, const Vector& v);
   const Vector operator*(const double, const Vector& v);
 }
 
