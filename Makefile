@@ -1,3 +1,15 @@
+## User-configurable variables
+## Override these on the command line or in a custom.mk file.
+
+## Include and link flags for Python
+override INC_PYTHON = -I/usr/include/python2.7
+override LD_PYTHON = -lpython2.7
+
+override EXTRA_LPATHS = -L/opt/hfs/dsolib
+
+## End user-configurable variables
+-include custom.mk
+
 CC = g++
 AR = ar
 SWIGEXEC = swig
@@ -22,11 +34,11 @@ MKCLASS = $(DEVTOOLS)/mkclass
 SWIGMODULE = vrend
 
 ARFLAGS=rvs
-override CFLAGS+=-g -O2 -Wall -I$(INC) -std=c++0x -c -fPIC -fopenmp
+override CFLAGS+=-g -Wall -I$(INC) -std=c++0x -c -fPIC -lopenvdb -fopenmp
 TOOL_CFLAGS += -g -Wall -I$(INC) -std=c++0x -L$(LIB)
 
-SWIGCFLAGS += -g -O2 -c -I$(INC) -I/usr/include/python2.7
-SWIGLDFLAGS += -L$(LIB) -lpython2.7 -lvrend -lOpenImageIO -lfftw3 -fopenmp
+SWIGCFLAGS += -g -c -I$(INC) $(INC_PYTHON)
+SWIGLDFLAGS += -L$(LIB) $(EXTRA_LPATHS) $(LD_PYTHON) -lvrend -lOpenImageIO -ltbb -ltbbmalloc -lopenvdb -fopenmp
 SWIGFLAGS+=-c++ -python -shadow -I$(INC) -outdir $(PYLIB)
 
 SOURCES=$(wildcard $(SRC)/*.cpp)
@@ -40,15 +52,14 @@ SWIGIS = $(patsubst $(INC)/%.h, $(SWIG)/%.i, $(HEADERS))
 SWIGWRAPS = $(patsubst $(SWIG)/%.i, $(SWIG)/%_wrap.cxx, $(SWIGROOTS))
 SWIGSOS = $(patsubst $(SWIG)/%.i, $(PYLIB)/_%.so, $(SWIGROOTS))
 SWIGPYS = $(patsubst $(SWIG)/%.i, $(PYLIB)/%.py, $(SWIGROOTS))
-#SWIGPYLINKS = $(patsubst $(LIB)/%.py, $(SCRIPTS)/%.py, $(SWIGPYS))
-#SWIGSOLINKS = $(patsubst $(LIB)/%.so, $(SCRIPTS)/%.so, $(SWIGSOS))
-
--include custom.mk
 
 all: debug
 
 ## 'make release' to not print debug info.
 release: setreleaseflag everything
+
+printvars:
+	echo $(EXTRA_LPATHS)
 
 setreleaseflag:
 	$(eval CFLAGS += -DRELEASE)
