@@ -29,42 +29,39 @@ const Vector Cone::grad(const Vector &p) const
 
 const Box Cone::getBBox() const
 {
-  using openvdb::OPENVDB_VERSION_NAME::math::minComponent;
-  using openvdb::OPENVDB_VERSION_NAME::math::maxComponent;
-
   const double
     r = m_H * tan(m_Theta);
   const Vector
     base = m_H * m_N,
-    corner1 = base + r * vector::UX,
-    corner2 = base + r * vector::UY,
-    corner3 = base + r * vector::UZ,
-    corner4 = base - r * vector::UX,
-    corner5 = base - r * vector::UY,
-    corner6 = base - r * vector::UZ,
-    corner7 = -r * vector::UX,
-    corner8 = -r * vector::UY,
-    corner9 = -r * vector::UZ,
+    corner1 = base + r * Vector::UX,
+    corner2 = base + r * Vector::UY,
+    corner3 = base + r * Vector::UZ,
+    corner4 = base - r * Vector::UX,
+    corner5 = base - r * Vector::UY,
+    corner6 = base - r * Vector::UZ,
+    corner7 = -r * Vector::UX,
+    corner8 = -r * Vector::UY,
+    corner9 = -r * Vector::UZ,
     minp =
-      minComponent(base,
-        minComponent(corner1,
-        minComponent(corner2,
-        minComponent(corner3,
-        minComponent(corner4,
-        minComponent(corner5,
-        minComponent(corner6,
-        minComponent(corner7,
-        minComponent(corner8, corner9))))))))),
+      base.minComponent(corner1)
+        .minComponent(corner2)
+        .minComponent(corner3)
+        .minComponent(corner4)
+        .minComponent(corner5)
+        .minComponent(corner6)
+        .minComponent(corner7)
+        .minComponent(corner8)
+        .minComponent(corner9),
     maxp =
-      maxComponent(base,
-        maxComponent(corner1,
-        maxComponent(corner2,
-        maxComponent(corner3,
-        maxComponent(corner4,
-        maxComponent(corner5,
-        maxComponent(corner6,
-        maxComponent(corner7,
-        maxComponent(corner8, corner9)))))))));
+      base.maxComponent(corner1)
+        .maxComponent(corner2)
+        .maxComponent(corner3)
+        .maxComponent(corner4)
+        .maxComponent(corner5)
+        .maxComponent(corner6)
+        .maxComponent(corner7)
+        .maxComponent(corner8)
+        .maxComponent(corner9);
 
   return Box(minp, maxp);
 }

@@ -77,6 +77,128 @@ Matrix::scale(const float f) const
   );
 }
 
+const Matrix Matrix::transpose() const
+{
+  return Matrix(
+    this->mm[0][0],
+    this->mm[1][0],
+    this->mm[2][0],
+    this->mm[0][1],
+    this->mm[1][1],
+    this->mm[2][1],
+    this->mm[0][2],
+    this->mm[1][2],
+    this->mm[2][2]
+  );
+}
+
+const Matrix Matrix::adjoint() const
+{
+  // Adapted from OpenVDB code base.
+  return Matrix(
+    this->mm[1][1] * this->mm[2][2] - this->mm[1][2] * this->mm[2][1],
+    this->mm[0][2] * this->mm[2][1] - this->mm[0][1] * this->mm[2][2],
+    this->mm[0][1] * this->mm[1][2] - this->mm[0][2] * this->mm[1][1],
+    this->mm[1][2] * this->mm[2][0] - this->mm[1][0] * this->mm[2][2],
+    this->mm[0][0] * this->mm[2][2] - this->mm[0][2] * this->mm[2][0],
+    this->mm[0][2] * this->mm[1][0] - this->mm[0][0] * this->mm[1][2],
+    this->mm[1][0] * this->mm[2][1] - this->mm[1][1] * this->mm[2][0],
+    this->mm[0][1] * this->mm[2][0] - this->mm[0][0] * this->mm[2][1],
+    this->mm[0][0] * this->mm[1][1] - this->mm[0][1] * this->mm[1][0]
+  );
+}
+
+const double Matrix::determinant() const
+{
+  return
+      this->mm[0][0] * (this->mm[1][1] * this->mm[2][2] - this->mm[1][2] * this->mm[2][1])
+    - this->mm[0][1] * (this->mm[1][0] * this->mm[2][2] - this->mm[1][2] * this->mm[2][0])
+    + this->mm[0][2] * (this->mm[1][0] * this->mm[2][1] - this->mm[1][1] * this->mm[2][0]);
+}
+
+const Matrix Matrix::inverse() const
+{
+  // Adapted from OpenVDB code base.
+  const Matrix adj = this->adjoint();
+  const double det = 
+    adj.mm[0][0] * this->mm[0][0] +
+    adj.mm[0][1] * this->mm[1][0] +
+    adj.mm[0][2] * this->mm[2][0];
+  
+  // Tolerance check removed here.
+  if(det == 0.0)
+  {
+    throw std::domain_error("Matrix is singular.");
+  }
+
+  return adj * (1.0 / det);
+}
+
+const Vector Matrix::dot(const Vector &v) const
+{
+  return Vector(
+    v.x() * this->mm[0][0] + v.y() * this->mm[0][1] + v.z() * this->mm[0][2],
+    v.x() * this->mm[1][0] + v.y() * this->mm[1][1] + v.z() * this->mm[1][2],
+    v.x() * this->mm[2][0] + v.y() * this->mm[2][1] + v.z() * this->mm[2][2]
+  );
+}
+
+const Matrix Matrix::dot(const Matrix &m) const
+{
+  return Matrix(
+    this->row(0).dot(m.column(0)),
+    this->row(0).dot(m.column(1)),
+    this->row(0).dot(m.column(2)),
+    this->row(1).dot(m.column(0)),
+    this->row(1).dot(m.column(1)),
+    this->row(1).dot(m.column(2)),
+    this->row(2).dot(m.column(0)),
+    this->row(2).dot(m.column(1)),
+    this->row(2).dot(m.column(2))
+  );
+}
+
+const Matrix Matrix::operator*(const Matrix & m) const
+{
+  return this->dot(m);
+}
+
+const bool Matrix::operator==(const Matrix &m) const
+{
+  bool result = true;
+  for(size_t i = 0; result && i < 3; i++)
+  {
+    for(size_t j = 0; result && j < 3; j++)
+    {
+      result &= this->mm[i][j] == m(i,j);
+    }
+  }
+  return result;
+}
+
+const Vector Matrix::row(size_t i) const
+{
+  return Vector(
+    this->mm[i][0],
+    this->mm[i][1],
+    this->mm[i][2]
+  );
+}
+
+const Vector Matrix::column(size_t j) const
+{
+  return Vector(
+    this->mm[0][j],
+    this->mm[1][j],
+    this->mm[2][j]
+  );
+}
+
+const Vector Matrix::operator*(const Vector &v) const
+{
+  return this->dot(v);
+}
+
 const Matrix Matrix::operator*(const float f) const
 {
   return this->scale(f);
@@ -100,4 +222,29 @@ const Matrix Matrix::operator+(const Matrix &o) const
     this->mm[2][1] + o.mm[2][1],
     this->mm[2][2] + o.mm[2][2]
   );
+}
+
+const Matrix Matrix::operator-(const Matrix &o) const
+{
+  return Matrix(
+    this->mm[0][0] - o.mm[0][0],
+    this->mm[0][1] - o.mm[0][1],
+    this->mm[0][2] - o.mm[0][2],
+    this->mm[1][0] - o.mm[1][0],
+    this->mm[1][1] - o.mm[1][1],
+    this->mm[1][2] - o.mm[1][2],
+    this->mm[2][0] - o.mm[2][0],
+    this->mm[2][1] - o.mm[2][1],
+    this->mm[2][2] - o.mm[2][2]
+  );
+}
+
+const double Matrix::operator()(size_t i, size_t j) const
+{
+  return this->mm[i][j];
+}
+
+const Matrix operator*(const float f, const Matrix &m)
+{
+  return m.scale(f);
 }

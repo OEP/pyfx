@@ -26,7 +26,7 @@ namespace vr
     public:
       Rotate(const Vector &axis, const double theta, const Volume<U,V> *field)
         : m_Axis(axis), m_Theta(theta), m_Field(field),
-          m_Rotation(matrix::rotation(axis, theta)),
+          m_Rotation(Matrix::rotation(axis, theta)),
           m_InvRotation(m_Rotation.inverse()),
           m_TRotation(m_Rotation.transpose()) {}
 

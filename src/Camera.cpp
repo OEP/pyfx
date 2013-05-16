@@ -231,11 +231,8 @@ const Vector& Camera::right() const
 
 const Box Camera::getBBox() const
 {
-  using openvdb::OPENVDB_VERSION_NAME::math::minComponent;
-  using openvdb::OPENVDB_VERSION_NAME::math::maxComponent;
-
   const Vector p0 = corner(0), p1 = corner(1);
-  Box b = Box(minComponent(p0, p1), maxComponent(p0, p1));
+  Box b = Box(p0.minComponent(p1), p0.maxComponent(p1));
   for(int i = 2; i < 8; i++)
   {
     b = b.expand(corner(i));
@@ -312,10 +309,10 @@ void Camera::update()
 
 void Camera::getProperties(map<string, string> &prop) const
 {
-  prop["eye"] = vector::toString(eye());
-  prop["up"] = vector::toString(up());
-  prop["right"] = vector::toString(right());
-  prop["view"] = vector::toString(view());
+  prop["eye"] = eye().toString();
+  prop["up"] = up().toString();
+  prop["right"] = right().toString();
+  prop["view"] = view().toString();
   prop["hfov"] = horizontalFOV();
   prop["ar"] = boost::lexical_cast<string>( aspectRatio() );
   prop["nearplane"] = boost::lexical_cast<string>( nearPlane() );

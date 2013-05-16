@@ -21,7 +21,6 @@ namespace vr
 
       static const Vector
         MAX, MIN,
-        ZEROS, ONES,
         UX, UY, UZ;
 
       Vector(const double x = 0.0);
@@ -54,6 +53,7 @@ namespace vr
 
       // Named linalg methods
       const double dot(const Vector &v) const;
+      const Vector dot(const Matrix &m) const;
       const Vector cross(const Vector &v) const;
       const Matrix outerProduct(const Vector&) const;
 

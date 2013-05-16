@@ -18,11 +18,9 @@ const int
 const Vector
   Vector::MAX = Vector(DBL_MAX, DBL_MAX, DBL_MAX),
   Vector::MIN = Vector(-DBL_MAX, -DBL_MAX, -DBL_MAX),
-  Vector::ZEROS = Vector(0,0,0),
-  Vector::ONES  = Vector(1,1,1),
-  Vector::AXIS_X = Vector(1,0,0),
-  Vector::AXIS_Y = Vector(0,1,0),
-  Vector::AXIS_Z = Vector(0,0,1);
+  Vector::UX = Vector(1,0,0),
+  Vector::UY = Vector(0,1,0),
+  Vector::UZ = Vector(0,0,1);
 
 Vector::Vector(const double x)
 {
@@ -185,6 +183,15 @@ const Vector Vector::scale (const Vector &amt) const
 const Vector Vector::operator* (const double amt) const
 {
   return this->scale(amt);
+}
+
+const Vector Vector::dot (const Matrix& m) const
+{
+  return Vector(
+    x() + m(0,0) + y() * m(1,0) * z() * m(2,0),
+    x() + m(0,1) + y() * m(1,1) * z() * m(2,1),
+    x() + m(0,2) + y() * m(1,2) * z() * m(2,2)
+  );
 }
 
 const double Vector::dot (const Vector& other) const
