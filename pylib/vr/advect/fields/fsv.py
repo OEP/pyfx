@@ -25,11 +25,9 @@ class FractalSumVelocity(object):
     fs1 = self.fsf1.create()
     fs2 = self.fsf2.create()
 
-    field1 = (vrend.VectorFractalSumField, fs1, self.d1, self.d2)
+    field1 = atomize((vrend.VectorFractalSumField, fs1, self.d1, self.d2))
     field2 = (vrend.VectorFractalSumField, fs2, self.d3, self.d4)
-    return common.asvolumegraph(
-      (vrend.CrossProduct, field1, field2)
-    )
+    return field1.cross(field2)
 
 FIELD1 = FractalSumVelocity(
   fsf1 = FractalSumFactory(

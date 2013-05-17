@@ -2,9 +2,9 @@
 Cumulo cloud algorithm.
 """
 
-from vr import vrend, common
+from vr import vrend
+from vr.atoms import atomize
 from vr.factory import FractalSumFactory
-from vr.graph import VolumeGraph
 
 class Cumulo(object):
   def __init__(self,
@@ -35,7 +35,7 @@ class Cumulo(object):
     """
     if self.gradient:
       density = (vrend.ReplaceGradient, density, self.gradient)
-    return_value = common.asvolumegraph(density)
+    return_value = atomize(density)
     res = self.resolution
 
     for i in range(self.iterations):
@@ -48,8 +48,8 @@ class Cumulo(object):
       if self.gradient:
         return_value = (vrend.ReplaceGradient, return_value, self.gradient)
 
-    return_value = common.asvolumegraph(return_value)
-    return_value._track(self.box)
+    return_value = atomize(return_value)
+    return_value.adopt(self.box)
     return return_value
 
   def get_cumulo_function(self, density, noise):
@@ -59,13 +59,11 @@ class Cumulo(object):
 
     Pyroclastic S(x) = S(x) + |N(Y(x))|
     """
-    return common.asvolumegraph(
-      (vrend.Sum,
-        density,
-        (vrend.AbsoluteValue,
-          (vrend.PassThrough,
-            noise,
-            (vrend.FindSurface, density)))))
+    density = atomize(density)
+    noise = atomize(noise)
+    surface = density.find_surface()
+    rhs = abs(noise.pass_through(surface))
+    return density + rhs
 
   def compute_layer(self, n):
     noise = self.noise
@@ -79,7 +77,7 @@ class Cumulo(object):
 
     N_n = r * N_{n-1}(x f) * Clamp(|N_{n-1}(x) / Q|, 0, 1)^billow
     """
-    return common.asvolumegraph(
+    return atomize(
       (vrend.Product,
         (vrend.Product,
           (vrend.Constant, self.rscale),

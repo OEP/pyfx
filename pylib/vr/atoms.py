@@ -7,19 +7,21 @@ from vr.vrend import *
 FIELDS = (ScalarField, VectorField, ColorField, MatrixField)
 CONSTANTS = (int, float, Vector, Color, Matrix)
 
-def as_field(obj):
-  if isinstance(obj, Atom):
-    return obj
+def atomize(obj, children=[], const=False):
+  """
+  Attempts to convert ``obj`` into a corresponding Atom.
 
-  if isinstance(obj, FIELDS):
-    return obj
-  
-  if isinstance(obj, CONSTANTS):
-    return Constant(obj)
+  If children are given, the resulting Atom will adopt those children.
+  Children will be ignored in cases where it does not make sense.
 
-  raise TypeError("Can't convert to field", obj)
+  If ``const`` is true, Python constants will be converted into their
+  corresponding field types.
+  """
 
-def atomize(obj, children=[]):
+  ## Fix constants if requested
+  if const and isinstance(obj, CONSTANTS):
+    return atomize(Constant(obj), const=const)
+
   ## Copy other atoms
   if isinstance(obj, Atom):
     return obj.copy()
@@ -30,7 +32,7 @@ def atomize(obj, children=[]):
     args = obj[1:]
     children = map(atomize, args)
     top = op(*(x.top for x in children))
-    return atomize(top, children)
+    return atomize(top, children=children, const=const)
 
   ## Handle the basic field types.
   if isinstance(obj, ScalarField):
@@ -44,7 +46,7 @@ def atomize(obj, children=[]):
 
   ## If it's a callable just call it with no-args
   if hasattr(obj, '__call__'):
-    return atomize(obj(), children)
+    return atomize(obj())
   
   ## Otherwise, just wrap as is and pray the user knows what he's doing.
   return Atom(obj, children)
@@ -61,33 +63,36 @@ class Atom(object):
     cls = self.__class__
     return cls(self.top, list(self.children))
   
-  def acquire(self, obj):
+  def adopt(self, obj):
     self.children.append(obj)
 
 class BaseFieldAtom(Atom):
   def __add__(self, o):
-    return atomize((Sum, self, as_field(o)))
+    return atomize((Sum, self, o), const=True)
   
   def __radd__(self, o):
-    return atomize((Sum, as_field(o), self))
+    return atomize((Sum, o, self), const=True)
 
   def __sub__(self, o):
-    return atomize((Difference, self, as_field(o)))
+    return atomize((Difference, self, o), const=True)
 
   def __rsub__(self, o):
-    return atomize((Difference, as_field(o), self))
+    return atomize((Difference, o, self), const=True)
  
   def __mul__(self, o):
-    return atomize((Product, self, as_field(o)))
+    return atomize((Product, self, o), const=True)
 
   def __rmul__(self, o):
-    return atomize((Product, as_field(o), self))
+    return atomize((Product, o, self), const=True)
 
   def __div__(self, o):
-    return atomize((Quotient, self, as_field(o)))
+    return atomize((Quotient, self, o), const=True)
 
   def __rdiv__(self, o):
-    return atomize((Quotient, as_field(o), self))
+    return atomize((Quotient, o, self), const=True)
+
+  def __abs__(self):
+    return atomize((AbsoluteValue, self))
 
   def translate(self, v):
     return atomize((Translate, v, self))
@@ -97,6 +102,9 @@ class BaseFieldAtom(Atom):
 
   def scale(self, amt):
     return atomize((Scale, amt, self))
+  
+  def pass_through(self, x):
+    return atomize((PassThrough, self, x), const=True)
 
 class ScalarFieldAtom(BaseFieldAtom):
   def mask(self):
@@ -109,15 +117,18 @@ class ScalarFieldAtom(BaseFieldAtom):
     color = atomize(as_field(color)) 
     return atomize((Amplify, color, self.mask()))
 
+  def find_surface(self):
+    return atomize((FindSurface, self))
+
 class VectorFieldAtom(BaseFieldAtom):
   def cross(self, o):
-    return atomize((CrossProduct, self, o))
+    return atomize((CrossProduct, self, o), const=True)
 
   def dot(self, o):
-    return atomize((DotProduct, self, o))
+    return atomize((DotProduct, self, o), const=True)
 
-  def outerProduct(self, o):
-    return atomize((OuterProduct, self, o))
+  def outer_product(self, o):
+    return atomize((OuterProduct, self, o), const=True)
 
 class ColorFieldAtom(BaseFieldAtom):
   pass

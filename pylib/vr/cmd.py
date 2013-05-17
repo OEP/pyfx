@@ -149,7 +149,7 @@ def transform_subject(opt, subject):
     subject = tree.rotateAll(rotateParms[0], rotateParms[1], subject)
   if translate:
     subject = tree.translateAll(translate, subject)
-  return common.asvolumegraph(subject)
+  return atomize(subject)
 
 def compute_step(opt):
   quality = _compute_quality(opt)
