@@ -1,10 +1,12 @@
 #include "PerlinNoise.h"
+
+
 using namespace vr;
 
 const float
 PerlinNoise::eval(const Vector &p) const
 {
-  return 0.0f;
+  return m_Noise.GetValue(p.x(), p.y(), p.z());
 }
 
 const float

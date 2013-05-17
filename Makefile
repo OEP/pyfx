@@ -38,7 +38,7 @@ override CFLAGS+=-g -Wall -I$(INC) -std=c++0x -c -fPIC -lopenvdb -fopenmp
 TOOL_CFLAGS += -g -Wall -I$(INC) -std=c++0x -L$(LIB)
 
 SWIGCFLAGS += -g -c -I$(INC) $(INC_PYTHON)
-SWIGLDFLAGS += -L$(LIB) $(EXTRA_LPATHS) $(LD_PYTHON) -lvrend -lOpenImageIO -ltbb -ltbbmalloc -lopenvdb -fopenmp
+SWIGLDFLAGS += -L$(LIB) $(EXTRA_LPATHS) $(LD_PYTHON) -lvrend -lnoise -lOpenImageIO -ltbb -ltbbmalloc -lopenvdb -fopenmp
 SWIGFLAGS+=-c++ -python -shadow -I$(INC) -outdir $(PYLIB)
 
 SOURCES=$(wildcard $(SRC)/*.cpp)
