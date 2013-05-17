@@ -43,7 +43,7 @@ class Cumulo(object):
       cmfn = self.get_cumulo_function(return_value, noise)
       next_grid = vrend.DenseGrid(self.box, res, 0)
 
-      next_grid.stamp(cmfn.top())
+      next_grid.stamp(cmfn.top)
       return_value = next_grid
       if self.gradient:
         return_value = (vrend.ReplaceGradient, return_value, self.gradient)
