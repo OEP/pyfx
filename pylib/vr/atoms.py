@@ -114,7 +114,7 @@ class ScalarFieldAtom(BaseFieldAtom):
     return atomize((Clamp, lo, hi, q))
 
   def shade(self, color):
-    color = atomize(as_field(color)) 
+    color = atomize(color, const=True) 
     return atomize((Amplify, color, self.mask()))
 
   def find_surface(self):
