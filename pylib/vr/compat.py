@@ -19,15 +19,12 @@ def __Type(thing):
   Given a thing of discriminating type, return a string which guesses the
   prefix for a class which can handle it.
   """
-  from vr import vrend, common
-  if isinstance(thing, (int, float)): return 'Scalar'
-  if isinstance(thing, vrend.Vector): return 'Vector'
-  if isinstance(thing, vrend.Color): return 'Color'
-  if isinstance(thing, vrend.Matrix): return 'Matrix'
-  if common.isscalar(thing): return 'Scalar'
-  if common.isvector(thing): return 'Vector'
-  if common.ismatrix(thing): return 'Matrix'
-  if common.iscolor(thing): return 'Color'
+  from vr.vrend import (Vector, Color, Matrix, VectorField, ColorField,
+    MatrixField, ScalarField)
+  if isinstance(thing, (int, float, ScalarField)): return 'Scalar'
+  if isinstance(thing, (Vector, VectorField)): return 'Vector'
+  if isinstance(thing, (Color, ColorField)): return 'Color'
+  if isinstance(thing, (Matrix, MatrixField)): return 'Matrix'
   raise ValueError("Could not guess type of: " + thing)
 
 def __CallerName():
