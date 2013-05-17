@@ -120,6 +120,12 @@ class ScalarFieldAtom(BaseFieldAtom):
   def find_surface(self):
     return atomize((FindSurface, self))
 
+  def __pow__(self, o):
+    return atomize((Power, self, o), const=True)
+
+  def __rpow__(self, o):
+    return atomize((Power, o, self), const=True)
+
 class VectorFieldAtom(BaseFieldAtom):
   def cross(self, o):
     return atomize((CrossProduct, self, o), const=True)
