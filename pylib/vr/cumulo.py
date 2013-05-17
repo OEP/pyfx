@@ -77,12 +77,8 @@ class Cumulo(object):
 
     N_n = r * N_{n-1}(x f) * Clamp(|N_{n-1}(x) / Q|, 0, 1)^billow
     """
-    return atomize(
-      (vrend.Product,
-        (vrend.Product,
-          (vrend.Constant, self.rscale),
-          (vrend.Scale, 1. / self.frequency, previousNoise)),
-        (vrend.Power,
-          (vrend.Clamp,
-            (vrend.AbsoluteValue, previousNoise), 0, 1, self.clampRadius),
-          self.billow)))
+    previousNoise = atomize(previousNoise)
+    one = self.rscale
+    two = previousNoise.scale(1.0 / self.frequency)
+    three = abs(previousNoise).clamp(q=self.clampRadius) ** self.billow
+    return one * two * three
