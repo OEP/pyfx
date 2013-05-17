@@ -4,6 +4,21 @@ Implements most overloaded operator stuff.
 """
 from vr.vrend import *
 
+FIELDS = (ScalarField, VectorField, ColorField, MatrixField)
+CONSTANTS = (int, float, Vector, Color, Matrix)
+
+def as_field(obj):
+  if isinstance(obj, Atom):
+    return obj
+
+  if isinstance(obj, FIELDS):
+    return obj
+  
+  if isinstance(obj, CONSTANTS):
+    return Constant(obj)
+
+  raise TypeError("Can't convert to field", obj)
+
 def atomize(obj, children=[]):
   ## Copy other atoms
   if isinstance(obj, Atom):
@@ -51,32 +66,48 @@ class Atom(object):
 
 class BaseFieldAtom(Atom):
   def __add__(self, o):
-    return atomize((Sum, self, o))
+    return atomize((Sum, self, as_field(o)))
   
   def __radd__(self, o):
-    return atomize((Sum, o, self))
+    return atomize((Sum, as_field(o), self))
 
   def __sub__(self, o):
-    return atomize((Difference, self, o))
+    return atomize((Difference, self, as_field(o)))
 
   def __rsub__(self, o):
-    return atomize((Difference, o, self))
+    return atomize((Difference, as_field(o), self))
  
   def __mul__(self, o):
-    return atomize((Product, self, o))
+    return atomize((Product, self, as_field(o)))
 
   def __rmul__(self, o):
-    return atomize((Product, o, self))
+    return atomize((Product, as_field(o), self))
 
   def __div__(self, o):
-    return atomize((Quotient, self, o))
+    return atomize((Quotient, self, as_field(o)))
 
   def __rdiv__(self, o):
-    return atomize((Quotient, o, self))
+    return atomize((Quotient, as_field(o), self))
+
+  def translate(self, v):
+    return atomize((Translate, v, self))
+
+  def rotate(self, axis, theta):
+    return atomize((Rotate, axis, theta, self))
+
+  def scale(self, amt):
+    return atomize((Scale, amt, self))
 
 class ScalarFieldAtom(BaseFieldAtom):
   def mask(self):
     return atomize((Mask, self))
+
+  def clamp(self, lo=0, hi=1, q=1.0):
+    return atomize((Clamp, lo, hi, q))
+
+  def shade(self, color):
+    color = atomize(as_field(color)) 
+    return atomize((Amplify, color, self.mask()))
 
 class VectorFieldAtom(BaseFieldAtom):
   def cross(self, o):
