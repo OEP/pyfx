@@ -14,18 +14,19 @@ $> python basic_sphere.py --light 0 8 0 1 --dsm-size 50 --dsm-step 0.2 [...]
 
 """
 
-from vr import cmd, vrend
+from vr import cmd, vrend, color
+from vr.atoms import atomize
 
 def main():
   parser = cmd.getopt_render(default_name='sphere')
   (opt, args) = parser.parse_args()
 
-  density = vrend.Sphere
+  density = atomize(vrend.Sphere)
 
   camera = cmd.fetch_camera(opt)
   renderer = cmd.fetch_renderer(opt)
 
-  renderer.render_density(camera, density)
+  renderer.render_density(camera, density, density.shade(color.CLEMSON_ORANGE))
 
 if __name__ == "__main__":
   main()
