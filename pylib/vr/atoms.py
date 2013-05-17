@@ -30,7 +30,7 @@ def atomize(obj, children=[], const=False):
   if isinstance(obj, (list, tuple)):
     op = obj[0]
     args = obj[1:]
-    children = map(atomize, args)
+    children = map(lambda x: atomize(x, const=const), args)
     top = op(*(x.top for x in children))
     return atomize(top, children=children, const=const)
 
@@ -107,11 +107,35 @@ class BaseFieldAtom(Atom):
     return atomize((PassThrough, self, x), const=True)
 
 class ScalarFieldAtom(BaseFieldAtom):
+  def union(self, o, *args):
+    o = atomize((Union, self, o))
+    for x in args:
+      o = atomize((Union, o, x))
+    return o
+
+  def cutout(self, o, *args):
+    o = atomize((Cutout, self, o))
+    for x in args:
+      o = atomize((Cutout, o, x))
+    return o
+
+  def intersect(self, o, *args):
+    o = atomize((Intersect, self, o))
+    for x in args:
+      o = atomize((Intersect, o, x))
+    return o
+
+  def blinn(self, o, *args):
+    o = atomize((Blinn, self, o))
+    for x in args:
+      o = atomize((Blinn, x, o))
+    return o
+
   def mask(self):
     return atomize((Mask, self))
 
   def clamp(self, lo=0, hi=1, q=1.0):
-    return atomize((Clamp, lo, hi, q))
+    return atomize((Clamp, self, lo, hi, q))
 
   def shade(self, color):
     color = atomize(color, const=True) 
