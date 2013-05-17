@@ -15,6 +15,7 @@ namespace vr
       const Noise *m_Noise;
       FractalSumParameters m_Params;
     protected:
+      const float evalIteration(const Vector &p, size_t) const;
     public:
       FractalSum(const Noise *n = NULL,
         const FractalSumParameters params = FractalSumParameters()):
