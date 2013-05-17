@@ -2,7 +2,7 @@ import vrendtest
 import math
 
 from vr.vrend import *
-from vr.common import *
+from vr.atoms import *
 
 """
 Default test case. For easy copying.
@@ -16,7 +16,7 @@ class TestGinsu(vrendtest.VrendTestCase):
     self.seq.push_back(Vector2D(0.50, 0.5))
     self.seq.push_back(Vector2D(0.75, 0.5))
     self.ginsu = (Ginsu, self.seq, Vector.UZ, Vector.UY)
-    self.ginsu = asvolumegraph(self.ginsu)
+    self.ginsu = atomize(self.ginsu)
 
 
   def test_plane_march(self):

@@ -5,11 +5,7 @@ Implements most overloaded operator stuff.
 from vr.vrend import *
 
 def atomize(obj, children=[]):
-  ## Wrap constants with Constant field
-  if isinstance(obj, (int, float, Vector, Matrix)):
-    return atomize(Constant(obj), children)
-
-  ## Copy other fields
+  ## Copy other atoms
   if isinstance(obj, Atom):
     return obj.copy()
   

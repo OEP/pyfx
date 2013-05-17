@@ -2,7 +2,6 @@ import vrendtest
 import math
 
 from vr.vrend import Box, Vector
-from vr.common import *
 
 class TestBox(vrendtest.VrendTestCase):
 

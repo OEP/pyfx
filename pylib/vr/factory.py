@@ -6,8 +6,8 @@ signatures.
 """
 
 import vrend
-import common
 import interpolate
+from vr.atoms import atomize
 
 class BaseFactory(dict):
   CLASS = object
@@ -144,9 +144,9 @@ class PyroclasticSphereFactory(BaseFactory):
 
 class StampedNoiseFactory(BaseFactory):
   CLASS = vrend.StampedNoise
-  FADE = common.asvolumegraph((vrend.Clamp, vrend.Sphere, 0, 1))
+  FADE = atomize((vrend.Clamp, vrend.Sphere, 0, 1))
   FIELDS = (
     ('noise', FractalSumFactory, interpolate.factory),
-    ('fade', FADE.top(), interpolate.left),
+    ('fade', FADE.top, interpolate.left),
     ('gamma', 1.0, interpolate.linear),
   )

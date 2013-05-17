@@ -1,8 +1,6 @@
 
 import unittest
 
-from vr.common import strvector
-
 class VrendTestCase(unittest.TestCase):
 
   DEFAULT_DELTA = 0.001
@@ -27,7 +25,6 @@ class VrendTestCase(unittest.TestCase):
       self.assertWithin(test.z(), mid.z(), dz)
     except AssertionError:
       args = (test, lower, upper)
-      args = tuple(strvector(x) for x in args)
       raise AssertionError("%s not between %s and %s" % args)
 
   def assertWithin(self, test, expected, delta):
@@ -45,7 +42,7 @@ class VrendTestCase(unittest.TestCase):
       self.assertWithin(test.z(), expected.z(), delta)
     except AssertionError:
       raise AssertionError("%s not in %s +/- %f" %
-        (strvector(test), strvector(expected), delta))
+        str(test), str(expected), delta)
 
   def assertVectorClose(self, test, expected):
     self.assertVectorWithin(test, expected, VrendTestCase.DEFAULT_DELTA)
