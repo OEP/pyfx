@@ -2,11 +2,10 @@
 Render functions.
 """
 
-from vr import vrend, common, path, timer
+from vr import vrend, path, timer
+from vr.atoms import atomize 
 
 import cmd
-
-from vr.graph import VolumeGraph
 
 QUALITY_BEAUTY = (1080, 1, 0.001)
 QUALITY_MID = (540, 1, 0.001)
@@ -111,16 +110,9 @@ class Render(object):
     """
     Quickly render a density field, optionally with color.
     """
-    density = common.asvolumegraph(density)
-    color = common.asvolumegraph(color)
-    scene = vrend.Scene(cam, density.top(), color.top(),
+    density = atomize(density)
+    color = atomize(color)
+    scene = vrend.Scene(cam, density.top, color.top,
       self.scatter,
       self.dsm_size)
     self.render_scene(scene)
-
-  def write_grid(self, vob):
-    print "Writing grid to %s" % self.gridpath
-    vob = common.as_vob(vob)
-
-    with timer.print_on_finish("Write Grid"):
-      vob.write(self.gridpath)

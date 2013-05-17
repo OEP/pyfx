@@ -3,7 +3,6 @@ Simple grid storage format.
 """
 
 import vr.vrend as vrend
-import vr.common as common
 import math
 import struct
 from datetime import datetime

@@ -8,7 +8,6 @@ from datetime import date
 import vr.vrend as vrend
 import vr.render as render
 import vr.path as path
-import vr.common as common
 from vr.vob import VOB
 
 def getopt_levelset(parser=None, default_name=None):
