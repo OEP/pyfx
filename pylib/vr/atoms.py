@@ -1,69 +1,99 @@
 """
-Field wrapper class.
 
 Implements most overloaded operator stuff.
 """
 from vr.vrend import *
 
-class Field(object):
+def atomize(obj, children=[]):
+  ## Wrap constants with Constant field
+  if isinstance(obj, (int, float, Vector, Matrix)):
+    return atomize(Constant(obj), children)
+
+  ## Copy other fields
+  if isinstance(obj, Atom):
+    return obj.copy()
   
-  def __init__(self, obj):
-    self.children = []
+  ## Treat lists/tuples as an operation call.
+  if isinstance(obj, (list, tuple)):
+    op = obj[0]
+    args = obj[1:]
+    children = map(atomize, args)
+    top = op(*(x.top for x in children))
+    return atomize(top, children)
 
-    ## Wrap constants with Constant field
-    if isinstance(obj, (int, float, Vector, Matrix)):
-      self.top = Constant(obj)
-      return
+  ## Handle the basic field types.
+  if isinstance(obj, ScalarField):
+    return ScalarFieldAtom(obj, children)
+  if isinstance(obj, VectorField):
+    return VectorFieldAtom(obj, children)
+  if isinstance(obj, ColorField):
+    return ColorFieldAtom(obj, children)
+  if isinstance(obj, MatrixField):
+    return MatrixFieldAtom(obj, children)
 
-    ## Copy other fields
-    if isinstance(obj, Field):
-      self.top = obj.top
-      self.children = list(obj.children)
-      return
-    
-    ## Treat lists/tuples as an operation call.
-    if isinstance(obj, (list, tuple)):
-      op = obj[0]
-      args = obj[1:]
-      args = map(Field, args)
-      self.children.extend(args)
-      self.top = op(*(x.top for x in args))
-      return
+  ## If it's a callable just call it with no-args
+  if hasattr(obj, '__call__'):
+    return atomize(obj(), children)
+  
+  ## Otherwise, just wrap as is and pray the user knows what he's doing.
+  return Atom(obj, children)
 
-    ## If it's a callable just call it with no-args
-    if hasattr(obj, '__call__'):
-      self.top = obj()
-      return
-    
-    ## Otherwise, just wrap as is and pray the user knows what he's doing.
-    self.top = obj
-
+class Atom(object):
+  def __init__(self, top, children=[]):
+    self.top = top
+    self.children = list(children)
+  
   def __getattr__(self, name):
     return getattr(self.top, name)
 
-  def __add__(self, o):
-    return Field((Sum, self, o))
+  def copy(self):
+    cls = self.__class__
+    return cls(self.top, list(self.children))
   
-  def __radd__(self, o):
-    return Field((Sum, o, self))
-
-  def __sub__(self, o):
-    return Field((Difference, self, o))
-
-  def __rsub__(self, o):
-    return Field((Difference, o, self))
- 
-  def __mul__(self, o):
-    return Field((Product, self, o))
-
-  def __rmul__(self, o):
-    return Field((Product, o, self))
-
-  def __div__(self, o):
-    return Field((Quotient, self, o))
-
-  def __rdiv__(self, o):
-    return Field((Quotient, o, self))
-
   def acquire(self, obj):
     self.children.append(obj)
+
+class BaseFieldAtom(Atom):
+  def __add__(self, o):
+    return atomize((Sum, self, o))
+  
+  def __radd__(self, o):
+    return atomize((Sum, o, self))
+
+  def __sub__(self, o):
+    return atomize((Difference, self, o))
+
+  def __rsub__(self, o):
+    return atomize((Difference, o, self))
+ 
+  def __mul__(self, o):
+    return atomize((Product, self, o))
+
+  def __rmul__(self, o):
+    return atomize((Product, o, self))
+
+  def __div__(self, o):
+    return atomize((Quotient, self, o))
+
+  def __rdiv__(self, o):
+    return atomize((Quotient, o, self))
+
+class ScalarFieldAtom(BaseFieldAtom):
+  def mask(self):
+    return atomize((Mask, self))
+
+class VectorFieldAtom(BaseFieldAtom):
+  def cross(self, o):
+    return atomize((CrossProduct, self, o))
+
+  def dot(self, o):
+    return atomize((DotProduct, self, o))
+
+  def outerProduct(self, o):
+    return atomize((OuterProduct, self, o))
+
+class ColorFieldAtom(BaseFieldAtom):
+  pass
+
+class MatrixFieldAtom(BaseFieldAtom):
+  pass
