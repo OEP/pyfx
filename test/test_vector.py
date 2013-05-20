@@ -61,6 +61,6 @@ class TestVector(vrendtest.VrendTestCase):
 
     self.assertClose(tricky.length(), 1.0)
     self.assertClose(ones.length(), 1.0)
-    self.assertEqual(tricky * trickyMag, self.tricky)
-    self.assertTrue((ones * onesMag).equals(self.ones))
+    self.assertVectorClose(tricky * trickyMag, self.tricky)
+    self.assertVectorClose(ones * onesMag, self.ones)
 
