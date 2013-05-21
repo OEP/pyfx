@@ -22,11 +22,16 @@ namespace vr
         return i + NX() * (j + NY() * k);
       }
 
+      //! Subclasses may override to initialize grid values.
+      virtual void initialize()
+      {}
+
     public:
       VolumeGrid(Griddable *b, const Vector resolution, const U defaultValue)
         : m_Griddable(b), m_Resolution(resolution), m_Default(defaultValue)
       {
         m_Griddable->gridSize(m_Resolution, m_Shape);
+        this->initialize();
       }
 
       const U eval(const Vector &p) const

@@ -16,7 +16,7 @@ namespace vr
       U *m_Values;
     protected:
 
-      void init()
+      void initialize()
       {
         m_Values = new U[size()];
         U *p = m_Values;
@@ -36,13 +36,11 @@ namespace vr
       DenseGrid(Griddable *b, const Vector resolution, const U &dv)
         : VolumeGrid<U,V>(b,resolution,dv)
       {
-        init();
       }
 
       DenseGrid(Griddable *b, const int dim, const U &dv)
         : VolumeGrid<U,V>(b, b->computeResolution(dim), dv)
       {
-        init();
       }
 
       virtual ~DenseGrid()
