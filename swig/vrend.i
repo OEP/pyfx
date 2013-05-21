@@ -108,4 +108,4 @@ from vr.compat import *
 %include "ProjectImage.i"
 %include "Coil.i"
 %include "Normalize.i"
-%include "VDBGrid.i"
+%include "ScalarVDBGrid.i"

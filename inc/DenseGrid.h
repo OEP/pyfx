@@ -36,11 +36,13 @@ namespace vr
       DenseGrid(Griddable *b, const Vector resolution, const U &dv)
         : VolumeGrid<U,V>(b,resolution,dv)
       {
+        this->initialize();
       }
 
       DenseGrid(Griddable *b, const int dim, const U &dv)
         : VolumeGrid<U,V>(b, b->computeResolution(dim), dv)
       {
+        this->initialize();
       }
 
       virtual ~DenseGrid()
