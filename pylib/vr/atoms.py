@@ -97,6 +97,9 @@ class BaseFieldAtom(Atom):
   def translate(self, v):
     return atomize((Translate, v, self))
 
+  def replace_box(self, box):
+    return atomize((ReplaceBox, self, box))
+
   def rotate(self, axis, theta):
     return atomize((Rotate, axis, theta, self))
 
