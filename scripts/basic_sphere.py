@@ -25,7 +25,8 @@ def main():
   density = atomize(Sphere)
   s1 = density.translate(Vector(1,0,0))
   s2 = density.translate(Vector(-1,0,0))
-  density = s1.blinn(s2, density).clamp()
+  density = s1.blinn(s2, density) - 8
+  density = density.clamp()
 
   camera = cmd.fetch_camera(opt)
   renderer = cmd.fetch_renderer(opt)
