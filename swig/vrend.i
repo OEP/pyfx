@@ -81,7 +81,7 @@ namespace std
 %include "WispParameters.i"
 
 %pythoncode %{
-from vr.compat import *
+from .compat import *
 %}
 
 %include "StampedNoise.i"
