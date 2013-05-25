@@ -1,7 +1,7 @@
 import vrendtest
 import math
 
-from pyfx import *
+from pyfx import Vector2D, line_distance
 
 class TestVector2D(vrendtest.VrendTestCase):
 
