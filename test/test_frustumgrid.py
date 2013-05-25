@@ -22,8 +22,8 @@ class TestFrustumGrid(vrendtest.VrendTestCase):
 
 
     self.res1 = self.c1.computeResolution(TestFrustumGrid.GRID_RES)
-    self.grid1 = ScalarDenseGrid(self.c1, self.res1, 0)
-    self.grid2 = ScalarSparseGrid(self.c1, self.res1, 0, 16)
+    self.grid1 = DenseGrid(self.c1, self.res1, 0)
+    self.grid2 = SparseGrid(self.c1, self.res1, 0, 16)
 
     self.grid1.stamp(self.sphere1)
     self.grid2.stamp(self.sphere1)

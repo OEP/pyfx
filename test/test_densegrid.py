@@ -14,9 +14,9 @@ class TestDenseGrid(vrendtest.VrendTestCase):
     self.r1 = Vector(0.1,0.1,0.1)
     self.r2 = Vector(0.09,0.09,0.09)
 
-    self.d1 = ScalarDenseGrid(self.b1, self.r1, 0)
-    self.d2 = ScalarDenseGrid(self.b1, self.r2, 0)
-    self.d3 = ScalarDenseGrid(self.b1, self.r2, 0)
+    self.d1 = DenseGrid(self.b1, self.r1, 0)
+    self.d2 = DenseGrid(self.b1, self.r2, 0)
+    self.d3 = DenseGrid(self.b1, self.r2, 0)
 
     for k in range(self.d3.NZ()):
       for j in range(self.d3.NY()):
