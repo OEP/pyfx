@@ -117,6 +117,8 @@ $(BIN):
 ## generates swig wrapper code
 $(SWIG)/%_wrap.cxx: $(SWIG)/%.i
 	$(SWIGEXEC) $(SWIGFLAGS) $<
+	## added to make operator overloading for Python3 to work
+	sed -i -e 's/def __div__/def __truediv__/g' $(SWIGPYS)
 
 $(PYLIB)/%.py: $(SWIG)/%_wrap.o
 
