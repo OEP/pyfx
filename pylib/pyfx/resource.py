@@ -18,7 +18,7 @@ class ResourceLoader(object):
 
   def __init__(self):
     self.cache = { }
-    self.paths = list((x for x in filter(lambda x: x, SEARCH_PATH)))
+    self.paths = list((x for x in [x for x in SEARCH_PATH if x]))
 
   def __search_paths(self, relative_path):
     for path in self.paths:

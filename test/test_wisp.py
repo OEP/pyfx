@@ -1,8 +1,8 @@
 import vrendtest
 import math
 
-from vr.vrend import *
-from vr.factory import WispFactory
+from pyfx import *
+from pyfx.factory import WispFactory
 
 class TestWisp(vrendtest.VrendTestCase):
 

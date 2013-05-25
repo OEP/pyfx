@@ -5,7 +5,7 @@ Render functions.
 from vr import vrend, path, timer
 from vr.atoms import atomize 
 
-import cmd
+from . import cmd
 
 QUALITY_BEAUTY = (1080, 1, 0.001)
 QUALITY_MID = (540, 1, 0.001)
@@ -84,14 +84,14 @@ class Render(object):
 
   def render_scene(self, scene):
     ## TODO: Print bounding boxes.
-    print "Render quality: ", self.quality
-    print "Scattering constant: ", scene.kappa()
+    print("Render quality: ", self.quality)
+    print("Scattering constant: ", scene.kappa())
     cam = scene.camera()
     im = vrend.Image(int(self.quality[0]*cam.aspectRatio()), self.quality[0])
     im.addProperties(vrend.Properties(self.meta))
     box = scene.densityBox()
 
-    print box.llc(), box.urc()
+    print(box.llc(), box.urc())
 
     for (i, (light, step, frustum)) in enumerate(self._lights):
       frustum = frustum or vrend.Camera.boundingFrustum(light.position(), box)
@@ -104,7 +104,7 @@ class Render(object):
       scene.render(im, self.quality[1], self.quality[2])
     
     im.write(self.framepath)
-    print "Wrote image to '%s'" % self.framepath
+    print("Wrote image to '%s'" % self.framepath)
 
   def render_density(self, cam, density, color=None):
     """

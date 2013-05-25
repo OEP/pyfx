@@ -1,2 +1,2 @@
-import cmap
-import direct
+from . import cmap
+from . import direct

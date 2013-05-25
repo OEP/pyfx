@@ -5,16 +5,15 @@ This module provides easier interfaces for creating objects with complex
 signatures.
 """
 
-import vrend
-import interpolate
-from vr.atoms import atomize
+from . import native, interpolate
+from .atoms import atomize
 
 class BaseFactory(dict):
   CLASS = object
   FIELDS = ()
 
   def __init__(self, *args, **kwargs):
-    self._assert_keys_valid(kwargs.keys())
+    self._assert_keys_valid(list(kwargs.keys()))
     values = dict(tuple(self._values_as_dict().items())
       + tuple(kwargs.items()))
     dict.__init__(self, *args, **values)
@@ -46,7 +45,7 @@ class BaseFactory(dict):
   def interpolate(self, other, q):
     cls = self.__class__
     out = {}
-    for (key, fn) in self.interps.items():
+    for (key, fn) in list(self.interps.items()):
       a = self[key]
       b = other[key]
       out[key] = fn(a, b, q)
@@ -59,10 +58,10 @@ class BaseFactory(dict):
     return self.__class__.FIELDS
 
   def _values_as_dict(self):
-    return dict(zip(self._field_names(), self._field_values()))
+    return dict(list(zip(self._field_names(), self._field_values())))
 
   def _interps_as_dict(self):
-    return dict(zip(self._field_names(), self._field_interps()))
+    return dict(list(zip(self._field_names(), self._field_interps())))
 
   def _field_names(self):
     return (x[0] for x in self.__defaults())
@@ -86,36 +85,36 @@ class BaseFactory(dict):
       self._assert_key_valid(key)
 
 class FractalSumFactory(BaseFactory):
-  CLASS = vrend.FractalSum
+  CLASS = native.FractalSum
   FIELDS = (
-    ('noise', vrend.PerlinNoise, interpolate.left),
+    ('noise', native.PerlinNoise, interpolate.left),
     ('octaves', 3.0, interpolate.linear),
     ('fjump', 2.0, interpolate.linear),
     ('roughness', 0.5, interpolate.linear),
     ('frequency', 0.666666, interpolate.linear),
-    ('translate', vrend.Vector(0), interpolate.linear),
+    ('translate', native.Vector(0), interpolate.linear),
     ('offset', 0.0, interpolate.linear),
-    ('axis', vrend.Vector.UZ, interpolate.rotate),
+    ('axis', native.Vector.UZ, interpolate.rotate),
     ('angle', 0.0, interpolate.linear),
   )
 
 class WispFactory(BaseFactory):
-  CLASS = vrend.Wisp
+  CLASS = native.Wisp
   FIELDS = (
     ('fspn1', FractalSumFactory, interpolate.factory),
     ('fspn2', FractalSumFactory, interpolate.factory),
-    ('e0', vrend.Vector.UX, interpolate.rotate),
-    ('e1', vrend.Vector.UY, interpolate.rotate),
-    ('e2', vrend.Vector.UZ, interpolate.rotate),
-    ('p0', vrend.Vector(0), interpolate.linear),
-    ('scale', vrend.Vector(1), interpolate.linear),
-    ('delta', vrend.Vector(0), interpolate.linear),
+    ('e0', native.Vector.UX, interpolate.rotate),
+    ('e1', native.Vector.UY, interpolate.rotate),
+    ('e2', native.Vector.UZ, interpolate.rotate),
+    ('p0', native.Vector(0), interpolate.linear),
+    ('scale', native.Vector(1), interpolate.linear),
+    ('delta', native.Vector(0), interpolate.linear),
     ('pscale', 1.0, interpolate.linear),
     ('clump', 0.333, interpolate.linear),
     ('amp', 1.0, interpolate.linear),
     ('wispDots', int(5e6), interpolate.left),
     ('opacity', 1.0, interpolate.linear),
-    ('res', vrend.Vector(0.1, 0.1, 0.1), interpolate.linear),
+    ('res', native.Vector(0.1, 0.1, 0.1), interpolate.linear),
     ('defaultValue', 0, interpolate.left),
     ('partitionSize', 16, interpolate.left),
     ('box', None, interpolate.left),
@@ -126,7 +125,7 @@ class WispFactory(BaseFactory):
     if self['box']: return self['box']
     fspn1 = self.arglist[0]
     fspn2 = self.arglist[1]
-    return vrend.Wisp.calcBBox(
+    return native.Wisp.calcBBox(
       fspn1,
       fspn2,
       self['clump'],
@@ -134,7 +133,7 @@ class WispFactory(BaseFactory):
       self['p0'])
 
 class PyroclasticSphereFactory(BaseFactory):
-  CLASS = vrend.PyroclasticSphere
+  CLASS = native.PyroclasticSphere
   FIELDS = (
     ('fs', FractalSumFactory, interpolate.factory),
     ('radius', 1.0, interpolate.linear),
@@ -143,8 +142,8 @@ class PyroclasticSphereFactory(BaseFactory):
   )
 
 class StampedNoiseFactory(BaseFactory):
-  CLASS = vrend.StampedNoise
-  FADE = atomize((vrend.Clamp, vrend.Sphere, 0, 1))
+  CLASS = native.StampedNoise
+  FADE = atomize((native.Clamp, native.Sphere, 0, 1))
   FIELDS = (
     ('noise', FractalSumFactory, interpolate.factory),
     ('fade', FADE.top, interpolate.left),

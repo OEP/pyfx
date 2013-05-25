@@ -131,7 +131,7 @@ class VOB:
       fp.write("shape %s\n" % self._shape)
       fp.write("structure %s\n" % self._structure)
       
-      for (key, val) in self._properties.items():
+      for (key, val) in list(self._properties.items()):
         fp.write("prop %s %s\n" % (key, val))
       fp.write("blk\n")
 

@@ -1,7 +1,7 @@
 import vrendtest
 import math
 
-from vr.vrend import *
+from pyfx import *
 
 """
 Default test case. For easy copying.

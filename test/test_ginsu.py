@@ -1,8 +1,8 @@
 import vrendtest
 import math
 
-from vr.vrend import *
-from vr.atoms import *
+from pyfx import *
+from pyfx.atoms import *
 
 """
 Default test case. For easy copying.

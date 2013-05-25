@@ -19,7 +19,7 @@ def __Type(thing):
   Given a thing of discriminating type, return a string which guesses the
   prefix for a class which can handle it.
   """
-  from vr.vrend import (Vector, Color, Matrix, VectorField, ColorField,
+  from .native import (Vector, Color, Matrix, VectorField, ColorField,
     MatrixField, ScalarField)
   if isinstance(thing, (int, float, ScalarField)): return 'Scalar'
   if isinstance(thing, (Vector, VectorField)): return 'Vector'
@@ -31,14 +31,14 @@ def __CallerName():
   return inspect.stack()[2][3]
 
 def __Guess(field, *args):
-  from vr import vrend
+  from . import native
   guesses = []
   caller, type = __CallerName(), __Type(field)
   guesses.append(type + caller)
   guesses.append(caller + type)
   for guess in guesses:
-    if hasattr(vrend, guess):
-      return getattr(vrend, guess)(*args)
+    if hasattr(native, guess):
+      return getattr(native, guess)(*args)
   raise ValueError("Could not guess a type for `%s`, not one of: %s" 
     % (caller, ", ".join(guesses)))
 

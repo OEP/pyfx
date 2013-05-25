@@ -1,7 +1,7 @@
 import vrendtest
 import math
 
-from vr.vrend import Vector
+from pyfx import Vector
 
 class TestVector(vrendtest.VrendTestCase):
 

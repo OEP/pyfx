@@ -34,7 +34,7 @@ def image_slice(image_path, canny_threshold=0):
   for contour in contours:
     for points in contour:
       for point in points:
-        point = map(float, point)
+        point = list(map(float, point))
         point = (x1/x2 for (x1, x2) in zip(point, (width, height)))
         seq.push_back(vrend.Vector2D(*point))
   return seq

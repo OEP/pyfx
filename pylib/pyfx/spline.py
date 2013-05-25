@@ -9,7 +9,7 @@ class BaseSplineGenerator(object):
     self.defaults = defaults
     self._chain = None
     self._density = None
-    self.attrs = frozenset(filter(lambda x: not x.startswith('_'), dir(cls)))
+    self.attrs = frozenset([x for x in dir(cls) if not x.startswith('_')])
     self.__assert_valid_instance()
 
   @property
@@ -48,7 +48,7 @@ class BaseSplineGenerator(object):
 
   def __assert_valid_instance(self):
     computes = set((y.replace('compute_', '', 1) for y in 
-      filter(lambda x: x.startswith('compute_'), dir(self))))
+      [x for x in dir(self) if x.startswith('compute_')]))
     defaultKeys = set(self.defaults.keys())
     self.__assert_valid_keys(computes, "Invalid compute_* method name(s): %s")
     self.__assert_valid_keys(defaultKeys, "Invalid default attribute name(s): %s")

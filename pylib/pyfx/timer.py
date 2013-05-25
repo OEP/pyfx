@@ -4,9 +4,9 @@ import time
 @contextmanager
 def print_on_finish(name=None):
   if name:
-    print "Begin Timer (%s)" % name
+    print("Begin Timer (%s)" % name)
   else:
-    print "Begin Timer"
+    print("Begin Timer")
 
   t0 = time.time()
   yield
@@ -14,9 +14,9 @@ def print_on_finish(name=None):
   pretty = pretty_time(t1 - t0)
 
   if name:
-    print "End Timer (%s) %s" % (name, pretty)
+    print("End Timer (%s) %s" % (name, pretty))
   else:
-    print "End Timer %s" % pretty
+    print("End Timer %s" % pretty)
 
 
 def pretty_time(time):

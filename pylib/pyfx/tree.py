@@ -53,7 +53,7 @@ def mergeAll(mode, *args):
   return (vr.MergeColor, args[0], mergeAll(mode, *args[1:]), mode)
 
 def constantProduct(tree, k):
-  if issubclass(tree[0], vr.ScalarField) and isinstance(k, (int,float,long)):
+  if issubclass(tree[0], vr.ScalarField) and isinstance(k, (int,float)):
     return (vr.ScalarProduct, tree, (vr.ScalarConstant, k))
   raise ValueError("Can't multiply %s and %s!" % (tree, k))
 

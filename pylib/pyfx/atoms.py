@@ -2,7 +2,7 @@
 
 Implements most overloaded operator stuff.
 """
-from vr.vrend import *
+from .native import *
 
 FIELDS = (ScalarField, VectorField, ColorField, MatrixField)
 CONSTANTS = (int, float, Vector, Color, Matrix)
@@ -30,7 +30,7 @@ def atomize(obj, children=[], const=False):
   if isinstance(obj, (list, tuple)):
     op = obj[0]
     args = obj[1:]
-    children = map(lambda x: atomize(x, const=const), args)
+    children = [atomize(x, const=const) for x in args]
     top = op(*(x.top for x in children))
     return atomize(top, children=children, const=const)
 

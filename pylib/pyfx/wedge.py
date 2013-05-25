@@ -5,6 +5,7 @@ import math
 
 from operator import mul
 from vr import vrend
+from functools import reduce
 
 class BaseWedge(object):
   PARAMETERS = ()

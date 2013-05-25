@@ -1,7 +1,7 @@
 import vrendtest
 import math
 
-from vr.vrend import *
+from pyfx import *
 
 class TestImage(vrendtest.VrendTestCase):
 
@@ -31,10 +31,6 @@ class TestImage(vrendtest.VrendTestCase):
     self.assertFalse(self.im.inBounds(1, 2, 0))
 
   def test_evalChannel(self):
-    print self.im.read(0, 1, 0)
-    print self.im.read(0, 1, 0)
-    print self.im.read(0, 1, 0)
-    print self.im.read(0, 1, 0)
     self.assertTrue(self.im.inBounds(0, 0, 0))
     self.assertTrue(self.im.inBounds(0, 1, 0))
     self.assertTrue(self.im.inBounds(1, 0, 0))

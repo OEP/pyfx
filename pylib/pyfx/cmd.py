@@ -160,9 +160,9 @@ def perform_get_levelset(parser, model):
   res = vrend.Vector(*opt.grid_resolution)
   pad = vrend.Vector(*opt.padding)
 
-  print "Resolution: ", common.strvector(res)
-  print "Padding: ", common.strvector(pad)
-  print "Threshold: ", opt.threshold
+  print("Resolution: ", common.strvector(res))
+  print("Padding: ", common.strvector(pad))
+  print("Threshold: ", opt.threshold)
 
   with timer.print_on_finish("Levelset Generation"):
     levelset = vrend.Levelset(model, res, pad, opt.threshold)
@@ -186,7 +186,7 @@ def perform_write_grid(parser, vob):
   with timer.print_on_finish("Write Grid"):
     vob.write(vobpath)
 
-  print "Wrote grid to %s" % vobpath
+  print("Wrote grid to %s" % vobpath)
 
 def fetch_renderer(opt):
   renderer = render.Render(

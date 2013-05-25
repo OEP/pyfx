@@ -9,6 +9,6 @@ def tanh(q, q0=0.0, L=1.0):
 
 def dtanh(q, q0=0.0, L=1.0):
   "Derivative of hyperbolic tangent step function."
-  from vrmath import sech
+  from .vrmath import sech
   sech_result = sech((q - q0) / L)
   return sech_result * sech_result / (2 * L)
