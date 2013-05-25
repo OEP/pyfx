@@ -2,10 +2,7 @@
 Render functions.
 """
 
-from vr import vrend, path, timer
-from vr.atoms import atomize 
-
-from . import cmd
+from . import path, timer, atomize, native
 
 QUALITY_BEAUTY = (1080, 1, 0.001)
 QUALITY_MID = (540, 1, 0.001)
@@ -87,14 +84,14 @@ class Render(object):
     print("Render quality: ", self.quality)
     print("Scattering constant: ", scene.kappa())
     cam = scene.camera()
-    im = vrend.Image(int(self.quality[0]*cam.aspectRatio()), self.quality[0])
-    im.addProperties(vrend.Properties(self.meta))
+    im = native.Image(int(self.quality[0]*cam.aspectRatio()), self.quality[0])
+    im.addProperties(native.Properties(self.meta))
     box = scene.densityBox()
 
     print(box.llc(), box.urc())
 
     for (i, (light, step, frustum)) in enumerate(self._lights):
-      frustum = frustum or vrend.Camera.boundingFrustum(light.position(), box)
+      frustum = frustum or native.Camera.boundingFrustum(light.position(), box)
       if self.light_fov: frustum.setFOV(self.light_fov)
 
       with timer.print_on_finish("Light %s" % (i+1)):
@@ -112,7 +109,7 @@ class Render(object):
     """
     density = atomize(density)
     color = atomize(color)
-    scene = vrend.Scene(cam, density.top, color.top,
+    scene = native.Scene(cam, density.top, color.top,
       self.scatter,
       self.dsm_size)
     self.render_scene(scene)

@@ -2,7 +2,7 @@
 Simple grid storage format.
 """
 
-import vr.vrend as vrend
+from . import native
 import math
 import struct
 from datetime import datetime
@@ -28,17 +28,17 @@ PROP_NEARPLANE = "nearplane"
 PROP_FARPLANE = "farplane"
 
 STRUCTURE_MAP = {
-  (1, DENSE): vrend.ScalarDenseGrid,
-  (3, DENSE): vrend.VectorDenseGrid,
-  (4, DENSE): vrend.ColorDenseGrid,
-  (1, SPARSE): vrend.ScalarSparseGrid,
-  (3, SPARSE): vrend.VectorSparseGrid,
-  (4, SPARSE): vrend.ColorSparseGrid
+  (1, DENSE): native.ScalarDenseGrid,
+  (3, DENSE): native.VectorDenseGrid,
+  (4, DENSE): native.ColorDenseGrid,
+  (1, SPARSE): native.ScalarSparseGrid,
+  (3, SPARSE): native.VectorSparseGrid,
+  (4, SPARSE): native.ColorSparseGrid
 }
 
 SHAPE_MAP = {
-  BOX: vrend.Box,
-  FRUSTUM: vrend.Camera
+  BOX: native.Box,
+  FRUSTUM: native.Camera
 }
 
 class VOB:
@@ -54,7 +54,7 @@ class VOB:
     vobject._resolution = grid.resolution()
     vobject._shape = grid.griddable().getShape()
     vobject._structure = "sparse" if common.issparse(grid) else "dense"
-    vobject._properties = vrend.Properties()
+    vobject._properties = native.Properties()
     grid.griddable().getProperties(vobject._properties)
     return vobject
 

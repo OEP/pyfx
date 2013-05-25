@@ -5,10 +5,10 @@ import sys
 import time
 from datetime import date
 
-import vr.vrend as vrend
-import vr.render as render
-import vr.path as path
-from vr.vob import VOB
+import pyfx
+import pyfx.render as render
+import pyfx.path as path
+from pyfx.vob import VOB
 
 def getopt_levelset(parser=None, default_name=None):
   """
@@ -104,40 +104,40 @@ def fetch_step(opt):
 
 def fetch_eye(opt):
   """Fetch eye vector from arguments."""
-  return vrend.Vector(*opt.eye)
+  return pyfx.Vector(*opt.eye)
 
 def fetch_view(opt):
   """Fetch view vector from arguments."""
-  return vrend.Vector(*opt.view)
+  return pyfx.Vector(*opt.view)
 
 def fetch_up(opt):
   """Fetch up vector."""
-  return vrend.Vector(*opt.up)
+  return pyfx.Vector(*opt.up)
 
 def fetch_rotation(opt):
   """Fetch rotation parameters from arguments"""
   if opt.rotate == None: return None
   axis = opt.rotate[:3]
   theta = math.radians(opt.rotate[3])
-  return (vrend.Vector(*axis), theta)
+  return (pyfx.Vector(*axis), theta)
 
 def fetch_camera(opt):
   eye = fetch_eye(opt)
   view = fetch_view(opt)
   up = fetch_up(opt)
-  cam = vrend.Camera()
+  cam = pyfx.Camera()
   cam.setEyeViewUp(eye, view, up)
   return cam
 
 def fetch_scene(opt, density, color=None, camera=None):
   camera = camera or fetch_camera(opt)
-  scene = vrend.Scene(camera, density, color, opt.scatter, opt.dsm_size)
+  scene = pyfx.Scene(camera, density, color, opt.scatter, opt.dsm_size)
   scene.setDSMSamples(opt.dsm_samples)
   return scene
 
 def fetch_translate(opt):
   if opt.translate == None: return None
-  return vrend.Vector(*opt.translate)
+  return pyfx.Vector(*opt.translate)
 
 def transform_subject(opt, subject):
   import vr.tree as tree
@@ -157,15 +157,15 @@ def compute_step(opt):
 
 def perform_get_levelset(parser, model):
   (opt, args) = parser.parse_args()
-  res = vrend.Vector(*opt.grid_resolution)
-  pad = vrend.Vector(*opt.padding)
+  res = pyfx.Vector(*opt.grid_resolution)
+  pad = pyfx.Vector(*opt.padding)
 
   print("Resolution: ", common.strvector(res))
   print("Padding: ", common.strvector(pad))
   print("Threshold: ", opt.threshold)
 
   with timer.print_on_finish("Levelset Generation"):
-    levelset = vrend.Levelset(model, res, pad, opt.threshold)
+    levelset = pyfx.Levelset(model, res, pad, opt.threshold)
 
   return levelset
 
@@ -201,6 +201,6 @@ def fetch_renderer(opt):
   )
 
   for (x, y, z, intensity) in opt.lights:
-    light = vrend.Light(vrend.Vector(x,y,z), vrend.Color(1), intensity)
+    light = pyfx.Light(pyfx.Vector(x,y,z), pyfx.Color(1), intensity)
     renderer.add_light(light)
   return renderer
