@@ -34,7 +34,7 @@ MKCLASS = $(DEVTOOLS)/mkclass
 SWIGMODULE = native
 
 ARFLAGS=rvs
-override CFLAGS+=-g -Wall -I$(INC) -std=c++0x -c -fPIC -lopenvdb -fopenmp
+override CFLAGS+=-g -Wall -I$(INC) -std=c++0x -c -fPIC -fopenmp
 TOOL_CFLAGS += -g -Wall -I$(INC) -std=c++0x -L$(LIB)
 
 SWIGCFLAGS += -g -c -I$(INC) $(INC_PYTHON)
