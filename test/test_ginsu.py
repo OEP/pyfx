@@ -2,7 +2,6 @@ import vrendtest
 import math
 
 from pyfx import *
-from pyfx.atoms import *
 
 """
 Default test case. For easy copying.
