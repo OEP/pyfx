@@ -85,10 +85,10 @@ class BaseFieldAtom(Atom):
   def __rmul__(self, o):
     return atomize((Product, o, self), const=True)
 
-  def __div__(self, o):
+  def __truediv__(self, o):
     return atomize((Quotient, self, o), const=True)
 
-  def __rdiv__(self, o):
+  def __rtruediv__(self, o):
     return atomize((Quotient, o, self), const=True)
 
   def __abs__(self):
@@ -162,7 +162,29 @@ class VectorFieldAtom(BaseFieldAtom):
 
   def outer_product(self, o):
     return atomize((OuterProduct, self, o), const=True)
+  
+  def __mul__(self, o):
+    '''Vector times scalar'''
+    o = atomize(o, const=True)
+    if isinstance(o, ScalarFieldAtom):
+      return atomize((Amplify, self, o))
+    return super(VectorFieldAtom, self).__mul__(self, o)
 
+  def __rmul__(self, o):
+    '''Scalar times vector'''
+    return self * o
+
+  def __truediv__(self, o):
+    '''Vector by scalar'''
+    x = o
+    if isinstance(o, (int, float)):
+      x = 1.0 / x
+      return self * x
+    x = atomize(x, const=True)
+    if isinstance(o, ScalarFieldAtom):
+      return atomize((Damp, self, o))
+    return super(VectorFieldAtom, self).__truediv__(self, o)
+    
 class ColorFieldAtom(BaseFieldAtom):
   pass
 
