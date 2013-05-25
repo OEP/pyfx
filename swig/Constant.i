@@ -1,12 +1,12 @@
 
-%module vrend
+%module native
 %{
 #include "Volume.h"
 %}
 
 %include "Volume.h"
 
-%module vrend
+%module native
 %{
 #include "Constant.h"
 %}

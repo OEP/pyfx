@@ -2,8 +2,8 @@
 ## Override these on the command line or in a custom.mk file.
 
 ## Include and link flags for Python
-override INC_PYTHON = -I/usr/include/python2.7
-override LD_PYTHON = -lpython2.7
+override INC_PYTHON = -I/usr/include/python3.3
+override LD_PYTHON = -L/usr/lib/x86_64-linux-gnu -lpython3.3m
 
 override EXTRA_LPATHS = -L/opt/hfs/dsolib
 
@@ -21,24 +21,24 @@ INC = inc
 OBJ = obj
 BIN = bin
 LIB = lib
-PYLIB = pylib/vr
+PYLIB = pylib/pyfx
 TAGFILE = tags
 DEVTOOLS = dev-tools
 SWIG = swig
 TOOLS = tools
 SCRIPTS = scripts
-WAVESLIB = $(LIB)/libvrend.a
+WAVESLIB = $(LIB)/libpyfx.a
 
 MKSWIGI = $(DEVTOOLS)/mkswigi
 MKCLASS = $(DEVTOOLS)/mkclass
-SWIGMODULE = vrend
+SWIGMODULE = native
 
 ARFLAGS=rvs
 override CFLAGS+=-g -Wall -I$(INC) -std=c++0x -c -fPIC -lopenvdb -fopenmp
 TOOL_CFLAGS += -g -Wall -I$(INC) -std=c++0x -L$(LIB)
 
 SWIGCFLAGS += -g -c -I$(INC) $(INC_PYTHON)
-SWIGLDFLAGS += -L$(LIB) $(EXTRA_LPATHS) $(LD_PYTHON) -lvrend -lnoise -lOpenImageIO -ltbb -ltbbmalloc -lopenvdb -fopenmp
+SWIGLDFLAGS += -L$(LIB) $(EXTRA_LPATHS) $(LD_PYTHON) -ltbb -ltbbmalloc -lopenvdb -lpyfx -lnoise -lOpenImageIO -fopenmp
 SWIGFLAGS+=-c++ -python -shadow -I$(INC) -outdir $(PYLIB)
 
 SOURCES=$(wildcard $(SRC)/*.cpp)

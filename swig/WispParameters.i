@@ -1,4 +1,4 @@
-%module vrend
+%module native
 %{
 #include "WispParameters.h"
 %}

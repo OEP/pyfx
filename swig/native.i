@@ -1,4 +1,4 @@
-%module vrend
+%module native
 
 %include "std_map.i"
 %include "std_vector.i"
