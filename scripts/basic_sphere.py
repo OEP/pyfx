@@ -14,9 +14,8 @@ $> python basic_sphere.py --light 0 8 0 1 --dsm-size 50 --dsm-step 0.2 [...]
 
 """
 
-from vr.vrend import *
-from vr import cmd, color
-from vr.atoms import atomize
+from pyfx import *
+from pyfx import cmd, color
 
 def main():
   parser = cmd.getopt_render(default_name='sphere')
