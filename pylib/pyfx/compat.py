@@ -59,37 +59,3 @@ def Damp(f1, f2): return __Guess(f1, f1, f2)
 def DenseGrid(g1, v1, c1): return __Guess(c1, g1, v1, c1)
 def SparseGrid(g1, v1, c1, p1): return __Guess(c1, g1, v1, c1, p1)
 def ReplaceGradient(f1, v1): return __Guess(f1, f1, v1)
-
-class PixelGenerator(object):
-  def __init__(self, image, x, y):
-    self.image = image
-    self.x = x
-    self.y = y
-    self.c = 0
-
-  def __iter__(self): return self
-
-  def __next__(self):
-    if self.c >= self.image.depth():
-      raise StopIteration
-    value = self.image.read(self.x, self.y, self.c)
-    self.c += 1
-    return value
-
-class ImageGenerator(object):
-  def __init__(self, image):
-    self.image = image
-    self.x = 0
-    self.y = 0
-
-  def __iter__(self): return self
-
-  def __next__(self):
-    if self.y >= self.image.height():
-      raise StopIteration
-    gen = PixelGenerator(self.image, self.x, self.y)
-    self.x += 1
-    if self.x >= self.image.width():
-      self.x = 0
-      self.y += 1
-    return gen
