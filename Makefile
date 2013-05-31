@@ -92,7 +92,7 @@ directories: $(LIB) $(OBJ) $(BIN)
 
 ## generates ctag
 $(TAGFILE): $(SOURCES) $(HEADERS)
-	$(CTAGS) $(SOURCES) $(HEADERS)
+	@$(CTAGS) $(SOURCES) $(HEADERS)
 
 ## generates static library
 $(WAVESLIB): $(OBJECTS)
