@@ -231,6 +231,11 @@ void Image::write(const char *filename) const
   delete [] imgdata;
 }
 
+const std::vector<Image::Pixel>* Image::data() const
+{
+  return &m_Values;
+}
+
 size_t Image::size() const
 {
   return width() * height() * depth();

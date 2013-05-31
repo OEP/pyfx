@@ -66,6 +66,7 @@ namespace vr
       size_t depth() const;
       size_t pixels() const;
       size_t size() const;
+      const std::vector<Image::Pixel>* data() const;
       
       const size_t __len__() const;
       const Color __getitem__(size_t) const;

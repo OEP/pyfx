@@ -7,6 +7,7 @@
 namespace std
 {
   %template(Properties) map<string, string>;
+  %template(FloatArray) vector<float>;
 }
 
 %include "types.i"
