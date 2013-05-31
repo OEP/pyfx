@@ -10,8 +10,6 @@ using std::string;
 
 Image::Image(size_t width, size_t height, size_t depth)
 {
-  m_Values = new float[width * height * depth];
-  m_Frequency = new size_t[width * height * depth];
   m_Shape[0] = width;
   m_Shape[1] = height;
   m_Shape[2] = depth;
@@ -20,195 +18,140 @@ Image::Image(size_t width, size_t height, size_t depth)
 
 Image::~Image()
 {
-  delete [] m_Values;
-  delete [] m_Frequency;
 }
 
 void Image::initialize()
 {
-  _fill(0.0f, 0);
+  fill(0.0f, 0);
 }
 
-void Image::add(size_t i, size_t j, float value)
+void Image::add(size_t i, size_t j, float value, size_t wt)
 {
-  _set(i, j, value, 1);
+  Image::Pixel p(depth(), value);
+  add(i, j, p, wt);
 }
 
-void Image::add(size_t i, size_t j, float *value)
+void Image::add(size_t i, size_t j, const Image::Pixel &p, size_t wt)
 {
-  _set(i, j, value, 1);
-}
+  const size_t idx = index(i,j);
 
-void Image::add(size_t i, size_t j, const Color &value)
-{
-  _set(i, j, value, 1);
-}
-
-void Image::setChannel(size_t i, size_t j, size_t c, float value)
-{
-  m_Frequency[index(i,j,c)] = 1;
-  m_Values[index(i,j,c)] = value;
-}
-
-void Image::set(size_t i, size_t j, float value)
-{
-  _set(i, j, value, -1);
-}
-
-void Image::set(size_t i, size_t j, float *value)
-{
-  _set(i, j, value, -1);
-}
-
-void Image::set(size_t i, size_t j, const Color &value)
-{
-  _set(i, j, value, -1);
-}
-
-void Image::fill(float value)
-{
-  _fill(value, -1);
-}
-
-void Image::fill(const Color &value)
-{
-  _fill(value, -1);
-}
-
-void Image::fill(float *value)
-{
-  _fill(value, -1);
-}
-
-void Image::fillAdd(float value)
-{
-  _fill(value, 1);
-}
-
-void Image::fillAdd(const Color &value)
-{
-  _fill(value, 1);
-}
-
-void Image::fillAdd(float *value)
-{
-  _fill(value, 1);
-}
-
-void Image::_fill(float value, const int mode)
-{
-  float tmp[depth()];
-  for(size_t i = 0; i < depth(); i++)
+  for(size_t c = 0; c < depth(); c++)
   {
-    tmp[i] = value;
+    m_Values[idx][c]    += p[c];
+    m_Frequency[idx][c] += wt;
   }
-  _fill(tmp, mode);
+  
 }
 
-void Image::_fill(const Color &value, const int mode)
+void Image::add(size_t i, size_t j, const Color &value, size_t wt)
 {
-  assert(depth() == 4);
-  float c[] = { value.red(), value.green(), value.blue(), value.alpha() };
-  _fill(c, mode);
+  Image::Pixel p(depth(), 0.0f);
+  p[0] = value.red();
+  p[1] = value.green();
+  p[2] = value.blue();
+  p[3] = value.alpha();
+
+  add(i, j, p, wt);
 }
 
-void Image::_fill(const float *value, const int mode)
+void Image::setChannel(size_t i, size_t j, size_t c, float value, size_t wt)
 {
-  float *p = m_Values;
-  size_t *c = m_Frequency;
-  for(size_t i = 0; i < size(); i++, p++, c++)
-  {
-    if(mode > 0)
-    {
-      *p += mode * value[i % depth()];
-      *c += mode;
-    }
-    else
-    {
-      *p = value[i % depth()];
-      *c = abs(mode);
-    }
-  }
+  Image::PixelCount wts(depth(), wt);
+  m_Frequency[index(i,j)]    = wts;
+  m_Values[index(i,j)][c]    = value;
 }
 
-void Image::_set(size_t i , size_t j, float value, const int mode)
+void Image::set(size_t i, size_t j, float value, size_t wt)
 {
-  float tmp[depth()];
-  for(size_t k = 0; k < depth(); k++)
-  {
-    tmp[k] = value;
-  }
-  _set(i, j, tmp, mode);
+  Image::Pixel p(depth(), value);
+  set(i, j, p, wt);
 }
 
-void Image::_set(size_t i, size_t j, const Color &value, const int mode)
+void Image::set(size_t i, size_t j, const Image::Pixel &p, size_t wt)
 {
-  assert(depth() == 4);
-  float tmp[] = {value.red(), value.green(), value.blue(), value.alpha()};
-  _set(i, j, tmp, mode);
+  m_Values[index(i,j)] = p;
+  m_Frequency[index(i,j)].clear();
+  m_Frequency[index(i,j)].resize(depth(), wt);
 }
 
-void Image::_set(size_t i, size_t j, const float *value, const int mode)
+void Image::set(size_t i, size_t j, const Color &value, size_t wt)
 {
-  float *p = m_Values + index(i,j);
-  size_t *c = m_Frequency + index(i,j);
+  Image::Pixel p(depth(), 0.0f);
+  p[0] = value.red();
+  p[1] = value.green();
+  p[2] = value.blue();
+  p[3] = value.alpha();
 
-  for(size_t k = 0; k < depth(); k++, p++, c++)
-  {
-    if(mode > 0)
-    {
-      *p += mode * value[k];
-      *c += mode;
-    }
-    else
-    {
-      *p = value[k];
-      *c = abs(mode);
-    }
-  }
+  set(i, j, p, wt);
+}
+
+void Image::fill(float value, size_t freq)
+{
+  Image::Pixel p(depth(), value);
+  fill(p, freq);
+}
+
+void Image::fill(const Color &value, size_t freq)
+{
+  Image::Pixel p(depth(), 0.0f);
+  p[0] = value.red();
+  p[1] = value.green();
+  p[2] = value.blue();
+  p[3] = value.alpha();
+
+  fill(p, freq);
+}
+
+void Image::fill(const Image::Pixel &p, size_t freq)
+{
+  m_Values.clear();
+  m_Frequency.clear();
+
+  Image::PixelCount freqs(depth(), freq);
+
+  m_Values.resize(pixels(), p);
+  m_Frequency.resize(pixels(), freqs);
 }
 
 void Image::_normalize(float *values) const
 {
-  float *p = m_Values;
-  size_t *c = m_Frequency;
-  for(size_t i = 0; i < size(); i++, p++, c++, values++)
+  for(size_t j = 0; j < height(); j++)
   {
-    *values = (*c > 0) ? *p / *c : *p;
+    for(size_t i = 0; i < width(); i++)
+    {
+      for(size_t c = 0; c < depth(); c++)
+      {
+        *values = read(i, j, c);
+        values++;
+      }
+    }
   }
 }
 
-void Image::read(size_t i, size_t j, float *out) const
+void Image::read(size_t i, size_t j, Image::Pixel &p) const
 {
-  float *p = m_Values + index(i,j);
-  size_t *c = m_Frequency + index(i,j);
-  
-  for(size_t i = 0; i < depth(); i++, p++, c++)
+  for(size_t c = 0; c < depth(); c++)
   {
-    *out = SAFE_NORMALIZE(*p, *c);
+    p[i] = read(i, j, c);
   }
 }
 
 float Image::read(size_t i, size_t j, size_t channel) const
 {
-  float *p = m_Values + index(i,j);
-  size_t *c = m_Frequency + index(i,j);
-
-  p += channel;
-  c += channel;
-  return SAFE_NORMALIZE(*p, *c);
+  return SAFE_NORMALIZE(
+    m_Values[index(i,j)][channel],
+    m_Frequency[index(i,j)][channel]
+  );
 }
 
 const Color Image::readColor(size_t i, size_t j) const
 {
-  float *p = m_Values + index(i,j);
-  size_t *c = m_Frequency + index(i,j);
-
   return Color(
-    SAFE_NORMALIZE(p[0], c[0]),
-    SAFE_NORMALIZE(p[1], c[1]),
-    SAFE_NORMALIZE(p[2], c[2]),
-    SAFE_NORMALIZE(p[3], c[3]));
+    read(i, j, 0),
+    read(i, j, 1),
+    read(i, j, 2),
+    read(i, j, 3)
+  );
 }
 
 void Image::setProperty(const string &name, const string &value)
@@ -243,11 +186,11 @@ Image* Image::fromFile(const char *filename)
   in->read_image(TypeDesc::FLOAT, pixels);
 
   unsigned long index = 0;
-  for(size_t j = 0; j < spec.height; j++)
+  for(int j = 0; j < spec.height; j++)
   {
-    for(size_t i = 0; i < spec.width; i++)
+    for(int i = 0; i < spec.width; i++)
     {
-      for(size_t c = 0; c < spec.nchannels; c++)
+      for(int c = 0; c < spec.nchannels; c++)
       {
         im->setChannel(i, spec.height - j - 1, c, pixels[index++]);
       }
@@ -314,12 +257,7 @@ size_t Image::depth() const
 
 size_t Image::index(const size_t i, const size_t j) const
 {
-  return ((height() - j - 1) * width() * depth() + i * depth());
-}
-
-size_t Image::index(const size_t i, const size_t j, const size_t c) const
-{
-  return index(i, j) + c;
+  return ((height() - j - 1) * width() + i);
 }
 
 const bool Image::inBounds(size_t i, size_t j) const
@@ -370,16 +308,13 @@ const Color Image::__getitem__(size_t i) const
     throw std::out_of_range("Index out of bounds.");
   }
 
-  const float *p = m_Values + (i * depth());
-  const size_t *c = m_Frequency + (i * depth());
-  
+  const size_t
+    jj = i / width(),
+    ii = i % width();
+
   if(depth() == 4)
   {
-    return Color(
-      SAFE_NORMALIZE(p[0], c[0]),
-      SAFE_NORMALIZE(p[1], c[1]),
-      SAFE_NORMALIZE(p[2], c[2]),
-      SAFE_NORMALIZE(p[3], c[3]));
+    return readColor(ii, jj);
   }
 
   throw std::runtime_error("Unsupported image depth.");
