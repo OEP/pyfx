@@ -21,6 +21,17 @@ class TestImage(vrendtest.VrendTestCase):
     self.im.set(0, 0, 2)
     self.assertEqual(self.im.read(0, 0, 0), 2)
 
+  def test_add(self):
+    def average(x): return sum(x) / len(x)
+    to_add = (1, 3, 6, 1, 7, 8, 1, 6, 1, 3)
+    added = []
+
+    for x in to_add:
+      self.im.add(0, 1, x)
+      added.append(x)
+
+      self.assertClose(self.im.read(0, 1, 0), average(added))
+
   def test_in_bounds(self):
     self.assertTrue(self.im.inBounds(0, 0, 0))
     self.assertTrue(self.im.inBounds(0, 1, 0))
