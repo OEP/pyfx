@@ -25,25 +25,29 @@ void Image::initialize()
   fill(0.0f, 0);
 }
 
-void Image::add(size_t i, size_t j, float value, size_t wt)
+void Image::add(size_t i, size_t j, float value)
 {
   Image::Pixel p(depth(), value);
-  add(i, j, p, wt);
+  add(i, j, p);
 }
 
-void Image::add(size_t i, size_t j, const Image::Pixel &p, size_t wt)
+void Image::add(size_t i, size_t j, const Image::Pixel &p)
 {
   const size_t idx = index(i,j);
 
   for(size_t c = 0; c < depth(); c++)
   {
-    m_Values[idx][c]    += p[c];
-    m_Frequency[idx][c] += wt;
+    const float
+      xi = p[c],
+      cai = m_Values[idx][c],
+      i = m_Frequency[idx][c];
+
+    m_Values[idx][c] = cai + (xi - cai) / (i+1);
+    ++m_Frequency[idx][c];
   }
-  
 }
 
-void Image::add(size_t i, size_t j, const Color &value, size_t wt)
+void Image::add(size_t i, size_t j, const Color &value)
 {
   Image::Pixel p(depth(), 0.0f);
   p[0] = value.red();
@@ -51,7 +55,7 @@ void Image::add(size_t i, size_t j, const Color &value, size_t wt)
   p[2] = value.blue();
   p[3] = value.alpha();
 
-  add(i, j, p, wt);
+  add(i, j, p);
 }
 
 void Image::setChannel(size_t i, size_t j, size_t c, float value, size_t wt)
@@ -138,10 +142,7 @@ void Image::read(size_t i, size_t j, Image::Pixel &p) const
 
 float Image::read(size_t i, size_t j, size_t channel) const
 {
-  return SAFE_NORMALIZE(
-    m_Values[index(i,j)][channel],
-    m_Frequency[index(i,j)][channel]
-  );
+  return m_Values[index(i,j)][channel];
 }
 
 const Color Image::readColor(size_t i, size_t j) const
