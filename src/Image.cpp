@@ -125,7 +125,7 @@ void Image::_normalize(float *values) const
     {
       for(size_t c = 0; c < depth(); c++)
       {
-        *values = read(i, j, c);
+        *values = read(i, height() - j - 1, c);
         values++;
       }
     }
@@ -263,7 +263,7 @@ size_t Image::depth() const
 
 size_t Image::index(const size_t i, const size_t j) const
 {
-  return ((height() - j - 1) * width() + i);
+  return j * width() + i;
 }
 
 const bool Image::inBounds(size_t i, size_t j) const
