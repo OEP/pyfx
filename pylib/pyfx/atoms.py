@@ -68,28 +68,52 @@ class Atom(object):
 
 class BaseFieldAtom(Atom):
   def __add__(self, o):
-    return atomize((Sum, self, o), const=True)
+    o = atomize(o, const=True)
+    if type(self) == type(o):
+      return atomize((Sum, self, o))
+    return NotImplemented
   
   def __radd__(self, o):
-    return atomize((Sum, o, self), const=True)
+    o = atomize(o, const=True)
+    if type(self) == type(o):
+      return atomize((Sum, o, self))
+    return NotImplemented
 
   def __sub__(self, o):
-    return atomize((Difference, self, o), const=True)
+    o = atomize(o, const=True)
+    if type(self) == type(o):
+      return atomize((Difference, self, o))
+    return NotImplemented
 
   def __rsub__(self, o):
-    return atomize((Difference, o, self), const=True)
+    o = atomize(o, const=True)
+    if type(self) == type(o):
+      return atomize((Difference, o, self))
+    return NotImplemented
  
   def __mul__(self, o):
-    return atomize((Product, self, o), const=True)
+    o = atomize(o, const=True)
+    if type(self) == type(o):
+      return atomize((Product, self, o))
+    return NotImplemented
 
   def __rmul__(self, o):
-    return atomize((Product, o, self), const=True)
+    o = atomize(o, const=True)
+    if type(self) == type(o):
+      return atomize((Product, o, self))
+    return NotImplemented
 
   def __truediv__(self, o):
-    return atomize((Quotient, self, o), const=True)
+    o = atomize(o, const=True)
+    if type(self) == type(o):
+      return atomize((Quotient, self, o))
+    return NotImplemented
 
   def __rtruediv__(self, o):
-    return atomize((Quotient, o, self), const=True)
+    o = atomize(o, const=True)
+    if type(self) == type(o):
+      return atomize((Quotient, o, self))
+    return NotImplemented
 
   def __abs__(self):
     return atomize((AbsoluteValue, self))
@@ -191,6 +215,17 @@ class ColorFieldAtom(BaseFieldAtom):
     for x in args:
       o = atomize((MergeColor, o, x, mode))
     return o
+  
+  def __mul__(self, o):
+    '''Color times scalar'''
+    o = atomize(o, const=True)
+    if isinstance(o, ScalarFieldAtom):
+      return atomize((Amplify, self, o))
+    return super(VectorFieldAtom, self).__mul__(self, o)
+
+  def __rmul__(self, o):
+    '''Scalar times color'''
+    return self * o
 
 class MatrixFieldAtom(BaseFieldAtom):
   pass
