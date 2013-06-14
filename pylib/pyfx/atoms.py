@@ -186,7 +186,11 @@ class VectorFieldAtom(BaseFieldAtom):
     return super(VectorFieldAtom, self).__truediv__(self, o)
     
 class ColorFieldAtom(BaseFieldAtom):
-  pass
+  def merge(self, first, *args, mode=MergeColor.MAX):
+    o = atomize((MergeColor, self, first, mode))
+    for x in args:
+      o = atomize((MergeColor, o, x, mode))
+    return o
 
 class MatrixFieldAtom(BaseFieldAtom):
   pass
