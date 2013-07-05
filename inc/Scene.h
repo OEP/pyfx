@@ -24,16 +24,15 @@ namespace vr
 
       const Color shade(const Ray &r, const double step) const;
 
-      std::vector<Light> m_Lights;
-      DeepShadowMap m_DSM;
+      std::vector<DeepShadowMap> m_DSMs;
 
     protected:
     public:
       Scene(const Camera& c, ScalarField *density, ColorField *volume=NULL, double kappa = 1.0, int dsmSize=100)
         : m_Camera(c), m_Volume(volume), m_Density(density),
-          m_UseLights(true), m_Kappa(kappa), m_DSM(DeepShadowMap(dsmSize)) {};
+          m_UseLights(true), m_Kappa(kappa) {};
 
-      void addLight(const Light&, double ds=0.1, Camera *frustum=NULL);
+      void addDSM(DeepShadowMap &dsm);
       void render(Image&, int, double) const;
       const Color evalColor(const Vector &x) const;
       const Color evalMaterialColor(const Vector &x) const;
@@ -47,10 +46,7 @@ namespace vr
       const double kappa() const;
 
       void setUseLights(bool);
-      void setDSMSamples(int);
-      void setDSMSeed(const unsigned long);
       void setDensity(ScalarField *density);
-      ScalarDenseGrid* getDSMMap(const int i) const;
   };
 }
 

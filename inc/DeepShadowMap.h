@@ -7,24 +7,26 @@
 #include "DenseGrid.h"
 #include "UniformPRN.h"
 #include "Volume.h"
+#include "Light.h"
+#include "VolumeGrid.h"
 
 namespace vr
 {
   class DeepShadowMap
   {
     public:
-      DeepShadowMap(const ScalarField *_field, Light _light)
+      DeepShadowMap(ScalarField *_field, Light _light)
         : field(_field), light(_light) {}
 
       ScalarField *field;
       Light light;
   };
+  
+  void compute_dsm(ScalarVolumeGrid *grid,
+    const ScalarField *dns,
+    const Vector &pl,
+    const double ds,
+    const int samples=1);
 }
-
-void compute_dsm(ScalarGrid *grid,
-  const ScalarField *dns,
-  const Vector &pl,
-  const double ds,
-  const int samples=1);
 
 #endif

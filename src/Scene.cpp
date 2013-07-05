@@ -26,10 +26,9 @@ void Scene::render(Image &im, int rpp, double step) const
   }
 }
 
-void Scene::addLight(const Light &l, double step, Camera *frustum)
+void Scene::addDSM(DeepShadowMap &dsm)
 {
-  m_Lights.push_back(l);
-  m_DSM.add(l.position(), step, m_Density, frustum);
+  m_DSMs.push_back(dsm);
 }
 
 const Color Scene::shade(const Ray &r, const double step) const
@@ -76,12 +75,12 @@ const Color Scene::evalMaterialColor(const Vector &x) const
 
 const float Scene::evalDSM(const int i, const Vector &x) const
 {
-  return m_DSM.eval(i, x);
+  return m_DSMs[i].field->eval(x);
 }
 
 const Color Scene::evalColor(const Vector &x) const
 {
-  if(!m_UseLights || m_Lights.size() == 0)
+  if(!m_UseLights || m_DSMs.size() == 0)
   {
     return evalMaterialColor(x);
   }
@@ -91,12 +90,12 @@ const Color Scene::evalColor(const Vector &x) const
 
   Color c(0);
 
-  for(size_t i = 0; i < m_Lights.size(); i++)
+  for(size_t i = 0; i < m_DSMs.size(); i++)
   {
     const float
       lookup = evalDSM(i, x),
       tl = exp( -lookup * m_Kappa );
-    c += m_Lights[i].color() * tl;
+    c += m_DSMs[i].light.color() * tl;
   }
 
   return evalMaterialColor(x) * c;
@@ -132,24 +131,9 @@ const double Scene::kappa() const
   return m_Kappa;
 }
 
-void Scene::setDSMSeed(const unsigned long seed)
-{
-  m_DSM.setSeed(seed);
-}
-
-void Scene::setDSMSamples(int n)
-{
-  m_DSM.setSamples(n);
-}
-
 void Scene::setDensity(ScalarField *density)
 {
   m_Density = density;
-}
-
-ScalarDenseGrid* Scene::getDSMMap(const int i) const
-{
-  return m_DSM.getMap(i);
 }
 
 void Scene::setUseLights(bool b)
