@@ -23,6 +23,7 @@ namespace vr
         return i + NX() * (j + NY() * k);
       }
 
+
     public:
       VolumeGrid(Griddable *b, const Vector resolution, const U defaultValue)
         : m_Griddable(b), m_Resolution(resolution), m_Default(defaultValue)
