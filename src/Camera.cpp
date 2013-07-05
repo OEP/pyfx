@@ -282,9 +282,9 @@ void Camera::gridSize(const Vector &res, int *dims) const
   dims[2] = ceil(gridDims[2]);
 }
 
-const Vector Camera::computeResolution(int n) const
+const Vector Camera::computeResolution(int nx, int ny, int nz) const
 {
-  return Vector(horizontalFOV()/n, verticalFOV()/n, viewLength()/n);
+  return Vector(horizontalFOV()/nx, verticalFOV()/ny, viewLength()/nz);
 }
 
 const Camera

@@ -13,6 +13,14 @@ namespace vr
   template <typename U, typename V>
   class SparseGrid : public VolumeGrid<U,V>
   {
+    using VolumeGrid<U,V>::size;
+    using VolumeGrid<U,V>::defaultValue;
+    using VolumeGrid<U,V>::oob;
+    using VolumeGrid<U,V>::index;
+    using VolumeGrid<U,V>::NX;
+    using VolumeGrid<U,V>::NY;
+    using VolumeGrid<U,V>::NZ;
+    using VolumeGrid<U,V>::evalP;
     private:
     protected:
       const int m_PartitionSize;
@@ -28,24 +36,12 @@ namespace vr
           pk = k / partitionSize();
         return pi + PNX() * (pj + PNY() * pk);
       }
-
-    public:
-      using VolumeGrid<U,V>::size;
-      using VolumeGrid<U,V>::defaultValue;
-      using VolumeGrid<U,V>::oob;
-      using VolumeGrid<U,V>::index;
-      using VolumeGrid<U,V>::NX;
-      using VolumeGrid<U,V>::NY;
-      using VolumeGrid<U,V>::NZ;
-      using VolumeGrid<U,V>::evalP;
-
-      SparseGrid(Griddable *b, const Vector resolution,
-        const U &dv, int partitionSize)
-        : VolumeGrid<U,V>(b,resolution,dv), m_PartitionSize(partitionSize)
+      
+      void init()
       {
-        m_PartitionShape[0] = (int) ceil(NX() / (double) partitionSize);
-        m_PartitionShape[1] = (int) ceil(NY() / (double) partitionSize);
-        m_PartitionShape[2] = (int) ceil(NZ() / (double) partitionSize);
+        m_PartitionShape[0] = (int) ceil(NX() / (double) m_PartitionSize);
+        m_PartitionShape[1] = (int) ceil(NY() / (double) m_PartitionSize);
+        m_PartitionShape[2] = (int) ceil(NZ() / (double) m_PartitionSize);
 
         m_Values = new DenseGrid<U,V>*[partitions()];
 
@@ -55,6 +51,23 @@ namespace vr
           *p = NULL;
           p++;
         }
+      }
+
+    public:
+      SparseGrid(Griddable *b, const Vector resolution,
+        const U &dv, int partitionSize)
+        : VolumeGrid<U,V>(b,resolution,dv),
+          m_PartitionSize(partitionSize)
+      {
+        init();
+      }
+      
+      SparseGrid(Griddable *b, int nx, int ny, int nz,
+        const U &dv, int partitionSize)
+        : VolumeGrid<U,V>(b,b->computeResolution(nx, ny, nz), dv),
+          m_PartitionSize(partitionSize)
+      {
+        init();
       }
 
       ~SparseGrid()

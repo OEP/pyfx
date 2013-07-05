@@ -70,7 +70,7 @@ namespace vr
       const Vector worldSpace(const Vector&) const;
       void gridSize(const Vector&, int*) const;
       const Box getBBox() const;
-      const Vector computeResolution(int) const;
+      const Vector computeResolution(int,int,int) const;
 
       void getProperties(std::map<std::string, std::string> &prop) const;
       const std::string getShape() const;

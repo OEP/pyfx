@@ -38,7 +38,7 @@ namespace vr
       const Vector worldSpace(const Vector&) const;
       void gridSize(const Vector&, int*) const;
       const Box getBBox() const;
-      const Vector computeResolution(int) const;
+      const Vector computeResolution(int,int,int) const;
 
       const Box expand(const Vector&) const;
       const Box expand(const Box&) const;

@@ -206,9 +206,9 @@ const Box Box::getBBox() const
   return *this;
 }
 
-const Vector Box::computeResolution(int n) const
+const Vector Box::computeResolution(int nx, int ny, int nz) const
 {
-  return length() / n;
+  return length() / Vector(nx, ny, nz);
 }
 
 const Vector Box::corner(const int i) const
