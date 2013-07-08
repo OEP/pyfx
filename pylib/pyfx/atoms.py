@@ -172,7 +172,19 @@ class ScalarFieldAtom(BaseFieldAtom):
     return atomize((FindSurface, self))
 
   def advect(self, u, dt):
-    return atomize((Advect, self, u, dt)) 
+    return atomize((Advect, self, u, dt))
+
+  def advect_error(self, u, dt):
+    bf = self.advect(u, dt)
+    bf = bf.advect(u, -dt)
+    return 0.5 * (self - bf)
+
+  def advect_bfecc(self, u, dt):
+    corrected = self + self.advect_error(u, dt)
+    return corrected.advect(u, dt)
+
+  def advect_mm(self, u, dt):
+    return self.advect(u, dt) + self.advect_error(u, dt)    
 
   def gradient(self):
     return atomize((Gradient, self))
@@ -192,6 +204,21 @@ class VectorFieldAtom(BaseFieldAtom):
 
   def outer_product(self, o):
     return atomize((OuterProduct, self, o), const=True)
+  
+  def advect(self, u, dt):
+    return atomize((Advect, self, u, dt))
+
+  def advect_error(self, u, dt):
+    bf = self.advect(u, dt)
+    bf = bf.advect(u, -dt)
+    return 0.5 * (self - bf)
+
+  def advect_bfecc(self, u, dt):
+    error = self.advect_error(u, dt)
+    return self.advect(u, dt) + error.advect(u, dt)
+
+  def advect_mm(self, u, dt):
+    return self.advect(u, dt) + self.advect_error(u, dt)
   
   def __mul__(self, o):
     '''Vector times scalar'''
