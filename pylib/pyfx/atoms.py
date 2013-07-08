@@ -171,6 +171,12 @@ class ScalarFieldAtom(BaseFieldAtom):
   def find_surface(self):
     return atomize((FindSurface, self))
 
+  def advect(self, u, dt):
+    return atomize((Advect, self, u, dt)) 
+
+  def gradient(self):
+    return atomize((Gradient, self))
+
   def __pow__(self, o):
     return atomize((Power, self, o), const=True)
 
