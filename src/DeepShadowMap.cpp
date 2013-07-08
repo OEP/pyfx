@@ -31,7 +31,7 @@ void vr::compute_dsm(
       result &= dns->eval(grid->evalP(i+ii, j+jj, k+kk)) <= 0.0f;
     }
 
-    if(!result)
+    if(result)
     {
       continue;
     }
