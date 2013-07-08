@@ -20,8 +20,8 @@ class TestFrustumGrid(vrendtest.VrendTestCase):
 
     self.sphere1 = Sphere()
 
-
-    self.res1 = self.c1.computeResolution(TestFrustumGrid.GRID_RES)
+    res = (TestFrustumGrid.GRID_RES,) * 3
+    self.res1 = self.c1.computeResolution(*res)
     self.grid1 = DenseGrid(self.c1, self.res1, 0)
     self.grid2 = SparseGrid(self.c1, self.res1, 0, 16)
 
