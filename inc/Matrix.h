@@ -21,6 +21,8 @@ namespace vr
         const double v10, const double v11, const double v12,
         const double v20, const double v21, const double v22
       );
+      Matrix(
+        const Vector &v0, const Vector &v1, const Vector &v2);
 
       static const Matrix rotation(const Vector &axis, const double theta);
 

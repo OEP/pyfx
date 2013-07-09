@@ -51,6 +51,22 @@ Matrix::Matrix(
   this->mm[2][2] = v22;
 }
 
+Matrix::Matrix(
+  const Vector &v0,
+  const Vector &v1,
+  const Vector &v2)
+{
+  this->mm[0][0] = v0[0];
+  this->mm[0][1] = v0[1];
+  this->mm[0][2] = v0[2];
+  this->mm[1][0] = v1[0];
+  this->mm[1][1] = v1[1];
+  this->mm[1][2] = v1[2];
+  this->mm[2][0] = v2[0];
+  this->mm[2][1] = v2[1];
+  this->mm[2][2] = v2[2];
+}
+
 const Matrix Matrix::rotation(const Vector& axis, const double angle)
 {
    const double cosa = cos(angle);

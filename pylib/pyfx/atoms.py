@@ -253,7 +253,9 @@ class ColorFieldAtom(BaseFieldAtom):
     return o
   
   def component(self, i):
-    return atomize((ColorComponent, self, i))
+    if 0 <= i < 4:
+      return atomize((pyfx.ColorComponent, self, i))
+    raise IndexError
   
   def __mul__(self, o):
     '''Color times scalar'''

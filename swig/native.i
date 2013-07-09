@@ -110,3 +110,5 @@ from .compat import *
 %include "Coil.i"
 %include "Normalize.i"
 %include "ScalarVDBGrid.i"
+%include "ColorComponent.i"
+%include "CreateVector.i"

@@ -179,6 +179,11 @@ const float Color::__getitem__(size_t i) const
   return m_RGBA[i];
 }
 
+const double Color::operator[](const int i) const
+{
+  return m_RGBA[i];
+}
+
 ostream& vr::operator<<(ostream &out, const Color &c)
 {
   out << "Color["

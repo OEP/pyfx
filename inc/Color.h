@@ -36,6 +36,7 @@ namespace vr
       const Color operator|(const Color&) const;
       const Color& operator=(const Color&);
       const bool operator==(const Color&) const;
+      const double operator[](const int) const;
 
       Color& operator+=(const Color&);
 
