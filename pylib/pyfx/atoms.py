@@ -219,6 +219,9 @@ class VectorFieldAtom(BaseFieldAtom):
 
   def advect_mm(self, u, dt):
     return self.advect(u, dt) + self.advect_error(u, dt)
+
+  def component(self, i):
+    return atomize((VectorComponent, self, i))
   
   def __mul__(self, o):
     '''Vector times scalar'''
@@ -248,6 +251,9 @@ class ColorFieldAtom(BaseFieldAtom):
     for x in args:
       o = atomize((MergeColor, o, x, mode))
     return o
+  
+  def component(self, i):
+    return atomize((ColorComponent, self, i))
   
   def __mul__(self, o):
     '''Color times scalar'''
