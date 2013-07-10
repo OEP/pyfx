@@ -222,6 +222,9 @@ class VectorFieldAtom(BaseFieldAtom):
 
   def component(self, i):
     return atomize((VectorComponent, self, i))
+
+  def normalize(self):
+    return atomize((Normalize, self))
   
   def __mul__(self, o):
     '''Vector times scalar'''
