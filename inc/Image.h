@@ -38,6 +38,9 @@ namespace vr
       void add(size_t i, size_t j, const Image::Pixel &p);
       void add(size_t i, size_t j, const Color &value);
 
+      void replace(const Image &im);
+      void replace(const Image &im, size_t x0, size_t y0);
+
       void set(size_t i, size_t j, float value, size_t freq=1);
       void set(size_t i, size_t j, const Image::Pixel &p, size_t freq=1);
       void set(size_t i, size_t j, const Color &value, size_t freq=1);

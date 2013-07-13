@@ -58,6 +58,31 @@ void Image::add(size_t i, size_t j, const Color &value)
   add(i, j, p);
 }
 
+void Image::replace(const Image &im)
+{
+  replace(im, 0, 0);
+}
+
+void Image::replace(const Image &im, size_t x0, size_t y0)
+{
+  if(depth() != im.depth())
+  {
+    throw std::length_error("Joined images must be equal depth.");
+  }
+
+  for(size_t j = y0; j < height() && j < im.height(); j++)
+  {
+    for(size_t i = x0; i < height() && i < im.height(); i++)
+    {
+      const size_t
+        idx = index(i, j),
+        oidx = im.index(i, j);
+      m_Values[idx] = im.m_Values[oidx];
+      m_Frequency[idx] = im.m_Frequency[oidx];
+    }
+  }
+}
+
 void Image::setChannel(size_t i, size_t j, size_t c, float value, size_t wt)
 {
   Image::PixelCount wts(depth(), wt);

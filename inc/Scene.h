@@ -34,7 +34,7 @@ namespace vr
 
       void addDSM(DeepShadowMap &dsm);
       void render(Image&, int, double) const;
-      void render(Image&, int, double, size_t x0, size_t y0, size_t x1, size_t y1) const;
+      void render(Image&, int, double, size_t imw, size_t imh, size_t x0=0, size_t y0=0) const;
       const Color evalColor(const Vector &x) const;
       const Color evalMaterialColor(const Vector &x) const;
       const float evalDSM(const int i, const Vector &x) const;
