@@ -1,7 +1,7 @@
 """
 Render functions.
 """
-
+import math
 from . import path, timer, atomize, native
 
 QUALITY_BEAUTY = (1080, 1, 0.001)
@@ -26,6 +26,7 @@ class Render(object):
   """
   def __init__(self,
       quality=QUALITY_QUICK,
+      patch_size = 100,
       dsm_size = 256,
       dsm_step = 0.1,
       scatter=1.0,
@@ -35,6 +36,7 @@ class Render(object):
       light_fov = None,
       output="./"):
     self.quality = quality
+    self.patch_size = patch_size
     self.dsm_size = dsm_size
     self.dsm_step = dsm_step
     self.scatter = scatter
@@ -80,7 +82,6 @@ class Render(object):
     return path.grid_frame(self.name, self.frame, self.output)
 
   def render_scene(self, scene):
-    ## TODO: Print bounding boxes.
     print("Render quality: ", self.quality)
     print("Scattering constant: ", scene.kappa())
     cam = scene.camera()
@@ -97,8 +98,18 @@ class Render(object):
       with timer.print_on_finish("Light %s" % (i+1)):
         scene.addLight(light, step, frustum)
 
-    with timer.print_on_finish("Render Frame %d" % self.frame):
-      scene.render(im, self.quality[1], self.quality[2], 50, 50, 250, 250)
+    count = 0
+    patch_cols = int(math.ceil(im.width() / self.patch_size))
+    patch_rows = int(math.ceil(im.height() / self.patch_size))
+    patch_count = patch_rows * patch_cols
+    with timer.print_on_finish("Frame %d" % self.frame):
+      for y0 in range(0, im.height(), self.patch_size):
+        y1 = y0 + self.patch_size
+        for x0 in range(0, im.width(), self.patch_size):
+          x1 = x0 + self.patch_size
+          count += 1
+          with timer.print_on_finish("Patch %d/%d" % (count, patch_count)):
+            scene.render(im, self.quality[1], self.quality[2], x0, y0, x1, y1)
     
     im.write(self.framepath)
     print("Wrote image to '%s'" % self.framepath)
