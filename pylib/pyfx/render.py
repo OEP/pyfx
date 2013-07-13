@@ -98,7 +98,7 @@ class Render(object):
         scene.addLight(light, step, frustum)
 
     with timer.print_on_finish("Render Frame %d" % self.frame):
-      scene.render(im, self.quality[1], self.quality[2])
+      scene.render(im, self.quality[1], self.quality[2], 50, 50, 250, 250)
     
     im.write(self.framepath)
     print("Wrote image to '%s'" % self.framepath)

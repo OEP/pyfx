@@ -8,20 +8,27 @@ using namespace std;
 
 void Scene::render(Image &im, int rpp, double step) const
 {
-  const int rays = rpp * im.width() * im.height();
+  render(im, rpp, step, 0, 0, im.width(), im.height());
+}
+
+void Scene::render(Image &im, int rpp, double step, size_t x0, size_t y0, size_t x1, size_t y1) const
+{
+  x0 = CLAMP(x0, 0ul, im.width());
+  x1 = CLAMP(x1, x0+1, im.width());
+  y0 = CLAMP(y0, 0ul, im.height());
+  y1 = CLAMP(y1, y0+1, im.height());
+
   #pragma omp parallel for 
-  for(int i = 0; i < rays; i++)
+  for(int j = y0; j < y1; j++)
   {
-    const CameraRay r = m_Camera.getRay(i, im.width(), im.height(), rpp);
-    const int
-      id = r.getRayId(),
-      x = id % im.width(),
-      y = id / im.width();
-
-    const Color c = shade(r, step);
-
+    const double viewy = j / (float) (im.height() - 1);
+    for(int i = x0; i < x1; i++)
     {
-      im.add(x, y, c);
+      const double viewx = i / (float) (im.width() - 1);
+      const Ray r = m_Camera.getRay(viewx, viewy);
+      // TODO: Perturb ray if doing multiple samples
+      const Color c = shade(r, step);
+      im.add(i, j, c);
     }
   }
 }

@@ -38,4 +38,8 @@
   #define SAFE_NORMALIZE(p,c) (c > 0) ? p / c : p
 #endif
 
+#ifndef CLAMP
+  #define CLAMP(x, lo, hi) std::max(lo, std::min(x, hi))
+#endif
+
 #endif
