@@ -118,6 +118,12 @@ class BaseFieldAtom(Atom):
   def __abs__(self):
     return atomize((AbsoluteValue, self))
 
+  def __neg__(self):
+    return self.invert()
+
+  def invert(self):
+    return atomize((Invert, self))
+
   def translate(self, v):
     return atomize((Translate, v, self))
 

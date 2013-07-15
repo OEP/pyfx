@@ -259,6 +259,21 @@ const Matrix Matrix::operator-(const Matrix &o) const
   );
 }
 
+const Matrix Matrix::operator-() const
+{
+  return Matrix(
+    -this->mm[0][0],
+    -this->mm[0][1],
+    -this->mm[0][2],
+    -this->mm[1][0],
+    -this->mm[1][1],
+    -this->mm[1][2],
+    -this->mm[2][0],
+    -this->mm[2][1],
+    -this->mm[2][2]
+  );
+}
+
 const double Matrix::operator()(size_t i, size_t j) const
 {
   return this->mm[i][j];

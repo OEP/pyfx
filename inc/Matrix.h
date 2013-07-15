@@ -48,6 +48,7 @@ namespace vr
       const Matrix operator/(const float) const;
       const Matrix operator+(const Matrix&) const;
       const Matrix operator-(const Matrix&) const;
+      const Matrix operator-() const;
       const double operator()(size_t i, size_t j) const;
       const bool operator==(const Matrix&) const;
       

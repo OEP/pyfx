@@ -31,6 +31,7 @@ namespace vr
       const Color operator+(const Color&) const;
 
       const Color operator-(const Color&) const;
+      const Color operator-() const;
       const Color operator*(const Color&) const;
       const Color operator*(const double) const;
       const Color operator|(const Color&) const;

@@ -112,3 +112,4 @@ from .compat import *
 %include "ScalarVDBGrid.i"
 %include "ColorComponent.i"
 %include "CreateVector.i"
+%include "Invert.i"

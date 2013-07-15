@@ -110,6 +110,11 @@ const Color Color::operator-(const Color &c) const
     alpha() - c.alpha());
 }
 
+const Color Color::operator-() const
+{
+  return Color(-red(), -green(), -blue(), -alpha());
+}
+
 const Color Color::operator*(const Color &c) const
 {
   return Color(red() * c.red(),
