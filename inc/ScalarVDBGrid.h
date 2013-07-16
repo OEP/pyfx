@@ -20,7 +20,9 @@ namespace vr
       }
 
       const float evalGrid(int i, int j, int k) const;
-      void set(int i, int j, int k, float v);
+      void set(int i, int j, int k, const float &v);
+      void stamp(const ScalarField *v);
+      const float eval(const Vector &p) const;
   };
 }
 

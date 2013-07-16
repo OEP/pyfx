@@ -31,7 +31,7 @@ namespace vr
         m_Griddable->gridSize(m_Resolution, m_Shape);
       }
 
-      const U eval(const Vector &p) const
+      virtual const U eval(const Vector &p) const
       {
         if(!contains(p))
         {
@@ -106,7 +106,7 @@ namespace vr
           k / (double) NZ());
       }
 
-      void stamp(const Volume<U,V> *v)
+      virtual void stamp(const Volume<U,V> *v)
       {
         #pragma omp parallel for
         for(int k = 0; k < NZ(); k++)
