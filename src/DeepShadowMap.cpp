@@ -1,6 +1,5 @@
 #include "Camera.h"
 #include "DeepShadowMap.h"
-#include "DenseGrid.h"
 #include "macros.h"
 
 using namespace vr;

@@ -1,5 +1,5 @@
 #include "Wisp.h"
-
+/*
 using namespace vr;
 
 const Box Wisp::calcBBox() const
@@ -37,4 +37,4 @@ void Wisp::addPoints()
     addPoint();
   }
 }
-
+*/

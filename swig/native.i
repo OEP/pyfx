@@ -64,8 +64,6 @@ namespace std
 %include "ReplaceBox.i"
 %include "Ramp.i"
 %include "VolumeGrid.i"
-%include "DenseGrid.i"
-%include "SparseGrid.i"
 %include "Griddable.i"
 %include "DeepShadowMap.i"
 %include "Scene.i"

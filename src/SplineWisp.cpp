@@ -1,3 +1,4 @@
+/*
 #include "SplineWisp.h"
 #include "macros.h"
 
@@ -55,3 +56,4 @@ const Box SplineWisp::calcBBox() const
 {
   return m_Chain->calcBBox(m_PN.getMax());
 }
+*/

@@ -1,5 +1,6 @@
 #ifndef BASEWISP_H_
 #define BASEWISP_H_
+/*
 
 #include "Volume.h"
 #include "Vector.h"
@@ -62,5 +63,6 @@ namespace vr
       void setSeed(const unsigned long seed);
   };
 }
+*/
 
 #endif

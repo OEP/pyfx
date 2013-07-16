@@ -1,6 +1,6 @@
 #ifndef WISP_H_
 #define WISP_H_
-
+/*
 #include "Volume.h"
 #include "Vector.h"
 #include "Matrix.h"
@@ -47,5 +47,6 @@ namespace vr
       const Box calcBBox() const;
   };
 }
+*/
 
 #endif

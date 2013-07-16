@@ -1,5 +1,6 @@
 #include "BaseWisp.h"
 
+/*
 using namespace vr;
 
 void BaseWisp::initialize()
@@ -41,3 +42,4 @@ const Box BaseWisp::getBBox() const
   if(m_Box) return *m_Box;
   return calcBBox();
 }
+*/

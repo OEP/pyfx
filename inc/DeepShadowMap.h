@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Griddable.h"
-#include "DenseGrid.h"
 #include "UniformPRN.h"
 #include "Volume.h"
 #include "Light.h"

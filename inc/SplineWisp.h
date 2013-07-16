@@ -1,6 +1,6 @@
 #ifndef SPLINEWISP_H_
 #define SPLINEWISP_H_
-
+/*
 #include "BaseWisp.h"
 #include "WispParameters.h"
 #include "WispChain.h"
@@ -32,5 +32,6 @@ namespace vr
       const Vector nextSegmentPoint(size_t, float&);
   };
 }
+*/
 
 #endif

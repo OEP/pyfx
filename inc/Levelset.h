@@ -1,6 +1,6 @@
 #ifndef LEVELSET_H_
 #define LEVELSET_H_
-
+/*
 #include <set>
 
 #include "Volume.h"
@@ -53,5 +53,5 @@ namespace vr
       const Box getBBox() const;
   };
 }
-
+*/
 #endif
