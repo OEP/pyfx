@@ -13,22 +13,17 @@ namespace vr
   {
     private:
     protected:
-      Griddable *m_Griddable;
-      const Vector m_Resolution;
-      U m_Default;
-      int m_Shape[3];
-
-      int index(int i, int j, int k) const
-      {
-        return i + NX() * (j + NY() * k);
-      }
-
-
+      virtual void openvdb::GridBase::Ptr getGrid() = 0;
     public:
-      VolumeGrid(Griddable *b, const Vector resolution, const U defaultValue)
-        : m_Griddable(b), m_Resolution(resolution), m_Default(defaultValue)
+      VolumeGrid(const Box &b, const Vector resolution)
       {
-        m_Griddable->gridSize(m_Resolution, m_Shape);
+        const Vector llc = b.llc();
+        openvdb::GridBase::Ptr grid = getGrid();
+        openvdb::Transform::Ptr trafo = openvdb::Transform::createLinearTransform(1);
+
+        trafo->preScale(openvdb::Vec3(resolution[0], resolution[1], resolution[2]));
+        trafo->preTranslate(openvdb::Vec3(llc[0], llc[1], llc[2]));
+        grid->setTransform(trafo);
       }
 
       virtual const U eval(const Vector &p) const
