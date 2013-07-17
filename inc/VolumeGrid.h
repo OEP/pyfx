@@ -56,8 +56,8 @@ namespace vr
           shape = b.length() / res;
         openvdb::math::Transform::Ptr trafo = openvdb::math::Transform::createLinearTransform(1);
 
-        trafo->preScale(to_openvdb(res));
         trafo->preTranslate(to_openvdb(b.llc()));
+        trafo->preScale(to_openvdb(res));
         getGrid()->setTransform(trafo);
 
         m_Shape[0] = (int) ceil(shape[0]);
