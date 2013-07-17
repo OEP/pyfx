@@ -2,6 +2,11 @@
 
 namespace vr
 {
+  const float to_pyfx(const float& f)
+  {
+    return f;
+  }
+  
   const Vector to_pyfx(const openvdb::Vec3d& v)
   {
     return Vector(v[0], v[1], v[2]);
@@ -20,5 +25,10 @@ namespace vr
   const openvdb::Vec4d to_openvdb(const Color &v)
   {
     return openvdb::Vec4d(v[0], v[1], v[2], v[3]);
+  }
+  
+  const float to_openvdb(const float& f)
+  {
+    return f;
   }
 }

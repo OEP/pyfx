@@ -64,6 +64,7 @@ namespace std
 %include "ReplaceBox.i"
 %include "Ramp.i"
 %include "Griddable.i"
+%include "VolumeGrid.i"
 %include "ScalarGrid.i"
 %include "DeepShadowMap.i"
 %include "Scene.i"
@@ -110,3 +111,4 @@ from .compat import *
 %include "ColorComponent.i"
 %include "CreateVector.i"
 %include "Invert.i"
+%include "vdbutil.i"

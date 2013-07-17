@@ -21,6 +21,11 @@ const float ScalarGrid::eval(const Vector &p) const
   return vr::eval_trilinear(*m_Grid, p);
 }
 
+void ScalarGrid::stamp(const ScalarField *f)
+{
+  vr::stamp(*m_Grid, f, openvdb::Coord(0), openvdb::Coord(NX(), NY(), NZ()));
+}
+
 openvdb::GridBase::Ptr ScalarGrid::getGrid() const
 {
   return m_Grid;

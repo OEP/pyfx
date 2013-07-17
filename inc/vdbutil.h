@@ -2,6 +2,7 @@
 #define VDBUTIL_H_
 
 #include <openvdb/openvdb.h>
+#include "Volume.h"
 #include "Vector.h"
 #include "Color.h"
 
@@ -9,11 +10,15 @@ namespace vr
 {
   const Vector to_pyfx(const openvdb::Vec3d&);
   const Color to_pyfx(const openvdb::Vec4d&);
+  const float to_pyfx(const float&);
+
+  //! Trivial identity function to make templated code more uniform.
+  const float to_openvdb(const float&);
 
   //! Convert Pyfx Vector to openvdb::Vec3d
   const openvdb::Vec3d to_openvdb(const Vector&);
 
-  //! Convert a Pyfx Vector to openvdb::Vec4d
+  //! Convert a Pyfx Color to openvdb::Vec4d
   const openvdb::Vec4d to_openvdb(const Color&);
 
   template <class GridType>
@@ -41,6 +46,27 @@ namespace vr
       sum += wt[i][0] * wt[j][1] * wt[k][2] * accessor.getValue(dijk);
     }
     return sum;
+  }
+
+  template <class GridType, typename U, typename V>
+  void stamp(GridType &grid, const Volume<U,V> *field, const openvdb::Coord llc, const openvdb::Coord urc)
+  {
+    #pragma omp parallel for
+    for(int k = llc[2]; k <= urc[2]; k++)
+    {
+      typedef typename GridType::Accessor AccessorType;
+      AccessorType accessor = grid.getAccessor();
+      openvdb::Coord ijk;
+      Vector p;
+
+      for(int j = llc[1]; j <= urc[1]; j++)
+      for(int i = llc[0]; i <= urc[0]; i++)
+      {
+        ijk = openvdb::Coord(i, j, k);
+        p = to_pyfx(grid.transformPtr()->indexToWorld(ijk));
+        accessor.setValue(ijk, to_openvdb(field->eval(p)));
+      }
+    }
   }
 }
 

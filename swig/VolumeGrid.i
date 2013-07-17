@@ -5,7 +5,15 @@
 
 %include "VolumeGrid.h"
 
-%template(ScalarVolumeGrid) vr::VolumeGrid<float, vr::Vector>;
-%template(VectorVolumeGrid) vr::VolumeGrid<vr::Vector, vr::Matrix>;
-%template(ColorVolumeGrid) vr::VolumeGrid<vr::Color, int>;
-%template(MatrixVolumeGrid) vr::VolumeGrid<vr::Matrix, int>;
+namespace vr
+{
+  %typedef VolumeGrid<float, Vector>  ScalarGridBase;
+  %typedef VolumeGrid<Vector, Matrix> VectorGridBase;
+  %typedef VolumeGrid<Matrix, int>    MatrixGridBase;
+  %typedef VolumeGrid<Color, int>     ColorGridBase;
+
+  %template(ScalarGridBase) VolumeGrid<float, Vector>;
+  %template(VectorGridBase) VolumeGrid<Vector, Matrix>;
+  %template(ColorGridBase)  VolumeGrid<Color, int>;
+  %template(MatrixGridBase) VolumeGrid<Matrix, int>;
+}

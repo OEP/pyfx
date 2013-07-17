@@ -48,6 +48,7 @@ namespace vr
       
       virtual void set(int i, int j, int k, const U& value) = 0;
       virtual const U& get(int i, int j, int k) const = 0;
+      virtual void stamp(const Volume<U,V> *f) = 0;
   };
   
   typedef VolumeGrid<float, Vector> ScalarGridBase;
