@@ -9,6 +9,11 @@ void ScalarGrid::set(int i, int j, int k, const float &value)
   accessor.setValue(ijk, value);
 }
 
+const float ScalarGrid::eval(const Vector &p) const
+{
+  return vr::eval_trilinear(*m_Grid, p);
+}
+
 openvdb::GridBase::Ptr ScalarGrid::getGrid() const
 {
   return m_Grid;

@@ -16,6 +16,8 @@ namespace vr
         m_Grid = openvdb::FloatGrid::create(defaultValue);
         setTransform(b, resolution);
       }
+
+      const float eval(const Vector &p) const;
       void set(int i, int j, int k, const float &value);
   };
 }
