@@ -1,31 +1,23 @@
 #include "VolumeGrid.h"
 
-namespace vr
+using namespace vr;
+
+const Vector to_pyfx(const openvdb::Vec3d& v)
 {
-  template <>
-  const Vector ScalarVolumeGrid::gradGrid(int i, int j, int k) const
-  {
-    return Vector(
-      evalGrid(i+1, j, k) - evalGrid(i-1, j, k),
-      evalGrid(i, j+1, k) - evalGrid(i, j-1, k),
-      evalGrid(i, j, k+1) - evalGrid(i, j, k-1));
-  }
+  return Vector(v[0], v[1], v[2]);
+}
 
-  template <>
-  const Matrix VectorVolumeGrid::gradGrid(int i, int j, int k) const
-  {
-    throw std::runtime_error("VectorVolumeGrid::gradGrid() not implemented");
-  }
+const Color to_pyfx(const openvdb::Vec4d& v)
+{
+  return Color(v[0], v[1], v[2], v[3]);
+}
 
-  template <>
-  const int ColorVolumeGrid::gradGrid(int i, int j, int k) const
-  {
-    throw std::runtime_error("ColorVolumeGrid::gradGrid() not implemented");
-  }
+const openvdb::Vec3d to_openvdb(const Vector &v)
+{
+  return openvdb::Vec3d(v[0], v[1], v[2]);
+}
 
-  template <>
-  const int MatrixVolumeGrid::gradGrid(int i, int j, int k) const
-  {
-    throw std::runtime_error("MatrixVolumeGrid::gradGrid() not implemented");
-  }
+const openvdb::Vec4d to_openvdb(const Color &v)
+{
+  return openvdb::Vec4d(v[0], v[1], v[2], v[3]);
 }

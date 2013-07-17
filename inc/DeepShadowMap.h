@@ -7,7 +7,7 @@
 #include "UniformPRN.h"
 #include "Volume.h"
 #include "Light.h"
-#include "VolumeGrid.h"
+#include "ScalarGrid.h"
 
 namespace vr
 {
@@ -21,7 +21,7 @@ namespace vr
       Light light;
   };
   
-  void compute_dsm(ScalarVolumeGrid *grid,
+  void compute_dsm(ScalarGrid *grid,
     const ScalarField *dns,
     const Vector &pl,
     const double ds,

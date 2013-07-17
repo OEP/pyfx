@@ -6,7 +6,7 @@ using namespace vr;
 
 // Do all samples and accumulate in grid.
 void vr::compute_dsm(
-  ScalarVolumeGrid *grid,
+  ScalarGrid *grid,
   const ScalarField *dns,
   const Vector &pl,
   const double ds,
