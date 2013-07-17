@@ -19,6 +19,7 @@ namespace vr
 
       const float eval(const Vector &p) const;
       void set(int i, int j, int k, const float &value);
+      const float& get(int i, int j, int k) const;
   };
 }
 

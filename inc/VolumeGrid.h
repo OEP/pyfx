@@ -79,6 +79,7 @@ namespace vr
       const int NZ() const { return m_Shape[2]; }
       
       virtual void set(int i, int j, int k, const U& value) = 0;
+      virtual const U& get(int i, int j, int k) const = 0;
   };
   
   typedef VolumeGrid<float, Vector> ScalarGridBase;
