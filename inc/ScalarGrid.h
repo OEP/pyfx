@@ -15,6 +15,8 @@ namespace vr
       {
         m_Grid = openvdb::FloatGrid::create(defaultValue);
         setTransform(b, resolution);
+        m_Grid->setGridClass(openvdb::GRID_LEVEL_SET);
+        m_Grid->setName("PyfxFloatGrid");
       }
 
       const float eval(const Vector &p) const;
