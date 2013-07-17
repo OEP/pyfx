@@ -1,4 +1,5 @@
 #include "ScalarGrid.h"
+#include "vdbutil.h"
 
 using namespace vr;
 

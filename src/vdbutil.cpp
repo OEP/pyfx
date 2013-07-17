@@ -1,4 +1,4 @@
-#include "VolumeGrid.h"
+#include "vdbutil.h"
 
 namespace vr
 {
