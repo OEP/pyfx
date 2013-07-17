@@ -60,6 +60,22 @@ namespace vr
         return b;
       }
 
+      void prune(const float tolerance = 0.0f)
+      {
+        getGrid()->pruneGrid(tolerance);
+      }
+
+      void write(const std::string path)
+      {
+        prune();
+        const openvdb::GridBase::Ptr grid = getGrid();
+        openvdb::io::File file(path);
+        openvdb::GridPtrVec grids;
+        grids.push_back(grid);
+        file.write(grids);
+        file.close();
+      }
+
       const int NX() const { return m_Shape[0]; }
       const int NY() const { return m_Shape[1]; }
       const int NZ() const { return m_Shape[2]; }
