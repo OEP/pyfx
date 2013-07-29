@@ -2,6 +2,7 @@
 #define IMPLICITVOLUME_H_
 
 #include <stdexcept>
+#include <memory>
 
 #include "Vector.h"
 #include "Matrix.h"
@@ -19,6 +20,8 @@ namespace vr
     protected:
     public:
       virtual ~Volume() { }
+      typedef std::shared_ptr< Volume<U, V> > Ptr;
+
       virtual const U eval(const Vector&) const
       {
         throw std::runtime_error("Illegal call to Volume::eval()");

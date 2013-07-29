@@ -12,6 +12,8 @@ namespace vr
       const noise::module::Perlin m_Noise;
     protected:
     public:
+      static ScalarField::Ptr create();
+
       virtual const float eval(const Vector &p) const;
       virtual const float getMax() const;
   };

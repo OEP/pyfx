@@ -3,6 +3,11 @@
 
 using namespace vr;
 
+ScalarField::Ptr PerlinNoise::create()
+{
+  return ScalarField::Ptr(new PerlinNoise());
+}
+
 const float
 PerlinNoise::eval(const Vector &p) const
 {
