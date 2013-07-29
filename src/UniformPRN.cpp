@@ -4,11 +4,11 @@ using namespace vr;
 const float
 UniformPRN::eval()
 {
-  return 0.0f;
+  return m_Distribution(m_Engine);
 }
 
 void
 UniformPRN::setSeed(const unsigned long seed)
 {
-
+  m_Engine.seed(seed);
 }
