@@ -38,7 +38,10 @@ namespace vr
       void add(size_t i, size_t j, const Image::Pixel &p);
       void add(size_t i, size_t j, const Color &value);
 
+      //! Replace contents of this image with contents of provided image.
       void replace(const Image &im);
+
+      //! Replace contents of this image, starting at x0, y0
       void replace(const Image &im, size_t x0, size_t y0);
 
       void set(size_t i, size_t j, float value, size_t freq=1);
