@@ -70,13 +70,13 @@ void Image::replace(const Image &im, size_t x0, size_t y0)
     throw std::length_error("Joined images must be equal depth.");
   }
 
-  for(size_t j = y0; j < height() && j < im.height(); j++)
+  for(size_t j = y0; j < height() && (j-y0) < im.height(); j++)
   {
-    for(size_t i = x0; i < width() && i < im.width(); i++)
+    for(size_t i = x0; i < width() && (i-x0) < im.width(); i++)
     {
       const size_t
         idx = index(i, j),
-        oidx = im.index(i, j);
+        oidx = im.index(i-x0, j-y0);
       m_Values[idx] = im.m_Values[oidx];
       m_Frequency[idx] = im.m_Frequency[oidx];
     }

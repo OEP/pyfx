@@ -41,7 +41,8 @@ namespace vr
       //! Replace contents of this image with contents of provided image.
       void replace(const Image &im);
 
-      //! Replace contents of this image, starting at x0, y0
+      //! Replace contents of this image with a patch
+      //! The patch (0,0) pixel starts at x0, y0 in the composite image
       void replace(const Image &im, size_t x0, size_t y0);
 
       void set(size_t i, size_t j, float value, size_t freq=1);
