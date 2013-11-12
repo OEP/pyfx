@@ -72,7 +72,7 @@ void Image::replace(const Image &im, size_t x0, size_t y0)
 
   for(size_t j = y0; j < height() && j < im.height(); j++)
   {
-    for(size_t i = x0; i < height() && i < im.height(); i++)
+    for(size_t i = x0; i < width() && i < im.width(); i++)
     {
       const size_t
         idx = index(i, j),
