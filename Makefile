@@ -2,10 +2,10 @@
 ## Override these on the command line or in a custom.mk file.
 
 ## Include and link flags for Python
-override INC_PYTHON = -I/usr/include/python3.3
-override LD_PYTHON = -L/usr/lib/x86_64-linux-gnu -lpython3.3m
-
-override EXTRA_LPATHS = -L/opt/hfs/dsolib
+PYTHON_VERSION := 2.7
+INC_PYTHON := -I/usr/include/python$(PYTHON_VERSION)
+LD_PYTHON := -lpython$(PYTHON_VERSION)
+EXTRA_LPATHS :=
 
 ## End user-configurable variables
 -include custom.mk
