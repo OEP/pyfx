@@ -82,36 +82,36 @@ class Render(object):
     return path.grid_frame(self.name, self.frame, self.output)
 
   def render_scene(self, scene):
-    print("Render quality: ", self.quality)
-    print("Scattering constant: ", scene.kappa())
     cam = scene.camera()
     im = native.Image(int(self.quality[0]*cam.aspectRatio()), self.quality[0])
     im.addProperties(native.Properties(self.meta))
     box = scene.densityBox()
 
-    print(box.llc(), box.urc())
-
+    ## add lights to scene if provided
     for (i, (light, step, frustum)) in enumerate(self._lights):
       frustum = frustum or native.Camera.boundingFrustum(light.position(), box)
       if self.light_fov: frustum.setFOV(self.light_fov)
-
       with timer.print_on_finish("Light %s" % (i+1)):
         scene.addLight(light, step, frustum)
 
-    count = 0
-    patch_cols = int(math.ceil(im.width() / self.patch_size))
-    patch_rows = int(math.ceil(im.height() / self.patch_size))
+    ## render the image in patches
+    patch_w = self.patch_size
+    patch_h = self.patch_size
+    patch_cols = int(math.ceil(im.width() / patch_w))
+    patch_rows = int(math.ceil(im.height() / patch_h))
     patch_count = patch_rows * patch_cols
+    count = 0
     with timer.print_on_finish("Frame %d" % self.frame):
-      for y0 in range(0, im.height(), self.patch_size):
-        h = min(im.height() - y0, self.patch_size)
-        for x0 in range(0, im.width(), self.patch_size):
-          w = min(im.width() - x0, self.patch_size)
+      for y0 in range(0, im.height(), patch_h):
+        h = min(im.height() - y0, patch_h)
+        for x0 in range(0, im.width(), patch_w):
+          w = min(im.width() - x0, patch_w)
           count += 1
           with timer.print_on_finish("Patch %d/%d" % (count, patch_count)):
             patch_im = native.Image(w, h)
             scene.render(patch_im, self.quality[1], self.quality[2],
                          im.width(), im.height(), x0, y0)
+            patch_im.write("patch.%04d.exr" % count)
             im.replace(patch_im, x0, y0)
     
     im.write(self.framepath)
