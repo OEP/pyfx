@@ -104,12 +104,15 @@ class Render(object):
     patch_count = patch_rows * patch_cols
     with timer.print_on_finish("Frame %d" % self.frame):
       for y0 in range(0, im.height(), self.patch_size):
-        y1 = y0 + self.patch_size
+        h = min(im.height() - y0, self.patch_size)
         for x0 in range(0, im.width(), self.patch_size):
-          x1 = x0 + self.patch_size
+          w = min(im.width() - x0, self.patch_size)
           count += 1
           with timer.print_on_finish("Patch %d/%d" % (count, patch_count)):
-            scene.render(im, self.quality[1], self.quality[2], x0, y0, x1, y1)
+            patch_im = native.Image(w, h)
+            scene.render(patch_im, self.quality[1], self.quality[2],
+                         im.width(), im.height(), x0, y0)
+            im.replace(patch_im, x0, y0)
     
     im.write(self.framepath)
     print("Wrote image to '%s'" % self.framepath)
