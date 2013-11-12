@@ -26,7 +26,7 @@ class Render(object):
   """
   def __init__(self,
       quality=QUALITY_QUICK,
-      patch_size = 100,
+      patch_size = None,
       dsm_size = 256,
       dsm_step = 0.1,
       scatter=1.0,
@@ -94,9 +94,14 @@ class Render(object):
       with timer.print_on_finish("Light %s" % (i+1)):
         scene.addLight(light, step, frustum)
 
+    ## figure out patch size
+    if self.patch_size is None:
+      patch_w = im.width()
+      patch_h = im.height()
+    else:
+      patch_w, patch_h = self.patch_size
+
     ## render the image in patches
-    patch_w = self.patch_size
-    patch_h = self.patch_size
     patch_cols = int(math.ceil(im.width() / patch_w))
     patch_rows = int(math.ceil(im.height() / patch_h))
     patch_count = patch_rows * patch_cols
@@ -111,7 +116,6 @@ class Render(object):
             patch_im = native.Image(w, h)
             scene.render(patch_im, self.quality[1], self.quality[2],
                          im.width(), im.height(), x0, y0)
-            patch_im.write("patch.%04d.exr" % count)
             im.replace(patch_im, x0, y0)
     
     im.write(self.framepath)
